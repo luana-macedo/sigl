@@ -1,6 +1,6 @@
 <!--
 <template>
-  <div class="Recuperar" > </div>
+  <div class="Recuperar" > 
   <h1>
       LOGIN
   </h1>
@@ -17,6 +17,7 @@
        <a href=""> Esqueceu Senha ? </a>
      </p>
        </div>
+</div>
 </template>
 <script>
 export default {
@@ -28,27 +29,6 @@ export default {
         password: 'Senha'
       }
     }
-  },
-  methods: {
-    login () {
-      if (this.input.username !== '' && this.input.password !== '') {
-        if (this.input.username === this.$parent.mockAccount.username && this.input.password === this.$parent.mockAccount.password) {
-          this.$emit('authenticated', true)
-          this.$router.replace({ name: 'secure' })
-        } else { console.log('The username and / or password is incorrect') }
-      } else { console.log('A username and password must be present') }
-    }
-  },
-  mounted () {
-    if (!this.authenticated) {
-      this.$router.replace({ name: 'login' })
-    }
-  },
-  setAuthenticated (status) {
-    this.authenticated = status
-  },
-  logout () {
-    this.authenticated = false
   }
 }
 </script>
