@@ -1,8 +1,10 @@
+<!--
 <template>
   <div class="Recuperar" > </div>
   <h1>
       LOGIN
   </h1>
+  <!--
     <div id="login">
       <input class="usuario" type= "text" img src="https://static.overlay-tech.com/assets/403d272c-e387-4c09-bc34-ba3d6c46da2c.svg" placeholder="Nova Senha:">
      <br>

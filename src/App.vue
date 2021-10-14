@@ -1,33 +1,97 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/login">Login</router-link>|
-      <router-link to="/professor">Professor</router-link>
-    </div>
-    <router-view/>
+  <v-app id="inspire">
+    <!-- <v-navigation-drawer
+      v-model="drawer"
+      app
+    >
+            -->
+    <!-- </v-navigation-drawer> -->
+
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+    >
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title class="text-h6">
+            SIGL
+          </v-list-item-title>
+          <v-list-item-subtitle>
+            Sistema Gerencial de Laboratório
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-divider></v-divider>
+
+      <v-list
+        dense
+        nav
+      >
+        <v-list-item
+          v-for="item in items"
+          :key="item.title"
+          :to="item.to"
+          link
+        >
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar app>
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+
+      <v-toolbar-title>ITPAC</v-toolbar-title>
+    </v-app-bar>
+
+    <v-main>
+      <router-view/>
+    </v-main>
+
+  <div class="footer">
+    <h2 class="text-footer">SIGL - SISTEMA INTEGRADO DE GERENCIAMENTO DE LABORATÓRIOS</h2>
   </div>
+  </v-app>
+
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+<script>
+  export default {
+    data: () => ({ drawer: null,
+      items: [
+          { title: 'PERÍODO', icon: 'mdi-view-dashboard', to:'/' },
+          { title: 'DISCIPLINA', icon: 'mdi-image', to:'/disciplinas' },
+          { title: 'ACADÊMICO', icon: 'mdi-help-box', to:'/academico'},
+          { title: 'PROFESSOR', icon: 'mdi-help-box', to:'/professor'},
+          { title: 'SUBGRUPO', icon: 'mdi-help-box', to:'/subgrupo'},
+          { title: 'MANUAL', icon: 'mdi-help-box', to:'/salas'},
+          { title: 'AGENDAMENTO', icon: 'mdi-help-box', to:'/'},
+          { title: 'EVIDÊNCIAS', icon: 'mdi-help-box', to:'/'},
+          { title: 'SALA', icon: 'mdi-help-box', to:'/'},
+          { title: 'STATUS', icon: 'mdi-help-box', to:'/'},
+          { title: 'CALENDÁRIO', icon: 'mdi-help-box', to:'/'},
+        ],
+    }),
   }
+</script>
+
+<style scoped>
+.footer{
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #e11b22;
+  color: white;
+  text-align: center;
+  font-family: Roboto, sans-serif;
+  font-size: 9px;
 }
 </style>
