@@ -79,7 +79,7 @@
           { title: 'EVIDÊNCIAS', icon: 'mdi-help-box', to:'/'},
           { title: 'SALA', icon: 'mdi-help-box', to:'/salas'},
           { title: 'STATUS', icon: 'mdi-help-box', to:'/'},
-          { title: 'CALENDÁRIO', icon: 'mdi-help-box', to:'/'},
+          { title: 'CALENDÁRIO', icon: 'mdi-help-box', to:'/calendario'},
         ],
     }),
   }

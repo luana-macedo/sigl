@@ -34,6 +34,11 @@ const routes = [
     name: 'Salas',
     component: () => import('../views/Salas.vue')
   },
+  {
+    path: '/calendario',
+    name: 'Calendario',
+    component: () => import('../views/Calendario.vue')
+  },
 ]
 
 const router = new VueRouter({
