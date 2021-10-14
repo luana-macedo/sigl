@@ -1,53 +1,16 @@
 <template>
-  <div class="Login" > </div>
-  <h1>
-      LOGIN
-  </h1>
+  <div class="Login"> 
+  <h1>Login</h1>
     <div id="login">
-      <input class="usuario" type= "text" placeholder="Usuario">
-     <br>
-     <input class="senha" type="password" placeholder="Senha">
-     <br>
-     <div class= "btn-login">
-       <button class="entrar">Entrar</button>
-     </div>
-     <p>
-       <a class="esqueceu" href=""> Esqueceu Senha? </a>
-     </p>
-       </div>
+     <input class="usuario" type="text" placeholder="Usuario"><br>
+     <input class="senha" type="password" placeholder="Senha"><br>
+     <div class= "btn-login"><button class="entrar">Entrar</button>
+     </div><p><a class="esqueceu" href=""> Esqueceu Senha?</a></p></div>
+    </div>
 </template>
 <script>
 export default {
-  name: 'Login',
-  data () {
-    return {
-      input: {
-        username: 'Usuário',
-        password: 'Senha'
-      }
-    }
-  },
-  methods: {
-    login () {
-      if (this.input.username !== '' && this.input.password !== '') {
-        if (this.input.username === this.$parent.mockAccount.username && this.input.password === this.$parent.mockAccount.password) {
-          this.$emit('authenticated', true)
-          this.$router.replace({ name: 'secure' })
-        } else { console.log('The username and / or password is incorrect') }
-      } else { console.log('A username and password must be present') }
-    }
-  },
-  mounted () {
-    if (!this.authenticated) {
-      this.$router.replace({ name: 'login' })
-    }
-  },
-  setAuthenticated (status) {
-    this.authenticated = status
-  },
-  logout () {
-    this.authenticated = false
-  }
+  name:'Login'
 }
 </script>
 <style scoped>
@@ -90,6 +53,5 @@ h1{
   text-align: center;
   padding: 8%;
   font-size: 0.5em;
-
 }
 </style>
