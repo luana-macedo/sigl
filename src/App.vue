@@ -58,7 +58,10 @@
   <div class="footer">
     <h2 class="text-footer">SIGL - SISTEMA INTEGRADO DE GERENCIAMENTO DE LABORATÓRIOS</h2>
   </div>
+
   </v-app>
+
+  
 
 </template>
 
@@ -93,5 +96,8 @@
   text-align: center;
   font-family: Roboto, sans-serif;
   font-size: 9px;
+}
+.text-footer{
+  padding: 12px;
 }
 </style>
