@@ -45,10 +45,46 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app>
+    <!-- <v-app-bar app>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title>ITPAC</v-toolbar-title>
+    </v-app-bar> -->
+    
+    <!-- ALTERAR COR DO FUNDO E IMAGEM -->
+    <v-app-bar
+      app
+      color="#F3F3F3"
+      src="./assets/img/itpac-logo.png"
+    >
+    <!-- CONTROLE DA IMAGEM -->
+
+    <template v-slot:img="{ props }">
+      <v-img
+        v-bind="props"
+        width="120px"
+        height="50px"
+        background-position="center"
+      ></v-img>
+    </template>
+
+      <v-app-bar-nav-icon  @click="drawer = !drawer"></v-app-bar-nav-icon>
+
+      <v-app-bar-title></v-app-bar-title>
+
+      <v-spacer></v-spacer>
+
+      <v-btn icon>
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+
+      <v-btn icon>
+        <v-icon>mdi-heart</v-icon>
+      </v-btn>
+
+      <v-btn icon>
+        <v-icon>mdi-dots-vertical</v-icon>
+      </v-btn>
     </v-app-bar>
 
     <v-main>
