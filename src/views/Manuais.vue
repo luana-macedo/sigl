@@ -1,36 +1,16 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="manuais"
-    sort-by="arquivo"
-    class="elevation-1"
-  >
+  <v-data-table :headers="headers" :items="manuais" class="elevation-2">
     <template v-slot:top>
-      <v-toolbar
-        flat
-      >
+      <v-toolbar flat >
         <v-toolbar-title>Gerenciamento de Manuais</v-toolbar-title>
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
+        <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
+         <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field> 
         <v-spacer></v-spacer>
-     <!-- <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Search"
-        single-line
-        hide-details
-      ></v-text-field> -->
-        <v-dialog
-          v-model="dialog"
-          max-width="200px"
-        > 
+        <v-dialog v-model="dialog" max-width="500px"> 
           <template v-slot:activator="{ on, attrs }">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
-            <v-btn class="mx-2" fab dark color="indigo" v-bind="attrs" v-on="on"><v-icon dark> mdi-plus</v-icon></v-btn> 
+            <v-btn class="mx-2 add" fab dark color="green" v-bind="attrs" v-on="on"><v-icon dark> mdi-plus</v-icon></v-btn> 
           </template>
           <v-card>
             <v-card-title>
@@ -38,22 +18,35 @@
             </v-card-title>
 
             <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col
-                    cols="8"
+               <v-form v-model="valid">
+    <v-container>
+      <v-row>
+        <v-col
+           cols="8"
                     sm="6"
                     md="4"
-                  >
-                    <v-text-field
-                      v-model="editedItem.descricao"
-                      label="Descricao"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-
+        >
+          <v-text-field
+            v-model="editedItem.descricao"
+            label="Descrição"
+            required
+          ></v-text-field>
+        </v-col>
+        <v-col
+           cols="8"
+                    sm="6"
+                    md="4"
+        >
+          <v-text-field
+            v-model="editedItem.arquivo"
+            label="Arquivo"
+            required
+          ></v-text-field>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-form>
+</v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
@@ -87,6 +80,13 @@
       </v-toolbar>
     </template>
        <template v-slot:item.acoes='{item}'>
+       <v-icon
+        small
+        class="mr-2"
+        @click="editItem(item)"
+      >
+       mdi-message-text
+      </v-icon>
       <v-icon
         small
         class="mr-2"
@@ -111,7 +111,15 @@
     </template>
   </v-data-table>
 </template>
-
+<style>
+.add{
+  width:5%;
+  height:5%;
+}
+body{
+  padding:2%;
+}
+</style>
 <script>
   export default {
     data: () => ({
@@ -119,30 +127,22 @@
       dialogDelete: false,
       headers: [
         {
-          text: 'Apelido do Grupo',
+          text: 'Descrição',
           align: 'start',
-          sortable: false,
           value: 'descricao',
         },
-        { text: 'Calories', value: 'arquivo' },
-        { text: 'Fat (g)', value: 'fat' },
+        { text: 'Arquivo', value: 'arquivo' },
         { text: 'Ações', value: 'acoes', sortable: false },
       ],
       manuais: [],
       editedIndex: -1,
       editedItem: {
         descricao: '',
-        arquivo: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
+        arquivo: '',
       },
       defaultItem: {
         descricao: '',
-        arquivo: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
+        arquivo: '',
       },
     }),
 
@@ -186,7 +186,6 @@
           }
         ]
       },
-
       editItem (item) {
         this.editedIndex = this.manuais.indexOf(item)
         this.editedItem = Object.assign({}, item)
