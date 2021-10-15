@@ -118,7 +118,7 @@
         </v-dialog>
       </v-toolbar>
     </template>
-       <template v-slot: item.acoes='{ item }'>
+       <template v-slot: item.acoes='{item}'>
       <v-icon
         small
         class="mr-2"
@@ -236,42 +236,7 @@
             fat: 16.0,
             carbs: 49,
             protein: 3.9,
-          },
-          {
-            name: 'Jelly bean',
-            calories: 375,
-            fat: 0.0,
-            carbs: 94,
-            protein: 0.0,
-          },
-          {
-            name: 'Lollipop',
-            calories: 392,
-            fat: 0.2,
-            carbs: 98,
-            protein: 0,
-          },
-          {
-            name: 'Honeycomb',
-            calories: 408,
-            fat: 3.2,
-            carbs: 87,
-            protein: 6.5,
-          },
-          {
-            name: 'Donut',
-            calories: 452,
-            fat: 25.0,
-            carbs: 51,
-            protein: 4.9,
-          },
-          {
-            name: 'KitKat',
-            calories: 518,
-            fat: 26.0,
-            carbs: 65,
-            protein: 7,
-          },
+          }
         ]
       },
 
