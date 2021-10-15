@@ -1,8 +1,8 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="desserts"
-    sort-by="calories"
+    :items="manuais"
+    sort-by="arquivo"
     class="elevation-1"
   >
     <template v-slot:top>
@@ -38,48 +38,8 @@
                     md="4"
                   >
                     <v-text-field
-                      v-model="editedItem.name"
-                      label="Dessert name"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="editedItem.calories"
-                      label="Calories"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="editedItem.fat"
-                      label="Fat (g)"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="editedItem.carbs"
-                      label="Carbs (g)"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="editedItem.protein"
-                      label="Protein (g)"
+                      v-model="editedItem.descricao"
+                      label="Descricao"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -118,7 +78,7 @@
         </v-dialog>
       </v-toolbar>
     </template>
-       <template v-slot: item.acoes='{item}'>
+       <template v-slot:item.acoes='{item}'>
       <v-icon
         small
         class="mr-2"
@@ -154,26 +114,24 @@
           text: 'Apelido do Grupo',
           align: 'start',
           sortable: false,
-          value: 'name',
+          value: 'descricao',
         },
-        { text: 'Calories', value: 'calories' },
+        { text: 'Calories', value: 'arquivo' },
         { text: 'Fat (g)', value: 'fat' },
-        { text: 'Carbs (g)', value: 'carbs' },
-        { text: 'Protein (g)', value: 'protein' },
         { text: 'Ações', value: 'acoes', sortable: false },
       ],
-      desserts: [],
+      manuais: [],
       editedIndex: -1,
       editedItem: {
-        name: '',
-        calories: 0,
+        descricao: '',
+        arquivo: 0,
         fat: 0,
         carbs: 0,
         protein: 0,
       },
       defaultItem: {
-        name: '',
-        calories: 0,
+        descricao: '',
+        arquivo: 0,
         fat: 0,
         carbs: 0,
         protein: 0,
@@ -182,7 +140,7 @@
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'Novo Grupo' : 'Editar Dados'
+        return this.editedIndex === -1 ? 'Cadastrar Manual' : 'Editar Dados'
       },
     },
 
@@ -201,59 +159,40 @@
 
     methods: {
       initialize () {
-        this.desserts = [
+        this.manuais = [
           {
-            name: 'Frozen Yogurt',
-            calories: 159,
-            fat: 6.0,
-            carbs: 24,
-            protein: 4.0,
+            descricao: 'Manual da Aula',
+            arquivo: 'manualdaaula2.pdf',
           },
           {
-            name: 'Ice cream sandwich',
-            calories: 237,
-            fat: 9.0,
-            carbs: 37,
-            protein: 4.3,
+            descricao: 'Manual Anatomia',
+            arquivo: 'manualanatomia.pdf',
           },
           {
-            name: 'Eclair',
-            calories: 262,
-            fat: 16.0,
-            carbs: 23,
-            protein: 6.0,
+            descricao: 'Manual Clinico',
+            arquivo: 'manualclinico.pdf',
           },
           {
-            name: 'Cupcake',
-            calories: 305,
-            fat: 3.7,
-            carbs: 67,
-            protein: 4.3,
-          },
-          {
-            name: 'Gingerbread',
-            calories: 356,
-            fat: 16.0,
-            carbs: 49,
-            protein: 3.9,
+            descricao: 'Manual ',
+            arquivo: 'manual',
           }
         ]
       },
 
       editItem (item) {
-        this.editedIndex = this.desserts.indexOf(item)
+        this.editedIndex = this.manuais.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
 
       deleteItem (item) {
-        this.editedIndex = this.desserts.indexOf(item)
+        this.editedIndex = this.manuais.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialogDelete = true
       },
 
       deleteItemConfirm () {
-        this.desserts.splice(this.editedIndex, 1)
+        this.manuais.splice(this.editedIndex, 1)
         this.closeDelete()
       },
 
@@ -275,9 +214,9 @@
 
       save () {
         if (this.editedIndex > -1) {
-          Object.assign(this.desserts[this.editedIndex], this.editedItem)
+          Object.assign(this.manuais[this.editedIndex], this.editedItem)
         } else {
-          this.desserts.push(this.editedItem)
+          this.manuais.push(this.editedItem)
         }
         this.close()
       },
