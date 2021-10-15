@@ -1,14 +1,14 @@
 <template>
 <div class="inicio">
  <div class="bg">
-<section class="background">
-    <div class="cadastro">
+   <div class="cadastro">
          <a href="#"><img class="add-icon" src="https://static.overlay-tech.com/assets/437c836f-a723-4f7e-aad2-111d3b374d67.png"></a>
      </div>
      <div class="barraPesquisa">
         <input type="text" id="search-bar" placeholder="Busca">
     <a href="#"><img class="search-icon" src="http://www.endlessicons.com/wp-content/uploads/2012/12/search-icon.png"></a>
     </div>
+<section class="background">
   <div class="about">
     <h1></h1>
     <div class="table-container">

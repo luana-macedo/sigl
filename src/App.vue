@@ -70,16 +70,16 @@
     data: () => ({ drawer: null,
       items: [
           { title: 'PERÍODO', icon: 'mdi-view-dashboard', to:'/' },
-          { title: 'DISCIPLINA', icon: 'mdi-image', to:'/disciplinas' },
-          { title: 'ACADÊMICO', icon: 'mdi-help-box', to:'/academico'},
-          { title: 'PROFESSOR', icon: 'mdi-help-box', to:'/professor'},
-          { title: 'SUBGRUPO', icon: 'mdi-help-box', to:'/subgrupo'},
-          { title: 'MANUAL', icon: 'mdi-help-box', to:'/'},
-          { title: 'AGENDAMENTO', icon: 'mdi-help-box', to:'/'},
-          { title: 'EVIDÊNCIAS', icon: 'mdi-help-box', to:'/'},
-          { title: 'SALA', icon: 'mdi-help-box', to:'/salas'},
-          { title: 'STATUS', icon: 'mdi-help-box', to:'/'},
-          { title: 'CALENDÁRIO', icon: 'mdi-help-box', to:'/'},
+          { title: 'DISCIPLINA', icon: 'mdi-book-multiple', to:'/disciplinas' },
+          { title: 'ACADÊMICO', icon: 'mdi-badge-account', to:'/academico'},
+          { title: 'PROFESSOR', icon: 'mdi-account-tie', to:'/professor'},
+          { title: 'SUBGRUPO', icon: 'mdi-account-group', to:'/subgrupo'},
+          { title: 'MANUAL', icon: 'mdi-folder-cog', to:'/manuais'},
+          { title: 'AGENDAMENTO', icon: 'mdi-notebook-edit', to:'/agendamento'},
+          { title: 'EVIDÊNCIAS', icon: 'mdi-page-next', to:'/evidencias'},
+          { title: 'SALA', icon: 'mdi-google-classroom', to:'/salas'},
+          { title: 'STATUS', icon: 'mdi-list-status', to:'/status'},
+          { title: 'CALENDÁRIO', icon: 'mdi-calendar-month-outline', to:'/calendario'},
         ],
     }),
   }
@@ -87,7 +87,7 @@
 
 <style scoped>
 .footer{
-  position: fixed;
+  position: relative;
   left: 0;
   bottom: 0;
   width: 100%;

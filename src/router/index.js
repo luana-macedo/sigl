@@ -30,9 +30,34 @@ const routes = [
     component: () => import('../views/Subgrupo.vue')
   },
   {
+    path: '/manuais',
+    name: 'Manuais',
+    component: () => import('../views/Manuais.vue')
+  },
+  {
+    path: '/agendamento',
+    name: 'Agendamento',
+    component: () => import('../views/Agendamento.vue')
+  },
+  {
+    path: '/evidencias',
+    name: 'Evidencias',
+    component: () => import('../views/Evidencias.vue')
+  },
+  {
     path: '/salas',
     name: 'Salas',
     component: () => import('../views/Salas.vue')
+  },
+  {
+    path: '/status',
+    name: 'Status',
+    component: () => import('../views/Status.vue')
+  },
+  {
+    path: '/calendario',
+    name: 'Calendario',
+    component: () => import('../views/Calendario.vue')
   },
 ]
 
