@@ -118,7 +118,7 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:item.acoes='{ item }'>
+       <template v-slot: item.acoes='{ item }'>
       <v-icon
         small
         class="mr-2"
