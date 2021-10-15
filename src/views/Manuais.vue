@@ -16,13 +16,21 @@
           vertical
         ></v-divider>
         <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
+     <!-- <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field> -->
         <v-dialog
           v-model="dialog"
-          max-width="500px"
-        >
+          max-width="200px"
+        > 
           <template v-slot:activator="{ on, attrs }">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
-            <v-btn class="mx-2" fab dark color="indigo" v-bind="attrs" v-on="on"><v-icon dark> mdi-plus</v-icon></v-btn>
+            <v-btn class="mx-2" fab dark color="indigo" v-bind="attrs" v-on="on"><v-icon dark> mdi-plus</v-icon></v-btn> 
           </template>
           <v-card>
             <v-card-title>
@@ -33,7 +41,7 @@
               <v-container>
                 <v-row>
                   <v-col
-                    cols="12"
+                    cols="8"
                     sm="6"
                     md="4"
                   >
