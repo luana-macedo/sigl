@@ -48,6 +48,7 @@
     >      
     <!-- CONTROLE DA IMAGEM -->
 
+    <!--
     <template v-slot:img="{ props }">
       <v-img
         v-bind="props"
@@ -56,7 +57,7 @@
         background-position="center"
       ></v-img>
     </template>
-
+    -->
       <v-app-bar-nav-icon  @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-app-bar-title><img src="./assets/img/itpac-logo.png" class="logo-itpac"></v-app-bar-title>
@@ -75,15 +76,13 @@
 
   </v-app>
 
-  
-
 </template>
 
 <script>
   export default {
     data: () => ({ drawer: null,
       items: [
-          { title: 'PERÍODO', icon: 'mdi-view-dashboard', to:'/' },
+          { title: 'PERÍODO', icon: 'mdi-view-dashboard', to:'/periodo' },
           { title: 'DISCIPLINA', icon: 'mdi-book-multiple', to:'/disciplinas' },
           { title: 'ACADÊMICO', icon: 'mdi-badge-account', to:'/academico'},
           { title: 'PROFESSOR', icon: 'mdi-account-tie', to:'/professor'},
@@ -115,8 +114,9 @@
   padding: 12px;
 }
 .logo-itpac{
-  width:20%;
-  height: 20%;
+  padding-top: 2.5%;
+  width:25%;
+  height: 25%;
 }
 .sair{
   width:24px;
