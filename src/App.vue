@@ -62,7 +62,7 @@
       <v-app-bar-title><img src="./assets/img/itpac-logo.png" class="logo-itpac"></v-app-bar-title>
 
       <v-spacer></v-spacer>
-        <img src="./assets/img/sair.png" class="sair">
+        <img src="./assets/img/exit-to-app.png" class="sair">
     </v-app-bar>
 
     <v-main>
@@ -119,7 +119,7 @@
   height: 20%;
 }
 .sair{
-  width:150px;
-  height: 90px;
+  width:24px;
+  height: 24px;
 }
 </style>
