@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="headers" :items="academico" class="elevation-2">
+  <v-data-table :headers="headers" :items="academnico" class="elevation-2">
     <template v-slot:top>
       <v-toolbar flat >
         <v-toolbar-title>Gerenciamento de Acadêmico</v-toolbar-title>
@@ -26,9 +26,16 @@
                     sm="6"
                     md="4"
         >
+
+         <v-text-field
+            v-model="editedItem.nome"
+            label="Nome"
+            required
+          ></v-text-field>
+
           <v-text-field
-            v-model="editedItem.matricula"
-            label="Descrição"
+            v-model="editedItem.cpf"
+            label="CPF"
             required
           ></v-text-field>
         </v-col>
@@ -37,11 +44,36 @@
                     sm="6"
                     md="4"
         >
-          <v-text-field
-            v-model="editedItem.nome"
-            label="nome"
+
+        <v-text-field
+            v-model="editedItem.matricula"
+            label="Matricula"
             required
           ></v-text-field>
+
+          <v-text-field
+            v-model="editedItem.email"
+            label="E-mail"
+            required
+          ></v-text-field>
+        </v-col>
+        <v-col
+           cols="8"
+                    sm="6"
+                    md="4"
+        >
+        
+          <v-text-field
+            v-model="editedItem.telefone"
+            label="Telefone"
+            required
+          ></v-text-field>
+        </v-col>
+        <v-col
+           cols="8"
+                    sm="6"
+                    md="4"
+        >
         </v-col>
       </v-row>
     </v-container>
@@ -68,11 +100,11 @@
         </v-dialog>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
-            <v-card-title class="text-h5">Deseja remover este acadêmico?</v-card-title>
+            <v-card-title class="text-h5">Deseja desativar esse acadêmico?</v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+              <v-btn color="blue darken-1" text @click="closeDelete">Não</v-btn>
+              <v-btn color="blue darken-1" text @click="deleteItemConfirm">Sim</v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
@@ -127,28 +159,34 @@ body{
       dialogDelete: false,
       headers: [
         {
-          text: 'Descrição',
+          text: 'Matricula',
           align: 'start',
           value: 'matricula',
         },
-        { text: 'nome', value: 'nome' },
+        { text: 'Nome', value: 'nome' },
         { text: 'Ações', value: 'acoes', sortable: false },
       ],
-      academico: [],
+      academnico: [],
       editedIndex: -1,
       editedItem: {
         matricula: '',
         nome: '',
+        cpf: '',
+        telefone: '',
+        email: '',
       },
       defaultItem: {
         matricula: '',
         nome: '',
+        cpf: '',
+        telefone: '',
+        email: '',
       },
     }),
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'Cadastrar ' : 'Editar Dados'
+        return this.editedIndex === -1 ? 'Cadastrar Acadêmico' : 'Editar Acadêmico'
       },
     },
 
@@ -167,39 +205,39 @@ body{
 
     methods: {
       initialize () {
-        this.academico = [
+        this.academnico = [
           {
-            matricula: ' 021365222154663',
-            nome: 'Felipe',
+            matricula: '000785496',
+            nome: 'Vitinho Imperador',
           },
           {
-            matricula: '856974213658954',
-            nome: 'Milena ',
+            matricula: '4521566',
+            nome: 'João Gomes',
           },
           {
-            matricula: '5845164035986381',
-            nome: 'Cirilo',
+            matricula: '496115362',
+            nome: 'Felipe Amorim',
           },
           {
-            matricula: '23252325232632633',
-            nome: 'Maria Joaquina',
+            matricula: '25320651102',
+            nome: 'Gusttavo Lima',
           }
         ]
       },
       editItem (item) {
-        this.editedIndex = this.academico.indexOf(item)
+        this.editedIndex = this.academnico.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
 
       deleteItem (item) {
-        this.editedIndex = this.academico.indexOf(item)
+        this.editedIndex = this.academnico.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialogDelete = true
       },
 
       deleteItemConfirm () {
-        this.academico.splice(this.editedIndex, 1)
+        this.academnico.splice(this.editedIndex, 1)
         this.closeDelete()
       },
 
@@ -221,9 +259,9 @@ body{
 
       save () {
         if (this.editedIndex > -1) {
-          Object.assign(this.academico[this.editedIndex], this.editedItem)
+          Object.assign(this.academnico[this.editedIndex], this.editedItem)
         } else {
-          this.academico.push(this.editedItem)
+          this.academnico.push(this.editedItem)
         }
         this.close()
       },
