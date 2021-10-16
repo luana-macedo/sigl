@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="headers" :items="manuais" class="elevation-2">
+  <v-data-table :headers="headers" :items="manuais" class="elevation-2 data-table">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Manuais</v-toolbar-title>
@@ -13,10 +13,10 @@
           hide-details
         ></v-text-field>
         <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="500px">
-          <template v-slot:activator="{ on, attrs }">
+        <v-dialog v-model="dialog" max-width="400px">
+          <template v-slot:activator="{ on, attrs }" class="template-add">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
-            <v-btn
+            <v-btn small
               class="mx-2 add"
               fab
               dark
@@ -41,44 +41,66 @@
                         label="Descrição"
                         required
                       ></v-text-field>
-                    </v-col>
+                    </v-col>  
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
                         v-model="editedItem.arquivo"
                         label="Arquivo"
                         required
                       ></v-text-field>
-                    </v-col>
+                    </v-col> 
                   </v-row>
                 </v-container>
               </v-form>
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">
+              <v-btn small color="primary" dark  @click="save"> Salvar </v-btn>
+              <v-btn small color="warning" dark @click="close">
                 Cancelar
               </v-btn>
-              <v-btn color="blue darken-1" text @click="save"> Salvar </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogDelete" max-width="500px">
-          <v-card>
-            <v-card-title class="text-h5"
-              >Deseja remover este grupo?</v-card-title
+        <v-dialog v-model="dialogDelete" max-width="400px">
+          <v-card class="card-modal">
+            <v-card-title class="text-h6"
+              >Deseja remover este manual ?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete"
-                >Cancel</v-btn
+                <v-btn  small color="primary" dark  @click="deleteItemConfirm"
+                >Sim</v-btn
               >
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                >OK</v-btn
+              <v-btn small color="warning" dark @click="closeDelete"
+                >Não</v-btn
               >
+            
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <!-- Modal Detalhar 
+        <v-dialog v-model="dialogDelete" max-width="400px">
+          <v-card class="card-modal">
+            <v-card-title class="text-h6"
+              >Manual</v-card-title>
+ <v-list-item>
+      <v-list-item-content>
+        <v-list-item-title>Descrição: </v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+<v-list-item>
+      <v-list-item-content>
+        <v-list-item-title>Arquivo: </v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+            <v-card-actions>
+              <v-btn small color="warning" dark @click="closeDelete"
+                >Sair</v-btn><v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog> -->
       </v-toolbar>
     </template>
     <template v-slot:item.acoes="{ item }">
@@ -96,11 +118,14 @@
 
 <style>
 .add {
-  width: 5%;
-  height: 5%;
+  width: 40px;
+  height: 40px;
 }
-body {
-  padding: 2%;
+.template-add{
+  padding-top:1%;
+}
+.data-table {
+  padding: 3%;
 }
 </style>
 <script>
