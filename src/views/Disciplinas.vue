@@ -10,6 +10,38 @@
         flat
       >
         <v-toolbar-title>My crud</v-toolbar-title>
+      
+  <div class="text-center d-flex align-center justify-space-around"> <!--Essa div é para que funcione a tooltip -->
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, option }">
+        <v-icon
+          color="primary"
+          dark
+          v-bind="option"
+          v-on="on"
+        >
+          mdi-home
+        </v-icon>
+      </template>
+      <span>Tooltip</span>
+    </v-tooltip>
+  </div> <!--Fim da estrutura de tooltip -->
+  <div class="text-center d-flex align-center justify-space-around">
+    <v-tooltip top>
+      <template v-slot:activator="{ on, option }">
+        <v-btn
+          color="primary"
+          dark
+          v-bind="option"
+          v-on="on"
+        >
+          Top
+        </v-btn>
+      </template>
+      <span>Top tooltip</span>
+    </v-tooltip>
+  </div>
+
         <v-divider
           class="mx-4"
           inset
@@ -20,12 +52,12 @@
           v-model="dialog"
           max-width="500px"
         >
-          <template v-slot:activator="{ on, attrs }">
+          <template v-slot:activator="{ on, option }">
             <v-btn
               color="primary"
               dark
               class="mb-2"
-              v-bind="attrs"
+              v-bind="option"
               v-on="on"
             >
               Adicionar
@@ -35,7 +67,6 @@
             <v-card-title>
               <span class="text-h5">{{ formTitle }}</span>
             </v-card-title>
-
             <v-card-text>
               <v-container>
                 <v-row>
