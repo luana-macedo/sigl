@@ -1,162 +1,234 @@
 <template>
-<div class="inicio">
- <div class="bg">
-   <div class="cadastro">
-         <a href="#"><img class="add-icon" src="https://static.overlay-tech.com/assets/437c836f-a723-4f7e-aad2-111d3b374d67.png"></a>
-     </div>
-     <div class="barraPesquisa">
-        <input type="text" id="search-bar" placeholder="Busca">
-    <a href="#"><img class="search-icon" src="http://www.endlessicons.com/wp-content/uploads/2012/12/search-icon.png"></a>
-    </div>
-<section class="background">
-  <div class="about">
-    <h1></h1>
-    <div class="table-container">
-      <table class="tabela">
-        <tr>
-          <th>Matricula</th>
-          <th>Nome</th>
-          <th>Ações</th>
-        </tr>
-        <tr>
-          <td>010203040506</td>
-          <td>Jose Antônio</td>
-          <td class="listar"><button><img src="https://static.overlay-tech.com/assets/01df22c7-27e9-4a24-a5ad-f6905d92c307.png"></button><button><img src="https://static.overlay-tech.com/assets/f7c20534-e6a3-4393-9663-7d263aa4329a.png"></button><button><img src="https://static.overlay-tech.com/assets/4a1697c7-ea60-40b1-920b-d5fc41d1bd1c.png"></button></td>
-        </tr>
-        <tr>
-          <td>102030405060</td>
-          <td>Samara Pereira</td>
-          <td class="listar"><button><img src="https://static.overlay-tech.com/assets/01df22c7-27e9-4a24-a5ad-f6905d92c307.png"></button><button><img src="https://static.overlay-tech.com/assets/f7c20534-e6a3-4393-9663-7d263aa4329a.png"></button><button><img src="https://static.overlay-tech.com/assets/4a1697c7-ea60-40b1-920b-d5fc41d1bd1c.png"></button></td>
-        </tr>
-        <tr>
-          <td>142536070809</td>
-          <td>Priscilla Alencar</td>
-            <td class="listar"><button><img src="https://static.overlay-tech.com/assets/01df22c7-27e9-4a24-a5ad-f6905d92c307.png"></button><button><img src="https://static.overlay-tech.com/assets/f7c20534-e6a3-4393-9663-7d263aa4329a.png"></button><button><img src="https://static.overlay-tech.com/assets/4a1697c7-ea60-40b1-920b-d5fc41d1bd1c.png"></button></td>
-        </tr>
-        <tr>
-          <td>586947415263</td>
-          <td>Steve McGarrett</td>
-          <td class="listar"><button><img src="https://static.overlay-tech.com/assets/01df22c7-27e9-4a24-a5ad-f6905d92c307.png"></button><button><img src="https://static.overlay-tech.com/assets/f7c20534-e6a3-4393-9663-7d263aa4329a.png"></button><button><img src="https://static.overlay-tech.com/assets/4a1697c7-ea60-40b1-920b-d5fc41d1bd1c.png"></button></td>
-        </tr>
-        <tr>
-          <td>741258963023</td>
-          <td>Catherine Rollins</td>
-          <td class="listar"><button><img src="https://static.overlay-tech.com/assets/01df22c7-27e9-4a24-a5ad-f6905d92c307.png"></button><button><img src="https://static.overlay-tech.com/assets/f7c20534-e6a3-4393-9663-7d263aa4329a.png"></button><button><img src="https://static.overlay-tech.com/assets/4a1697c7-ea60-40b1-920b-d5fc41d1bd1c.png"></button></td>
-        </tr>
-      </table>
-    </div>
-  </div>
-</section>
-</div>
-</div>
+  <v-data-table :headers="headers" :items="academico" class="elevation-2">
+    <template v-slot:top>
+      <v-toolbar flat >
+        <v-toolbar-title>Gerenciamento de Acadêmico</v-toolbar-title>
+        <v-divider class="mx-4" inset vertical></v-divider>
+        <v-spacer></v-spacer>
+         <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field> 
+        <v-spacer></v-spacer>
+        <v-dialog v-model="dialog" max-width="500px"> 
+          <template v-slot:activator="{ on, attrs }">
+            <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
+            <v-btn class="mx-2 add" fab dark color="green" v-bind="attrs" v-on="on"><v-icon dark> mdi-plus</v-icon></v-btn> 
+          </template>
+          <v-card>
+            <v-card-title>
+              <span class="text-h5">{{ formTitle }}</span>
+            </v-card-title>
+
+            <v-card-text>
+               <v-form v-model="valid">
+    <v-container>
+      <v-row>
+        <v-col
+           cols="8"
+                    sm="6"
+                    md="4"
+        >
+          <v-text-field
+            v-model="editedItem.matricula"
+            label="Descrição"
+            required
+          ></v-text-field>
+        </v-col>
+        <v-col
+           cols="8"
+                    sm="6"
+                    md="4"
+        >
+          <v-text-field
+            v-model="editedItem.nome"
+            label="nome"
+            required
+          ></v-text-field>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-form>
+</v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="blue darken-1"
+                text
+                @click="close"
+              >
+                Cancelar
+              </v-btn>
+              <v-btn
+                color="blue darken-1"
+                text
+                @click="save"
+              >
+                Salvar
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialogDelete" max-width="500px">
+          <v-card>
+            <v-card-title class="text-h5">Deseja remover este acadêmico?</v-card-title>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+              <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-toolbar>
+    </template>
+       <template v-slot:item.acoes='{item}'>
+       <v-icon
+        small
+        class="mr-2"
+        @click="editItem(item)"
+      >
+       mdi-message-text
+      </v-icon>
+      <v-icon
+        small
+        class="mr-2"
+        @click="editItem(item)"
+      >
+        mdi-pencil
+      </v-icon>
+      <v-icon
+        small
+        @click="deleteItem(item)"
+      >
+        mdi-delete
+      </v-icon>
+    </template>
+    <template v-slot:no-data>
+      <v-btn
+        color="primary"
+        @click="initialize"
+      >
+        Reset
+      </v-btn>
+    </template>
+  </v-data-table>
 </template>
-<script>
-export default {
-  name: 'inicio'
-}
-</script>
-
 <style>
-.table-container {
-  overflow-x: auto;
+.add{
+  width:5%;
+  height:5%;
 }
-.tabela {
-  width: 50%;
-  border-collapse: collapse;
-  margin: auto;
-  caption-side: top;
-  empty-cells: hide;
-  table-layout: auto;
-}
-button{
- background-color: Transparent;
- background-repeat:no-repeat;
- border: none;
- cursor:pointer;
- overflow: hidden;
-outline: none;
-}
-th,
-td {
-  padding: 15px;
-  text-align: left;
-}
-tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-.bg{
- padding:5%;
-}
-.background{
-  background-color:#e2e2e2;
-  box-shadow: rgb(184, 184, 184) 0.1em 0.3em 0.7em;
-  margin: auto;
-  height:500px;
-  width:100%;
-}
-
-.flex-wrapper-five {
-  background-color: greenyellow;
-  border-radius: 50%;
-  padding: 14px 19px 13px 20px;
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-  display: flex;
-  align-items: center;
-}
-
-p {
-  font-family: "Roboto";
-  font-size: 24px;
-  line-height: 20px;
-  color: black;
-  text-align: center;
-  text-transform: uppercase;
-  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-}
-input#search-bar {
-  margin: 0 auto;
-  margin-left: 23%;
-  margin-right: 40% ;
-  width: 30%;
-  height: 45px;
-  padding: 0 20px;
-  font-size: 1rem;
-  border: 1px solid #d0cfce;
-  outline: none;
-border-radius: 4px;
-}
-input#search-bar:focus {
-  border: 1px solid #000000;
-  transition: 0.35s ease;
-  color: #000000;
-}
-input#search-bar::-webkit-input-placeholder {
-  transition: opacity 0.45s ease;
-  opacity: 0;
-}
-input#search-bar::-moz-placeholder {
-  transition: opacity 0.45s ease;
-  opacity: 0;
-}
-input#search-bar::-ms-placeholder {
-  transition: opacity 0.45s ease;
-  opacity: 0;
-}
-.search-icon {
-  position: relative;
-  float:right;
-  width: 75px;
-  height: 75px;
-  top: -62px;
-  right: 450px;
-}
-.add-icon {
-  position: relative;
-  float:right;
-  width: 50px;
-  height: 50px;
-  top: -20px;
-  right: 250px;
+body{
+  padding:2%;
 }
 </style>
+<script>
+  export default {
+    data: () => ({
+      dialog: false,
+      dialogDelete: false,
+      headers: [
+        {
+          text: 'Descrição',
+          align: 'start',
+          value: 'matricula',
+        },
+        { text: 'nome', value: 'nome' },
+        { text: 'Ações', value: 'acoes', sortable: false },
+      ],
+      academico: [],
+      editedIndex: -1,
+      editedItem: {
+        matricula: '',
+        nome: '',
+      },
+      defaultItem: {
+        matricula: '',
+        nome: '',
+      },
+    }),
+
+    computed: {
+      formTitle () {
+        return this.editedIndex === -1 ? 'Cadastrar ' : 'Editar Dados'
+      },
+    },
+
+    watch: {
+      dialog (val) {
+        val || this.close()
+      },
+      dialogDelete (val) {
+        val || this.closeDelete()
+      },
+    },
+
+    created () {
+      this.initialize()
+    },
+
+    methods: {
+      initialize () {
+        this.academico = [
+          {
+            matricula: ' 021365222154663',
+            nome: 'Felipe',
+          },
+          {
+            matricula: '856974213658954',
+            nome: 'Milena ',
+          },
+          {
+            matricula: '5845164035986381',
+            nome: 'Cirilo',
+          },
+          {
+            matricula: '23252325232632633',
+            nome: 'Maria Joaquina',
+          }
+        ]
+      },
+      editItem (item) {
+        this.editedIndex = this.academico.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.dialog = true
+      },
+
+      deleteItem (item) {
+        this.editedIndex = this.academico.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.dialogDelete = true
+      },
+
+      deleteItemConfirm () {
+        this.academico.splice(this.editedIndex, 1)
+        this.closeDelete()
+      },
+
+      close () {
+        this.dialog = false
+        this.$nextTick(() => {
+          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedIndex = -1
+        })
+      },
+
+      closeDelete () {
+        this.dialogDelete = false
+        this.$nextTick(() => {
+          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedIndex = -1
+        })
+      },
+
+      save () {
+        if (this.editedIndex > -1) {
+          Object.assign(this.academico[this.editedIndex], this.editedItem)
+        } else {
+          this.academico.push(this.editedItem)
+        }
+        this.close()
+      },
+    },
+  }
+</script>
+
+
