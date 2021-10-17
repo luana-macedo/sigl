@@ -26,21 +26,12 @@
       <span>Tooltip</span>
     </v-tooltip>
   </div> <!--Fim da estrutura de tooltip -->
-  <div class="text-center d-flex align-center justify-space-around">
-    <v-tooltip top>
-      <template v-slot:activator="{ on, option }">
-        <v-btn
-          color="primary"
-          dark
-          v-bind="option"
-          v-on="on"
-        >
-          Top
-        </v-btn>
+  <v-tooltip bottom>
+      <template v-slot:activator="{ on }">
+        <v-icon color="primary" dark v-on="on">home</v-icon>
       </template>
-      <span>Top tooltip</span>
+      <span>Tooltip</span>
     </v-tooltip>
-  </div>
 
         <v-divider
           class="mx-4"
