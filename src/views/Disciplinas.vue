@@ -1,350 +1,254 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="desserts"
-    sort-by="calories"
-    class="elevation-1"
-  >
+  <v-data-table :headers="headers" :items="disciplinas" class="elevation-2 data-table">
     <template v-slot:top>
-      <v-toolbar
-        flat
-      >
-        <v-toolbar-title>My crud</v-toolbar-title>
-      
-  <div class="text-center d-flex align-center justify-space-around"> <!--Essa div é para que funcione a tooltip -->
-    <v-tooltip bottom>
-      <template v-slot:activator="{ on, option }">
-        <v-icon
-          color="primary"
-          dark
-          v-bind="option"
-          v-on="on"
-        >
-          mdi-home
-        </v-icon>
-      </template>
-      <span>Tooltip</span>
-    </v-tooltip>
-  </div> <!--Fim da estrutura de tooltip -->
-  <v-tooltip bottom>
-      <template v-slot:activator="{ on }">
-        <v-icon color="primary" dark v-on="on">home</v-icon>
-      </template>
-      <span>Tooltip</span>
-    </v-tooltip>
-
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
+      <v-toolbar flat>
+        <v-toolbar-title>Gerenciamento de Disciplina</v-toolbar-title>
+        <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <v-dialog
-          v-model="dialog"
-          max-width="500px"
-        >
-          <template v-slot:activator="{ on, option }">
-            <v-btn
-              color="primary"
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Pesquisar"
+          single-line
+          hide-details
+        ></v-text-field>
+        <v-spacer></v-spacer>
+        <v-dialog v-model="dialog" max-width="400px">
+          <template v-slot:activator="{ on, attrs }" class="template-add">
+            <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
+            <v-btn small
+              class="mx-2 add"
+              fab
               dark
-              class="mb-2"
-              v-bind="option"
+              color="green"
+              v-bind="attrs"
               v-on="on"
+              ><v-icon dark> mdi-plus</v-icon></v-btn
             >
-              Adicionar
-            </v-btn>
           </template>
           <v-card>
             <v-card-title>
               <span class="text-h5">{{ formTitle }}</span>
             </v-card-title>
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="editedItem.name"
-                      label="Dessert name"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="editedItem.calories"
-                      label="Calories"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="editedItem.fat"
-                      label="Fat (g)"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="editedItem.carbs"
-                      label="Carbs (g)"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="editedItem.protein"
-                      label="Protein (g)"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
 
+            <v-card-text>
+              <v-form v-model="valid">
+                <v-container>
+                  <v-row>
+                    <v-col cols="8" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.descricao"
+                        label="Apelido"
+                        required
+                      ></v-text-field>
+                    </v-col>  
+                    <v-col cols="8" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.Disciplina"
+                        label="Disciplina"
+                        required
+                      ></v-text-field>
+                    </v-col> 
+                    <v-col cols="8" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.Periodo"
+                        label="Período"
+                        required
+                      ></v-text-field>
+                    </v-col> 
+                    <v-col cols="8" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.Nome"
+                        label="Nome do Professor"
+                        required
+                      ></v-text-field>
+                    </v-col> 
+                  </v-row>
+                </v-container>
+              </v-form>
+            </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn
-                color="blue darken-1"
-                text
-                @click="close"
-              >
+              <v-btn small color="primary" dark  @click="save"> Salvar </v-btn>
+              <v-btn small color="warning" dark @click="close">
                 Cancelar
               </v-btn>
-              <v-btn
-                color="blue darken-1"
-                text
-                @click="save"
-              >
-                Salvar
-              </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogDelete" max-width="500px">
-          <v-card>
-            <v-card-title class="text-h5">Deseja remover este grupo?</v-card-title>
+        <v-dialog v-model="dialogDelete" max-width="400px">
+          <v-card class="card-modal">
+            <v-card-title class="text-h6"
+              >Deseja remover esta disciplina ?</v-card-title
+            >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+                <v-btn  small color="primary" dark  @click="deleteItemConfirm"
+                >Sim</v-btn
+              >
+              <v-btn small color="warning" dark @click="closeDelete"
+                >Não</v-btn
+              >
+            
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <!-- Modal Detalhar 
+        <v-dialog v-model="dialogDelete" max-width="400px">
+          <v-card class="card-modal">
+            <v-card-title class="text-h6"
+              >Disciplina</v-card-title>
+ <v-list-item>
+      <v-list-item-content>
+        <v-list-item-title>Apelido: </v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+<v-list-item>
+      <v-list-item-content>
+        <v-list-item-title>Disciplina: </v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+            <v-card-actions>
+              <v-btn small color="warning" dark @click="closeDelete"
+                >Sair</v-btn><v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog> -->
       </v-toolbar>
     </template>
-    <template v-slot:item.acoes='{ item }'>
-      <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >
-        mdi-pencil
+    <template v-slot:item.acoes="{ item }">
+      <v-icon small class="mr-2" @click="editItem(item)">
+        mdi-message-text
       </v-icon>
-      <v-icon
-        small
-        @click="deleteItem(item)"
-      >
-        mdi-delete
-      </v-icon>
+      <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+      <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn
-        color="primary"
-        @click="initialize"
-      >
-        Reset
-      </v-btn>
+      <v-btn color="primary" @click="initialize"> Reset </v-btn>
     </template>
   </v-data-table>
 </template>
 
+<style>
+.add {
+  width: 40px;
+  height: 40px;
+}
+.template-add{
+  padding-top:1%;
+}
+.data-table {
+  padding: 3%;
+}
+</style>
 <script>
-  export default {
-    data: () => ({
-      dialog: false,
-      dialogDelete: false,
-      headers: [
+export default {
+  data: () => ({
+    dialog: false,
+    dialogDelete: false,
+    headers: [
+      {
+        text: "Apelido",
+        align: "start",
+        value: "descricao",
+      },
+      { text: "Disciplina", value: "Disciplina" },
+      { text: "Ações", value: "acoes", sortable: false },
+    ],
+    disciplinas: [],
+    editedIndex: -1,
+    editedItem: {
+      descricao: "",
+      Disciplina: "",
+    },
+    defaultItem: {
+      descricao: "",
+      Disciplina: "",
+    },
+  }),
+
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "Cadastrar Disciplina" : "Editar Dados";
+    },
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close();
+    },
+    dialogDelete(val) {
+      val || this.closeDelete();
+    },
+  },
+
+  created() {
+    this.initialize();
+  },
+
+  methods: {
+    initialize() {
+      this.disciplinas = [
         {
-          text: 'Apelido da disciplina',
-          align: 'start',
-          sortable: false,
-          value: 'name',
+          descricao: "ALG 1",
+          Disciplina: "Algoritmo 1",
         },
-        { text: 'Disciplina', value: 'calories' },
-        { text: 'Fat (g)', value: 'fat' },
-        { text: 'Carbs (g)', value: 'carbs' },
-        { text: 'Protein (g)', value: 'protein' },
-        { text: 'Ações', value: 'acoes', sortable: false },
-      ],
-      desserts: [],
-      editedIndex: -1,
-      editedItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-      },
-      defaultItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-      },
-    }),
-
-    computed: {
-      formTitle () {
-        return this.editedIndex === -1 ? 'Novo Grupo' : 'Editar Dados'
-      },
+        {
+          descricao: "CAL 1",
+          Disciplina: "Cálculo 1",
+        },
+        {
+          descricao: "IA",
+          Disciplina: "Inteligência Artificial",
+        },
+        {
+          descricao: "FIS",
+          Disciplina: "Física",
+        },
+      ];
+    },
+    editItem(item) {
+      this.editedIndex = this.disciplinas.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
     },
 
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
-      dialogDelete (val) {
-        val || this.closeDelete()
-      },
+    deleteItem(item) {
+      this.editedIndex = this.disciplinas.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogDelete = true;
     },
 
-    created () {
-      this.initialize()
+    deleteItemConfirm() {
+      this.disciplinas.splice(this.editedIndex, 1);
+      this.closeDelete();
     },
 
-    methods: {
-      initialize () {
-        this.desserts = [
-          {
-            name: 'Frozen Yogurt',
-            calories: 159,
-            fat: 6.0,
-            carbs: 24,
-            protein: 4.0,
-          },
-          {
-            name: 'Ice cream sandwich',
-            calories: 237,
-            fat: 9.0,
-            carbs: 37,
-            protein: 4.3,
-          },
-          {
-            name: 'Eclair',
-            calories: 262,
-            fat: 16.0,
-            carbs: 23,
-            protein: 6.0,
-          },
-          {
-            name: 'Cupcake',
-            calories: 305,
-            fat: 3.7,
-            carbs: 67,
-            protein: 4.3,
-          },
-          {
-            name: 'Gingerbread',
-            calories: 356,
-            fat: 16.0,
-            carbs: 49,
-            protein: 3.9,
-          },
-          {
-            name: 'Jelly bean',
-            calories: 375,
-            fat: 0.0,
-            carbs: 94,
-            protein: 0.0,
-          },
-          {
-            name: 'Lollipop',
-            calories: 392,
-            fat: 0.2,
-            carbs: 98,
-            protein: 0,
-          },
-          {
-            name: 'Honeycomb',
-            calories: 408,
-            fat: 3.2,
-            carbs: 87,
-            protein: 6.5,
-          },
-          {
-            name: 'Donut',
-            calories: 452,
-            fat: 25.0,
-            carbs: 51,
-            protein: 4.9,
-          },
-          {
-            name: 'KitKat',
-            calories: 518,
-            fat: 26.0,
-            carbs: 65,
-            protein: 7,
-          },
-        ]
-      },
-
-      editItem (item) {
-        this.editedIndex = this.desserts.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-
-      deleteItem (item) {
-        this.editedIndex = this.desserts.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialogDelete = true
-      },
-
-      deleteItemConfirm () {
-        this.desserts.splice(this.editedIndex, 1)
-        this.closeDelete()
-      },
-
-      close () {
-        this.dialog = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-
-      closeDelete () {
-        this.dialogDelete = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.desserts[this.editedIndex], this.editedItem)
-        } else {
-          this.desserts.push(this.editedItem)
-        }
-        this.close()
-      },
+    close() {
+      this.dialog = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
     },
-  }
+
+    closeDelete() {
+      this.dialogDelete = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.disciplinas[this.editedIndex], this.editedItem);
+      } else {
+        this.disciplinas.push(this.editedItem);
+      }
+      this.close();
+    },
+  },
+};
 </script>
