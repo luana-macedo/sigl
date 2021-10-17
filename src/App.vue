@@ -34,30 +34,10 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-
-    <!-- <v-app-bar app>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
-      <v-toolbar-title>ITPAC</v-toolbar-title>
-    </v-app-bar> -->
-    
-    <!-- ALTERAR COR DO FUNDO E IMAGEM -->
     <v-app-bar
       app
       color="#F3F3F3"
     >      
-    <!-- CONTROLE DA IMAGEM -->
-
-    <!--
-    <template v-slot:img="{ props }">
-      <v-img
-        v-bind="props"
-        width="120px"
-        height="50px"
-        background-position="center"
-      ></v-img>
-    </template>
-    -->
       <v-app-bar-nav-icon  @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-app-bar-title><img src="./assets/img/itpac-logo.png" class="logo-itpac"></v-app-bar-title>

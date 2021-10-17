@@ -1,25 +1,24 @@
 <template>
-<section class="section-form"> 
-         <h1 class="text-h5 title-login">Login</h1>
-    <v-card width="400" class="mx-auto mt-5 card-login p-1" id="login">
+<section class="section-form" id="recuperacao"> 
+         <h1 class="text-h5 title-login">Recuperação de Senha</h1>
+    <v-card width="400" class="mx-auto mt-5 card-login p-1">
       <v-card-title class="pb-0">
       </v-card-title>
       <v-card-text>
         <v-form>
-          <v-text-field 
-            label="Usuário" 
-            prepend-icon="mdi-account-circle"
+           <v-text-field 
+            label="Nova Senha"
+            prepend-icon="mdi-lock"
           />
           <v-text-field 
-            label="Senha"
+            label="Confirmar Senha"
             prepend-icon="mdi-lock"
           />
         </v-form>
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn>Esqueceu a Senha ?</v-btn>
-        <v-btn center id="btn-logar">Login</v-btn>
+        <v-btn center id="btn-salvar">Salvar</v-btn>
       </v-card-actions>
     </v-card>
 </section>
@@ -30,8 +29,8 @@
   text-align: center;
   font-family: 'Roboto','Times New Roman', Times, serif;
 }
-#btn-logar{
-width:50%;
+#btn-salvar{
+width:100%;
 color:white;
 background-color:#e11b22 ;
 display: block !important;
@@ -46,9 +45,8 @@ padding-inline: 1%;
  padding-right:2%;
 }
 </style>
-
 <script>
 export default {
-  name: 'Login',
+  name: 'Recuperacao',
 }
 </script>
