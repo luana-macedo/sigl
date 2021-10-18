@@ -10,8 +10,8 @@ const routes = [
     component: () => import('../views/Login.vue')
   },
   {
-    path: '/',
-    name: 'Recupersenha',
+    path: '/recuperarsenha',
+    name: 'Recuperarsenha',
     component: () => import('../views/Recuperarsenha.vue')
   },
   {
