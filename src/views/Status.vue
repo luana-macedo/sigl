@@ -69,11 +69,7 @@
       </v-toolbar>
     </template>
        <template v-slot:item.acoes='{item}'>
-       <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >
+       <v-icon v-icon small class="mr-2" @click="initialize">
        mdi-message-text
       </v-icon>
       <v-icon
