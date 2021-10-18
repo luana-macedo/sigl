@@ -80,7 +80,10 @@
 
 <style scoped>
 .footer{
-  position: relative;
+  position: fixed;
+  margin:0;
+  padding:0;
+  border:0;
   left: 0;
   bottom: 0;
   width: 100%;

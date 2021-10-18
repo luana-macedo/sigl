@@ -13,7 +13,7 @@
           hide-details
         ></v-text-field>
         <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="400px">
+        <v-dialog v-model="dialog" max-width="350px">
           <template v-slot:activator="{ on, attrs }" class="template-add">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
             <v-btn small
@@ -28,33 +28,32 @@
           </template>
           <v-card>
             <v-card-title>
-              <span class="text-h5">{{ formTitle }}</span>
+              <span class="text-h6">{{ formTitle }}</span>
             </v-card-title>
 
             <v-card-text>
               <v-form v-model="valid">
                 <v-container>
                   <v-row>
-                    <v-col cols="8" sm="6" md="4">
+                    <v-col cols="12" sm="4" md="8">
                       <v-text-field
                         v-model="editedItem.descricao"
                         label="Descrição"
                         required
                       ></v-text-field>
                     </v-col>  
-                    <v-col cols="8" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.arquivo"
+                    <v-col cols="12" sm="4" md="8">
+                      <v-file-input truncate-length="18" 
+                      v-model="editedItem.arquivo"
                         label="Arquivo"
                         required
-                      ></v-text-field>
+                      ></v-file-input>
                     </v-col> 
                   </v-row>
                 </v-container>
               </v-form>
             </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
+            <v-card-actions id="card-actions">
               <v-btn small color="primary" dark  @click="save"> Salvar </v-btn>
               <v-btn small color="warning" dark @click="close">
                 Cancelar
@@ -62,7 +61,7 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogDelete" max-width="400px">
+        <v-dialog v-model="dialogDelete" max-width="350px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
               >Deseja remover este manual ?</v-card-title
@@ -127,6 +126,12 @@
 .data-table {
   padding: 3%;
 }
+#card-actions{
+   padding-left:18%;
+}
+.card-modal{
+  text-align: center;
+}
 </style>
 <script>
 export default {
@@ -156,7 +161,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "Cadastrar Manual" : "Editar Dados";
+      return this.editedIndex === -1 ? "Cadastrar Manual" : "Editar Manual";
     },
   },
 
