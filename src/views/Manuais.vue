@@ -73,37 +73,43 @@
               >
               <v-btn small color="warning" dark @click="closeDelete"
                 >Não</v-btn
-              >
-            
+              > 
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <!-- Modal Detalhar 
-        <v-dialog v-model="dialogDelete" max-width="400px">
-          <v-card class="card-modal">
-            <v-card-title class="text-h6"
-              >Manual</v-card-title>
- <v-list-item>
-      <v-list-item-content>
-        <v-list-item-title>Descrição: </v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-<v-list-item>
-      <v-list-item-content>
-        <v-list-item-title>Arquivo: </v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-            <v-card-actions>
-              <v-btn small color="warning" dark @click="closeDelete"
-                >Sair</v-btn><v-spacer></v-spacer>
+        <v-dialog max-width="350px" v-model="dialogdetalhar">
+          <v-card>
+            <v-card-title>
+              <span class="text-h6">Detalhar</span>
+            </v-card-title>
+
+            <v-card-text>
+              <v-form v-model="valid">
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="4" md="8">
+                      <v-text-field> Descrição : Manual da Aula </v-text-field>
+                    </v-col>  
+                    <v-col cols="12" sm="4" md="8">
+                      <v-text-field> Arquivo : Manualdaaula.pdf</v-text-field>
+                    </v-col> 
+                  </v-row>
+                </v-container>
+              </v-form>
+            </v-card-text>
+            <v-card-actions id="card-actions">
+              <v-btn small color="primary" dark  @click="save"> Salvar </v-btn>
+              <v-btn small color="warning" dark @click="close">
+                Cancelar
+              </v-btn>
             </v-card-actions>
           </v-card>
-        </v-dialog> -->
+        </v-dialog> 
       </v-toolbar>
     </template>
     <template v-slot:item.acoes="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)">
+      <v-icon small class="mr-2" @click="initialize">
         mdi-message-text
       </v-icon>
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
@@ -136,6 +142,7 @@
 <script>
 export default {
   data: () => ({
+    dialogdetalhar: false,
     dialog: false,
     dialogDelete: false,
     headers: [
@@ -166,6 +173,9 @@ export default {
   },
 
   watch: {
+     dialogdetalhar(val) {
+      val || this.close();
+    },
     dialog(val) {
       val || this.close();
     },
