@@ -43,7 +43,7 @@
       <v-app-bar-title><img src="./assets/img/itpac-logo.png" class="logo-itpac"></v-app-bar-title>
 
       <v-spacer></v-spacer>
-        <img src="./assets/img/exit-to-app.png" class="sair">
+       <router-link :to="{ name: 'retornar' }"> <img src="./assets/img/exit-to-aplicativo.png" class="sair"> </router-link>
     </v-app-bar>
 
     <v-main>
@@ -99,7 +99,7 @@
   height: 17%;
 }
 .sair{
-  width:24px;
+  width:50px;
   height: 24px;
 }
 </style>
