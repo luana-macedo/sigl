@@ -39,6 +39,8 @@
                       <v-text-field
                         v-model="editedItem.descricao"
                         label="Apelido"
+                        :rules="['Campo Obrigatório']"
+                        maxlenght="20"
                         required
                       ></v-text-field>
                     </v-col>  
@@ -46,13 +48,16 @@
                       <v-text-field
                         v-model="editedItem.Disciplina"
                         label="Disciplina"
-                        required
+                        :rules="['Campo Obrigatório']"
+                        maxlenght="20"
                       ></v-text-field>
                     </v-col> 
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
                         v-model="editedItem.Periodo"
                         label="Período"
+                        :rules="['Campo Obrigatório']"
+                        maxlenght="20"
                         required
                       ></v-text-field>
                     </v-col> 
@@ -60,6 +65,8 @@
                       <v-text-field
                         v-model="editedItem.Nome"
                         label="Nome do Professor"
+                        :rules="['Campo Obrigatório']"
+                        maxlenght="20"
                         required
                       ></v-text-field>
                     </v-col> 
@@ -140,6 +147,12 @@
 }
 .data-table {
   padding: 3%;
+}
+#card-actions{
+   padding-left:18%;
+}
+.card-modal{
+  text-align: center;
 }
 </style>
 <script>

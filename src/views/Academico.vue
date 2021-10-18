@@ -1,5 +1,9 @@
 <template>
-  <v-data-table :headers="headers" :items="academico" class="elevation-2 data-table">
+  <v-data-table
+    :headers="headers"
+    :items="academico"
+    class="elevation-2 data-table"
+  >
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Acadêmico</v-toolbar-title>
@@ -16,7 +20,8 @@
         <v-dialog v-model="dialog" max-width="400px">
           <template v-slot:activator="{ on, attrs }" class="template-add">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
-            <v-btn small
+            <v-btn
+              small
               class="mx-2 add"
               fab
               dark
@@ -32,70 +37,50 @@
             </v-card-title>
 
             <v-card-text>
-               <v-form v-model="valid">
-    <v-container>
-      <v-row>
-        <v-col
-           cols="8"
-                    sm="6"
-                    md="4"
-        >
+              <v-form v-model="valid">
+                <v-container>
+                  <v-row>
+                    <v-col cols="8" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.nome"
+                        label="Nome"
+                        required
+                      ></v-text-field>
 
-         <v-text-field
-            v-model="editedItem.nome"
-            label="Nome"
-            required
-          ></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.cpf"
+                        label="CPF"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="8" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.matricula"
+                        label="Matricula"
+                        required
+                      ></v-text-field>
 
-          <v-text-field
-            v-model="editedItem.cpf"
-            label="CPF"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col
-           cols="8"
-                    sm="6"
-                    md="4"
-        >
-
-        <v-text-field
-            v-model="editedItem.matricula"
-            label="Matricula"
-            required
-          ></v-text-field>
-
-          <v-text-field
-            v-model="editedItem.email"
-            label="E-mail"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col
-           cols="8"
-                    sm="6"
-                    md="4"
-        >
-        
-          <v-text-field
-            v-model="editedItem.telefone"
-            label="Telefone"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col
-           cols="8"
-                    sm="6"
-                    md="4"
-        >
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-form>
-</v-card-text>
+                      <v-text-field
+                        v-model="editedItem.email"
+                        label="E-mail"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="8" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.telefone"
+                        label="Telefone"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="8" sm="6" md="4"> </v-col>
+                  </v-row>
+                </v-container>
+              </v-form>
+            </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small color="primary" dark  @click="save"> Salvar </v-btn>
+              <v-btn small color="primary" dark @click="save"> Salvar </v-btn>
               <v-btn small color="warning" dark @click="close">
                 Cancelar
               </v-btn>
@@ -109,13 +94,11 @@
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-                <v-btn  small color="primary" dark  @click="deleteItemConfirm"
+              <v-btn small color="primary" dark @click="deleteItemConfirm"
                 >Sim</v-btn
               >
-              <v-btn small color="warning" dark @click="closeDelete"
-                >Não</v-btn
-              >
-            
+              <v-btn small color="warning" dark @click="closeDelete">Não</v-btn>
+
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
@@ -161,8 +144,8 @@
   width: 40px;
   height: 40px;
 }
-.template-add{
-  padding-top:1%;
+.template-add {
+  padding-top: 1%;
 }
 .data-table {
   padding: 3%;
@@ -185,24 +168,24 @@ export default {
     academico: [],
     editedIndex: -1,
     editedItem: {
-      matricula: '',
-      nome: '',
-      cpf: '',
-      telefone:'',
-      email:'',
+      matricula: "",
+      nome: "",
+      cpf: "",
+      telefone: "",
+      email: "",
     },
     defaultItem: {
-      matricula: '',
-        nome: '',
-        cpf: '',
-        telefone: '',
-        email: '',
+      matricula: "",
+      nome: "",
+      cpf: "",
+      telefone: "",
+      email: "",
     },
   }),
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "Cadastrar Academico" : "Editar Dados" ;
+      return this.editedIndex === -1 ? "Cadastrar Academico" : "Editar Dados";
     },
   },
 
