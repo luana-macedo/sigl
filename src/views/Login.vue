@@ -24,7 +24,7 @@
     </v-card>
 </section>
 </template>
-<style scoped>
+<style>
 .section-form{
   padding: 5% 0;
   text-align: center;
