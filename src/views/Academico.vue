@@ -1,16 +1,30 @@
 <template>
-  <v-data-table :headers="headers" :items="academnico" class="elevation-2">
+  <v-data-table :headers="headers" :items="academico" class="elevation-2 data-table">
     <template v-slot:top>
-      <v-toolbar flat >
+      <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Acadêmico</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-         <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field> 
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Pesquisar"
+          single-line
+          hide-details
+        ></v-text-field>
         <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="500px"> 
-          <template v-slot:activator="{ on, attrs }">
+        <v-dialog v-model="dialog" max-width="400px">
+          <template v-slot:activator="{ on, attrs }" class="template-add">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
-            <v-btn class="mx-2 add" fab dark color="green" v-bind="attrs" v-on="on"><v-icon dark> mdi-plus</v-icon></v-btn> 
+            <v-btn small
+              class="mx-2 add"
+              fab
+              dark
+              color="green"
+              v-bind="attrs"
+              v-on="on"
+              ><v-icon dark> mdi-plus</v-icon></v-btn
+            >
           </template>
           <v-card>
             <v-card-title>
@@ -81,192 +95,192 @@
 </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn
-                color="blue darken-1"
-                text
-                @click="close"
-              >
+              <v-btn small color="primary" dark  @click="save"> Salvar </v-btn>
+              <v-btn small color="warning" dark @click="close">
                 Cancelar
               </v-btn>
-              <v-btn
-                color="blue darken-1"
-                text
-                @click="save"
-              >
-                Salvar
-              </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogDelete" max-width="500px">
-          <v-card>
-            <v-card-title class="text-h5">Deseja desativar esse acadêmico?</v-card-title>
+        <v-dialog v-model="dialogDelete" max-width="400px">
+          <v-card class="card-modal">
+            <v-card-title class="text-h6"
+              >Deseja remover esta academico ?</v-card-title
+            >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete">Não</v-btn>
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm">Sim</v-btn>
+                <v-btn  small color="primary" dark  @click="deleteItemConfirm"
+                >Sim</v-btn
+              >
+              <v-btn small color="warning" dark @click="closeDelete"
+                >Não</v-btn
+              >
+            
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <!-- Modal Detalhar 
+        <v-dialog v-model="dialogDelete" max-width="400px">
+          <v-card class="card-modal">
+            <v-card-title class="text-h6"
+              >nome</v-card-title>
+ <v-list-item>
+      <v-list-item-content>
+        <v-list-item-title>Apelido: </v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+<v-list-item>
+      <v-list-item-content>
+        <v-list-item-title>nome: </v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+            <v-card-actions>
+              <v-btn small color="warning" dark @click="closeDelete"
+                >Sair</v-btn><v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog> -->
       </v-toolbar>
     </template>
-       <template v-slot:item.acoes='{item}'>
-       <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >
-       mdi-message-text
+    <template v-slot:item.acoes="{ item }">
+      <v-icon small class="mr-2" @click="editItem(item)">
+        mdi-message-text
       </v-icon>
-      <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >
-        mdi-pencil
-      </v-icon>
-      <v-icon
-        small
-        @click="deleteItem(item)"
-      >
-        mdi-delete
-      </v-icon>
+      <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+      <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn
-        color="primary"
-        @click="initialize"
-      >
-        Reset
-      </v-btn>
+      <v-btn color="primary" @click="initialize"> Reset </v-btn>
     </template>
   </v-data-table>
 </template>
+
 <style>
-.add{
-  width:5%;
-  height:5%;
+.add {
+  width: 40px;
+  height: 40px;
 }
-body{
-  padding:2%;
+.template-add{
+  padding-top:1%;
+}
+.data-table {
+  padding: 3%;
 }
 </style>
 <script>
-  export default {
-    data: () => ({
-      dialog: false,
-      dialogDelete: false,
-      headers: [
+export default {
+  data: () => ({
+    dialog: false,
+    dialogDelete: false,
+    headers: [
+      {
+        text: "Matricula",
+        align: "start",
+        value: "matricula",
+      },
+      { text: "Nome", value: "nome" },
+      { text: "Ações", value: "acoes", sortable: false },
+    ],
+    academico: [],
+    editedIndex: -1,
+    editedItem: {
+      matricula: '',
+      nome: '',
+      cpf: '',
+      telefone:'',
+      email:'',
+    },
+    defaultItem: {
+      matricula: '',
+        nome: '',
+        cpf: '',
+        telefone: '',
+        email: '',
+    },
+  }),
+
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "Cadastrar Academico" : "Editar Dados" ;
+    },
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close();
+    },
+    dialogDelete(val) {
+      val || this.closeDelete();
+    },
+  },
+
+  created() {
+    this.initialize();
+  },
+
+  methods: {
+    initialize() {
+      this.academico = [
         {
-          text: 'Matricula',
-          align: 'start',
-          value: 'matricula',
+          matricula: "00000036236",
+          nome: "Joao Gomes",
         },
-        { text: 'Nome', value: 'nome' },
-        { text: 'Ações', value: 'acoes', sortable: false },
-      ],
-      academnico: [],
-      editedIndex: -1,
-      editedItem: {
-        matricula: '',
-        nome: '',
-        cpf: '',
-        telefone: '',
-        email: '',
-      },
-      defaultItem: {
-        matricula: '',
-        nome: '',
-        cpf: '',
-        telefone: '',
-        email: '',
-      },
-    }),
-
-    computed: {
-      formTitle () {
-        return this.editedIndex === -1 ? 'Cadastrar Acadêmico' : 'Editar Acadêmico'
-      },
+        {
+          matricula: "98645863215",
+          nome: "Vitor Fernandes",
+        },
+        {
+          matricula: "48961651646",
+          nome: "Gabriel Gava",
+        },
+        {
+          matricula: "64631654165",
+          nome: "Felipe Amorim",
+        },
+      ];
+    },
+    editItem(item) {
+      this.editedIndex = this.academico.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
     },
 
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
-      dialogDelete (val) {
-        val || this.closeDelete()
-      },
+    deleteItem(item) {
+      this.editedIndex = this.academico.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogDelete = true;
     },
 
-    created () {
-      this.initialize()
+    deleteItemConfirm() {
+      this.academico.splice(this.editedIndex, 1);
+      this.closeDelete();
     },
 
-    methods: {
-      initialize () {
-        this.academnico = [
-          {
-            matricula: '000785496',
-            nome: 'Vitinho Imperador',
-          },
-          {
-            matricula: '4521566',
-            nome: 'João Gomes',
-          },
-          {
-            matricula: '496115362',
-            nome: 'Felipe Amorim',
-          },
-          {
-            matricula: '25320651102',
-            nome: 'Gusttavo Lima',
-          }
-        ]
-      },
-      editItem (item) {
-        this.editedIndex = this.academnico.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-
-      deleteItem (item) {
-        this.editedIndex = this.academnico.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialogDelete = true
-      },
-
-      deleteItemConfirm () {
-        this.academnico.splice(this.editedIndex, 1)
-        this.closeDelete()
-      },
-
-      close () {
-        this.dialog = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-
-      closeDelete () {
-        this.dialogDelete = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.academnico[this.editedIndex], this.editedItem)
-        } else {
-          this.academnico.push(this.editedItem)
-        }
-        this.close()
-      },
+    close() {
+      this.dialog = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
     },
-  }
+
+    closeDelete() {
+      this.dialogDelete = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.academico[this.editedIndex], this.editedItem);
+      } else {
+        this.academico.push(this.editedItem);
+      }
+      this.close();
+    },
+  },
+};
 </script>
-
-

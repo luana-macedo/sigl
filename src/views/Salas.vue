@@ -28,7 +28,7 @@
         >
           <v-text-field
             v-model="editedItem.numero"
-            label="Descrição"
+            label="Sala"
             required
           ></v-text-field>
         </v-col>
@@ -39,7 +39,7 @@
         >
           <v-text-field
             v-model="editedItem.nome"
-            label="nome"
+            label="Nome"
             required
           ></v-text-field>
         </v-col>
