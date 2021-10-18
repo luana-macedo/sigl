@@ -148,6 +148,12 @@
 .data-table {
   padding: 3%;
 }
+#card-actions{
+   padding-left:18%;
+}
+.card-modal{
+  text-align: center;
+}
 </style>
 <script>
 export default {
