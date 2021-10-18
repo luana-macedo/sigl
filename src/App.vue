@@ -94,9 +94,9 @@
   padding: 12px;
 }
 .logo-itpac{
-  padding-top: 2.5%;
-  width:25%;
-  height: 25%;
+  padding-top: 2.2%;
+  width:17%;
+  height: 17%;
 }
 .sair{
   width:24px;
