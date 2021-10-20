@@ -80,10 +80,10 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small color="primary" dark @click="save"> Salvar </v-btn>
-              <v-btn small color="warning" dark @click="close">
+               <v-btn small color="warning" dark @click="close">
                 Cancelar
               </v-btn>
+              <v-btn small color="primary" dark @click="save"> Salvar </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -94,11 +94,10 @@
             >
             <v-card-actions>
               <v-spacer></v-spacer>
+               <v-btn small color="warning" dark @click="closeDelete">Não</v-btn>
               <v-btn small color="primary" dark @click="deleteItemConfirm"
                 >Sim</v-btn
               >
-              <v-btn small color="warning" dark @click="closeDelete">Não</v-btn>
-
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
