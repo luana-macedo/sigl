@@ -55,10 +55,10 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">
+              <v-btn small color="warning" dark @click="close">
                 Cancelar
               </v-btn>
-              <v-btn color="blue darken-1" text @click="save"> Salvar </v-btn>
+              <v-btn small color="primary" dark @click="save"> Salvar </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -69,10 +69,10 @@
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete"
-                >Cancel</v-btn
+              <v-btn small color="warning" dark @click="closeDelete"
+                >Cancelar</v-btn
               >
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+              <v-btn small color="primary" dark  @click="deleteItemConfirm"
                 >OK</v-btn
               >
               <v-spacer></v-spacer>
@@ -101,6 +101,22 @@
 }
 body {
   padding: 2%;
+}
+.add {
+  width: 40px;
+  height: 40px;
+}
+.template-add{
+  padding-top:1%;
+}
+.data-table {
+  padding: 3%;
+}
+#card-actions{
+   padding-left:18%;
+}
+.card-modal{
+  text-align: center;
 }
 </style>
 <script>

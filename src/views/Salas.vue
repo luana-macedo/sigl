@@ -50,15 +50,13 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
-                color="blue darken-1"
-                text
+               small color = "warning" dark
                 @click="close"
               >
                 Cancelar
               </v-btn>
               <v-btn
-                color="blue darken-1"
-                text
+                small color ="primary" dark
                 @click="save"
               >
                 Salvar
@@ -71,8 +69,8 @@
             <v-card-title class="text-h5">Deseja remover esta sala?</v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+              <v-btn small color ="warning" dark @click="closeDelete">Cancelar</v-btn>
+              <v-btn small color ="primary" dark @click="deleteItemConfirm">OK</v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
