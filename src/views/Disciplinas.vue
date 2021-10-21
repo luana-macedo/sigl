@@ -6,7 +6,7 @@
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-text-field
-          v-model="search"
+          v-model="pesquisa"
           append-icon="mdi-magnify"
           label="Pesquisar"
           single-line
@@ -37,7 +37,7 @@
                   <v-row>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="editarItem.descricao"
+                        v-model="itemEditado.descricao"
                         label="Apelido"
                         :rules="['Campo Obrigatório']"
                         maxlenght="20"
@@ -46,7 +46,7 @@
                     </v-col>  
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="editarItem.disciplina"
+                        v-model="itemEditado.disciplina"
                         label="disciplina"
                         :rules="['Campo Obrigatório']"
                         maxlenght="20"
@@ -54,7 +54,7 @@
                     </v-col> 
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="editarItem.periodo"
+                        v-model="itemEditado.periodo"
                         label="Período"
                         :rules="['Campo Obrigatório']"
                         maxlenght="20"
@@ -63,7 +63,7 @@
                     </v-col> 
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="editarItem.nome"
+                        v-model="itemEditado.nome"
                         label="Nome do Professor"
                         :rules="['Campo Obrigatório']"
                         maxlenght="20"
@@ -79,7 +79,7 @@
               <v-btn small color="warning" dark @click="fechar">
                 Cancelar
               </v-btn>
-              <v-btn small color="primary" dark  @click="save"> Salvar </v-btn>
+              <v-btn small color="primary" dark  @click="salvar"> Salvar </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -93,7 +93,7 @@
                <v-btn small color="warning" dark @click="fecharDelete"
                 >Não</v-btn
               >
-                <v-btn  small color="primary" dark  @click="deleteItemConfirm"
+                <v-btn  small color="primary" dark  @click="removeItemConfirm"
                 >Sim</v-btn
               >
               <v-spacer></v-spacer>
@@ -107,7 +107,7 @@
         mdi-message-text
       </v-icon>
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+      <v-icon small @click="removeItem(item)"> mdi-delete </v-icon>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="inicializar"> Reset </v-btn>
@@ -145,15 +145,15 @@ export default {
         value: "descricao",
       },
       { text: "disciplina", value: "disciplina" },
-      { text: "Ações", value: "acoes", sortable: false },
+      { text: "Ações", value: "acoes"},
     ],
     disciplinas: [],
-    editarIndice: -1,
-    editarItem: {
+    editIndice: -1,
+    itemEditado: {
       descricao: "",
       disciplina: "",
     },
-    defaultItem: {
+    itemPadrao: {
       descricao: "",
       disciplina: "",
     },
@@ -161,7 +161,7 @@ export default {
 
   computed: {
     tituloForm() {
-      return this.editarIndice === -1 ? "Cadastrar disciplina" : "Editar Dados";
+      return this.editIndice === -1 ? "Cadastrar disciplina" : "Editar Dados";
     },
   },
 
@@ -200,43 +200,43 @@ export default {
       ];
     },
     editItem(item) {
-      this.editarIndice = this.disciplinas.indexOf(item);
-      this.editarItem = Object.assign({}, item);
+      this.editIndice = this.disciplinas.indexOf(item);
+      this.itemEditado = Object.assign({}, item);
       this.dialog = true;
     },
 
-    deleteItem(item) {
-      this.editarIndice = this.disciplinas.indexOf(item);
-      this.editarItem = Object.assign({}, item);
+    removeItem(item) {
+      this.editIndice = this.disciplinas.indexOf(item);
+      this.itemEditado = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
-    deleteItemConfirm() {
-      this.disciplinas.splice(this.editarIndice, 1);
+    removeItemConfirm() {
+      this.disciplinas.splice(this.editIndice, 1);
       this.fecharDelete();
     },
 
     fechar() {
       this.dialog = false;
       this.$nextTick(() => {
-        this.editarItem = Object.assign({}, this.defaultItem);
-        this.editarIndice = -1;
+        this.itemEditado = Object.assign({}, this.itemPadrao);
+        this.editIndice = -1;
       });
     },
 
     fecharDelete() {
       this.dialogDelete = false;
       this.$nextTick(() => {
-        this.editarItem = Object.assign({}, this.defaultItem);
-        this.editarIndice = -1;
+        this.itemEditado = Object.assign({}, this.itemPadrao);
+        this.editIndice = -1;
       });
     },
 
-    save() {
-      if (this.editarIndice > -1) {
-        Object.assign(this.disciplinas[this.editarIndice], this.editarItem);
+    salvar() {
+      if (this.editIndice > -1) {
+        Object.assign(this.disciplinas[this.editIndice], this.itemEditado);
       } else {
-        this.disciplinas.push(this.editarItem);
+        this.disciplinas.push(this.itemEditado);
       }
       this.fechar();
     },
