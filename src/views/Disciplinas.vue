@@ -1,8 +1,8 @@
 <template>
-  <v-data-table :headers="headers" :items="disciplinas" class="elevation-2 data-table">
+  <v-data-table :headers="titulos" :items="disciplinas" class="elevation-2 data-table">
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title>Gerenciamento de Disciplina</v-toolbar-title>
+        <v-toolbar-title>Gerenciamento de disciplina</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-text-field
@@ -28,7 +28,7 @@
           </template>
           <v-card>
             <v-card-title>
-              <span class="text-h5">{{ formTitle }}</span>
+              <span class="text-h5">{{ tituloForm }}</span>
             </v-card-title>
 
             <v-card-text>
@@ -37,7 +37,7 @@
                   <v-row>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.descricao"
+                        v-model="editarItem.descricao"
                         label="Apelido"
                         :rules="['Campo Obrigatório']"
                         maxlenght="20"
@@ -46,15 +46,15 @@
                     </v-col>  
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.Disciplina"
-                        label="Disciplina"
+                        v-model="editarItem.disciplina"
+                        label="disciplina"
                         :rules="['Campo Obrigatório']"
                         maxlenght="20"
                       ></v-text-field>
                     </v-col> 
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.Periodo"
+                        v-model="editarItem.periodo"
                         label="Período"
                         :rules="['Campo Obrigatório']"
                         maxlenght="20"
@@ -63,7 +63,7 @@
                     </v-col> 
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.Nome"
+                        v-model="editarItem.nome"
                         label="Nome do Professor"
                         :rules="['Campo Obrigatório']"
                         maxlenght="20"
@@ -76,7 +76,7 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small color="warning" dark @click="close">
+              <v-btn small color="warning" dark @click="fechar">
                 Cancelar
               </v-btn>
               <v-btn small color="primary" dark  @click="save"> Salvar </v-btn>
@@ -90,7 +90,7 @@
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-               <v-btn small color="warning" dark @click="closeDelete"
+               <v-btn small color="warning" dark @click="fecharDelete"
                 >Não</v-btn
               >
                 <v-btn  small color="primary" dark  @click="deleteItemConfirm"
@@ -100,38 +100,17 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <!-- Modal Detalhar 
-        <v-dialog v-model="dialogDelete" max-width="400px">
-          <v-card class="card-modal">
-            <v-card-title class="text-h6"
-              >Disciplina</v-card-title>
- <v-list-item>
-      <v-list-item-content>
-        <v-list-item-title>Apelido: </v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-<v-list-item>
-      <v-list-item-content>
-        <v-list-item-title>Disciplina: </v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-            <v-card-actions>
-              <v-btn small color="warning" dark @click="closeDelete"
-                >Sair</v-btn><v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        </v-dialog> -->
       </v-toolbar>
     </template>
     <template v-slot:item.acoes="{ item }">
-      <v-icon v-icon small class="mr-2" @click="initialize">
+      <v-icon v-icon small class="mr-2" @click="inicializar">
         mdi-message-text
       </v-icon>
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize"> Reset </v-btn>
+      <v-btn color="primary" @click="inicializar"> Reset </v-btn>
     </template>
   </v-data-table>
 </template>
@@ -159,107 +138,107 @@ export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
-    headers: [
+    titulos: [
       {
         text: "Apelido",
         align: "start",
         value: "descricao",
       },
-      { text: "Disciplina", value: "Disciplina" },
+      { text: "disciplina", value: "disciplina" },
       { text: "Ações", value: "acoes", sortable: false },
     ],
     disciplinas: [],
-    editedIndex: -1,
-    editedItem: {
+    editarIndice: -1,
+    editarItem: {
       descricao: "",
-      Disciplina: "",
+      disciplina: "",
     },
     defaultItem: {
       descricao: "",
-      Disciplina: "",
+      disciplina: "",
     },
   }),
 
   computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "Cadastrar Disciplina" : "Editar Dados";
+    tituloForm() {
+      return this.editarIndice === -1 ? "Cadastrar disciplina" : "Editar Dados";
     },
   },
 
   watch: {
     dialog(val) {
-      val || this.close();
+      val || this.fechar();
     },
     dialogDelete(val) {
-      val || this.closeDelete();
+      val || this.fecharDelete();
     },
   },
 
   created() {
-    this.initialize();
+    this.inicializar();
   },
 
   methods: {
-    initialize() {
+    inicializar() {
       this.disciplinas = [
         {
           descricao: "ALG 1",
-          Disciplina: "Algoritmo 1",
+          disciplina: "Algoritmo 1",
         },
         {
           descricao: "CAL 1",
-          Disciplina: "Cálculo 1",
+          disciplina: "Cálculo 1",
         },
         {
           descricao: "IA",
-          Disciplina: "Inteligência Artificial",
+          disciplina: "Inteligência Artificial",
         },
         {
           descricao: "FIS",
-          Disciplina: "Física",
+          disciplina: "Física",
         },
       ];
     },
     editItem(item) {
-      this.editedIndex = this.disciplinas.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.editarIndice = this.disciplinas.indexOf(item);
+      this.editarItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.disciplinas.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.editarIndice = this.disciplinas.indexOf(item);
+      this.editarItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.disciplinas.splice(this.editedIndex, 1);
-      this.closeDelete();
+      this.disciplinas.splice(this.editarIndice, 1);
+      this.fecharDelete();
     },
 
-    close() {
+    fechar() {
       this.dialog = false;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
+        this.editarItem = Object.assign({}, this.defaultItem);
+        this.editarIndice = -1;
       });
     },
 
-    closeDelete() {
+    fecharDelete() {
       this.dialogDelete = false;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
+        this.editarItem = Object.assign({}, this.defaultItem);
+        this.editarIndice = -1;
       });
     },
 
     save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.disciplinas[this.editedIndex], this.editedItem);
+      if (this.editarIndice > -1) {
+        Object.assign(this.disciplinas[this.editarIndice], this.editarItem);
       } else {
-        this.disciplinas.push(this.editedItem);
+        this.disciplinas.push(this.editarItem);
       }
-      this.close();
+      this.fechar();
     },
   },
 };
