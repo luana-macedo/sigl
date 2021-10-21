@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="headers" :items="manuais" class="elevation-2">
+  <v-data-table :headers="titulos" :items="status" class="elevation-2">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Status</v-toolbar-title>
@@ -8,7 +8,7 @@
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
-          label="Search"
+          label="Pesquisar"
           single-line
           hide-details
         ></v-text-field>
@@ -28,7 +28,7 @@
           </template>
           <v-card>
             <v-card-title>
-              <span class="text-h5">{{ formTitle }}</span>
+              <span class="text-h5">{{ tituloForm }}</span>
             </v-card-title>
 
             <v-card-text>
@@ -37,7 +37,7 @@
                   <v-row>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.Status"
+                        v-model="itemEditado.Status"
                         label="Status"
                         required
                       ></v-text-field>
@@ -48,7 +48,7 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small color="warning" dark @click="close">
+              <v-btn small color="warning" dark @click="fechar">
                 Cancelar
               </v-btn>
               <v-btn small color="primary" dark @click="save"> Salvar </v-btn>
@@ -62,7 +62,7 @@
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small color="warning" dark @click="closeDelete">Não</v-btn>
+              <v-btn small color="warning" dark @click="fecharDelete">Não</v-btn>
               <v-btn small color="primary" dark @click="deleteItemConfirm"
                 >Sim</v-btn
               >
@@ -73,14 +73,14 @@
       </v-toolbar>
     </template>
     <template v-slot:item.acoes="{ item }">
-      <v-icon v-icon small class="mr-2" @click="initialize">
+      <v-icon v-icon small class="mr-2" @click="inicializar">
         mdi-message-text
       </v-icon>
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize"> Reset </v-btn>
+      <v-btn color="primary" @click="inicializar"> Reset </v-btn>
     </template>
   </v-data-table>
 </template>
@@ -98,49 +98,49 @@ export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
-    headers: [
+    titulos: [
       {
         text: "Status",
         align: "start",
         value: "Status",
       },
 
-      { text: "Ações", value: "acoes", sortable: false },
+      { text: "Ações", value: "acoes"},
     ],
-    manuais: [],
-    editedIndex: -1,
-    editedItem: {
+    status: [],
+    editIndice: -1,
+    itemEditado: {
       Status: "",
       arquivo: "",
     },
-    defaultItem: {
+    itemPadrao: {
       Status: "",
       arquivo: "",
     },
   }),
 
   computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "Cadastrar Status" : "Editar Status";
+    tituloForm() {
+      return this.editIndice === -1 ? "Cadastrar Status" : "Editar Status";
     },
   },
 
   watch: {
     dialog(val) {
-      val || this.close();
+      val || this.fechar();
     },
     dialogDelete(val) {
-      val || this.closeDelete();
+      val || this.fecharDelete();
     },
   },
 
   created() {
-    this.initialize();
+    this.inicializar();
   },
 
   methods: {
-    initialize() {
-      this.manuais = [
+    inicializar() {
+      this.status = [
         {
           Status: "Pendente",
         },
@@ -150,45 +150,45 @@ export default {
       ];
     },
     editItem(item) {
-      this.editedIndex = this.manuais.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.editIndice = this.status.indexOf(item);
+      this.itemEditado = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.manuais.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.editIndice = this.status.indexOf(item);
+      this.itemEditado = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.manuais.splice(this.editedIndex, 1);
-      this.closeDelete();
+      this.status.splice(this.editIndice, 1);
+      this.fecharDelete();
     },
 
-    close() {
+    fechar() {
       this.dialog = false;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
+        this.itemEditado = Object.assign({}, this.itemPadrao);
+        this.editIndice = -1;
       });
     },
 
-    closeDelete() {
+    fecharDelete() {
       this.dialogDelete = false;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
+        this.itemEditado = Object.assign({}, this.itemPadrao);
+        this.editIndice = -1;
       });
     },
 
     save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.manuais[this.editedIndex], this.editedItem);
+      if (this.editIndice > -1) {
+        Object.assign(this.status[this.editIndice], this.itemEditado);
       } else {
-        this.manuais.push(this.editedItem);
+        this.status.push(this.itemEditado);
       }
-      this.close();
+      this.fechar();
     },
   },
 };

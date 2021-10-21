@@ -64,10 +64,10 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn small color = " warning" dark @click="fecharDelete"
-                >Cancelar</v-btn
+                >Não</v-btn
               >
               <v-btn small color= "primary" dark  @click="deleteItemConfirm"
-                >OK</v-btn
+                >Sim</v-btn
               >
               <v-spacer></v-spacer>
             </v-card-actions>
