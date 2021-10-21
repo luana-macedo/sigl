@@ -1,12 +1,12 @@
 <template>
   <v-data-table
-    :headers="headers"
-    :items="academico"
+    :headers="titulos"
+    :items="alunos"
     class="elevation-2 data-table"
   >
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title>Gerenciamento de Acadêmico</v-toolbar-title>
+        <v-toolbar-title>Gerenciamento de Aluno</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-text-field
@@ -33,7 +33,7 @@
           </template>
           <v-card>
             <v-card-title>
-              <span class="text-h5">{{ formTitle }}</span>
+              <span class="text-h5">{{ tituloForm }}</span>
             </v-card-title>
 
             <v-card-text>
@@ -42,33 +42,33 @@
                   <v-row>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.nome"
+                        v-model="itemEditado.nome"
                         label="Nome"
                         required
                       ></v-text-field>
 
                       <v-text-field
-                        v-model="editedItem.cpf"
+                        v-model="itemEditado.cpf"
                         label="CPF"
                         required
                       ></v-text-field>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.matricula"
+                        v-model="itemEditado.matricula"
                         label="Matricula"
                         required
                       ></v-text-field>
 
                       <v-text-field
-                        v-model="editedItem.email"
+                        v-model="itemEditado.email"
                         label="E-mail"
                         required
                       ></v-text-field>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.telefone"
+                        v-model="itemEditado.telefone"
                         label="Telefone"
                         required
                       ></v-text-field>
@@ -80,21 +80,21 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-               <v-btn small color="warning" dark @click="close">
+               <v-btn small color="warning" dark @click="fechar">
                 Cancelar
               </v-btn>
-              <v-btn small color="primary" dark @click="save"> Salvar </v-btn>
+              <v-btn small color="primary" dark @click="salvar"> Salvar </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
         <v-dialog v-model="dialogDelete" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
-              >Deseja remover esta academico ?</v-card-title
+              >Deseja remover esta alunos ?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-               <v-btn small color="warning" dark @click="closeDelete">Não</v-btn>
+               <v-btn small color="warning" dark @click="fecharDelete">Não</v-btn>
               <v-btn small color="primary" dark @click="deleteItemConfirm"
                 >Sim</v-btn
               >
@@ -118,7 +118,7 @@
       </v-list-item-content>
     </v-list-item>
             <v-card-actions>
-              <v-btn small color="warning" dark @click="closeDelete"
+              <v-btn small color="warning" dark @click="fecharDelete"
                 >Sair</v-btn><v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
@@ -126,14 +126,14 @@
       </v-toolbar>
     </template>
     <template v-slot:item.acoes="{ item }">
-      <v-icon v-icon small class="mr-2" @click="initialize">
+      <v-icon v-icon small class="mr-2" @click="inicializar">
         mdi-message-text
       </v-icon>
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize"> Reset </v-btn>
+      <v-btn color="primary" @click="inicializar"> Reset </v-btn>
     </template>
   </v-data-table>
 </template>
@@ -155,25 +155,25 @@ export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
-    headers: [
+    titulos: [
       {
         text: "Matricula",
         align: "start",
         value: "matricula",
       },
       { text: "Nome", value: "nome" },
-      { text: "Ações", value: "acoes", sortable: false },
+      { text: "Ações", value: "acoes" },
     ],
-    academico: [],
-    editedIndex: -1,
-    editedItem: {
+    alunos: [],
+    editIndice: -1,
+    itemEditado: {
       matricula: "",
       nome: "",
       cpf: "",
       telefone: "",
       email: "",
     },
-    defaultItem: {
+    itemPadrao: {
       matricula: "",
       nome: "",
       cpf: "",
@@ -183,27 +183,27 @@ export default {
   }),
 
   computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "Cadastrar Academico" : "Editar Dados";
+    tituloForm() {
+      return this.editIndice === -1 ? "Cadastrar Academico" : "Editar Dados";
     },
   },
 
   watch: {
     dialog(val) {
-      val || this.close();
+      val || this.fechar();
     },
     dialogDelete(val) {
-      val || this.closeDelete();
+      val || this.fecharDelete();
     },
   },
 
   created() {
-    this.initialize();
+    this.inicializar();
   },
 
   methods: {
-    initialize() {
-      this.academico = [
+    inicializar() {
+      this.alunos = [
         {
           matricula: "00000036236",
           nome: "Joao Gomes",
@@ -223,45 +223,45 @@ export default {
       ];
     },
     editItem(item) {
-      this.editedIndex = this.academico.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.editIndice = this.alunos.indexOf(item);
+      this.itemEditado = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.academico.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.editIndice = this.alunos.indexOf(item);
+      this.itemEditado = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.academico.splice(this.editedIndex, 1);
-      this.closeDelete();
+      this.alunos.splice(this.editIndice, 1);
+      this.fecharDelete();
     },
 
-    close() {
+    fechar() {
       this.dialog = false;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
+        this.itemEditado = Object.assign({}, this.itemPadrao);
+        this.editIndice = -1;
       });
     },
 
-    closeDelete() {
+    fecharDelete() {
       this.dialogDelete = false;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
+        this.itemEditado = Object.assign({}, this.itemPadrao);
+        this.editIndice = -1;
       });
     },
 
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.academico[this.editedIndex], this.editedItem);
+    salvar() {
+      if (this.editIndice > -1) {
+        Object.assign(this.alunos[this.editIndice], this.itemEditado);
       } else {
-        this.academico.push(this.editedItem);
+        this.alunos.push(this.itemEditado);
       }
-      this.close();
+      this.fechar();
     },
   },
 };
