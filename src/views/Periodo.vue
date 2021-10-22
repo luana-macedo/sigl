@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="titulos" :items="manuais" class="elevation-2">
+  <v-data-table :headers="titulos" :items="periodos" class="elevation-2">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Período</v-toolbar-title>
@@ -131,7 +131,7 @@ export default {
       },
       { text: "Ações", value: "acoes"},
     ],
-    manuais: [],
+    periodos: [],
     editIndice: -1,
     itemEditado: {
       periodo: "",
@@ -142,7 +142,7 @@ export default {
       arquivo: "",
     },
   }),
-
+   
   computed: {
     tituloForm() {
       return this.editIndice === -1 ? "Cadastrar Periodo" : "Editar Dados";
@@ -163,8 +163,13 @@ export default {
   },
 
   methods: {
+    fetchPeriodos(){
+axios.get().then(response => {
+  this.periodos=response.data.periodos
+})
+    },
     inicializar() {
-      this.manuais = [
+      this.periodos = [
         {
           periodo: "2020/1",
           datacadastro: "12/08/2019",
@@ -188,19 +193,19 @@ export default {
       ];
     },
     editItem(item) {
-      this.editIndice = this.manuais.indexOf(item);
+      this.editIndice = this.periodos.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editIndice = this.manuais.indexOf(item);
+      this.editIndice = this.periodos.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.manuais.splice(this.editIndice, 1);
+      this.periodos.splice(this.editIndice, 1);
       this.fecharDelete();
     },
 
@@ -222,9 +227,9 @@ export default {
 
     salvar() {
       if (this.editIndice > -1) {
-        Object.assign(this.manuais[this.editIndice], this.itemEditado);
+        Object.assign(this.periodos[this.editIndice], this.itemEditado);
       } else {
-        this.manuais.push(this.itemEditado);
+        this.periodos.push(this.itemEditado);
       }
       this.fechar();
     },
