@@ -37,8 +37,18 @@
                   <v-row>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="itemEditado.descricao"
-                        label="Descrição"
+                        v-model="itemEditado.periodo"
+                        label="Periodo"
+                        required
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="itemEditado.datacadastro"
+                        label="Data de Cadastro"
+                        required
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="itemEditado.ativo"
+                        label="Status"
                         required
                       ></v-text-field>
                     </v-col>
@@ -52,7 +62,7 @@
               <v-btn small color = "warning" dark  @click="fechar">
                 Cancelar
               </v-btn>
-              <v-btn small color = "primary" dark  @click="salvar"> Salvar </v-btn>
+              <v-btn small color = "primary" dark  @click="salvar">Salvar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -107,18 +117,28 @@ export default {
       {
         text: "Periodo",
         align: "start",
-        value: "descricao",
+        value: "periodo",
       },
-      { text: "Ações", value: "acoes", sortable: false },
+      {
+        text: "Data Cadastro",
+        align: "center",
+        value: "datacadastro",
+      },
+       {
+        text: "Status",
+        align: "center",
+        value: "ativo",
+      },
+      { text: "Ações", value: "acoes"},
     ],
     manuais: [],
     editIndice: -1,
     itemEditado: {
-      descricao: "",
+      periodo: "",
       arquivo: "",
     },
     itemPadrao: {
-      descricao: "",
+      periodo: "",
       arquivo: "",
     },
   }),
@@ -146,16 +166,24 @@ export default {
     inicializar() {
       this.manuais = [
         {
-          descricao: "2020/1",
+          periodo: "2020/1",
+          datacadastro: "12/08/2019",
+          ativo : true
         },
         {
-          descricao: "2020/2",
+          periodo: "2020/2",
+          datacadastro: "12/08/2019",
+          ativo : true
         },
         {
-          descricao: "2021/1",
+          periodo: "2021/1",
+          datacadastro: "12/08/2019",
+          ativo : true
         },
         {
-          descricao: "2021/2 ",
+          periodo: "2021/2 ",
+          datacadastro: "12/08/2019",
+          ativo : true
         },
       ];
     },
