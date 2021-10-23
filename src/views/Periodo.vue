@@ -37,7 +37,7 @@
                   <v-row>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="itemEditado.periodo"
+                        v-model="itemEditado.descricao"
                         label="Periodo"
                         required
                       ></v-text-field>
@@ -116,8 +116,8 @@ export default {
     titulos: [
       {
         text: "Periodo",
-        align: "start",
-        value: "periodo",
+        align: "center",
+        value: "descricao",
       },
       {
         text: "Data Cadastro",
@@ -125,21 +125,24 @@ export default {
         value: "datacadastro",
       },
        {
-        text: "Status",
-        align: "center",
+        text: "Status", align: "center",
         value: "ativo",
       },
-      { text: "Ações", value: "acoes"},
+      { text: "Ações", align: "center", value: "acoes"},
     ],
     periodos: [],
     editIndice: -1,
     itemEditado: {
-      periodo: "",
+      descricao: "",
       arquivo: "",
+      datacadastro: "",
+      status: true
     },
     itemPadrao: {
-      periodo: "",
+      descricao: "",
       arquivo: "",
+      datacadastro: "",
+      status: true
     },
   }),
    
@@ -163,30 +166,25 @@ export default {
   },
 
   methods: {
-    fetchPeriodos(){
-axios.get().then(response => {
-  this.periodos=response.data.periodos
-})
-    },
     inicializar() {
       this.periodos = [
         {
-          periodo: "2020/1",
+          descricao: "2020/1",
           datacadastro: "12/08/2019",
           ativo : true
         },
         {
-          periodo: "2020/2",
+          descricao: "2020/2",
           datacadastro: "12/08/2019",
           ativo : true
         },
         {
-          periodo: "2021/1",
+          descricao: "2021/1",
           datacadastro: "12/08/2019",
           ativo : true
         },
         {
-          periodo: "2021/2 ",
+          descricao: "2021/2 ",
           datacadastro: "12/08/2019",
           ativo : true
         },
