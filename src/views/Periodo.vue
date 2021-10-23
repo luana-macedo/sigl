@@ -13,7 +13,7 @@
           hide-details
         ></v-text-field>
         <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="500px">
+        <v-dialog v-model="dialog" max-width="400px">
           <template v-slot:activator="{ on, attrs }">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
             <v-btn small
@@ -66,7 +66,7 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogDelete" max-width="500px">
+        <v-dialog v-model="dialogDelete" max-width="400px">
           <v-card>
             <v-card-title class="text-h5"
               >Deseja remover este Periodo?</v-card-title
