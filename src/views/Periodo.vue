@@ -16,7 +16,8 @@
         <v-dialog v-model="dialog" max-width="400px">
           <template v-slot:activator="{ on, attrs }">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
-            <v-btn small
+            <v-btn
+              small
               class="mx-2 add"
               fab
               dark
@@ -59,10 +60,10 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small color = "warning" dark  @click="fechar">
+              <v-btn small color="warning" dark @click="fechar">
                 Cancelar
               </v-btn>
-              <v-btn small color = "primary" dark  @click="salvar">Salvar</v-btn>
+              <v-btn small color="primary" dark @click="salvar">Salvar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -73,10 +74,10 @@
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small color = " warning" dark @click="fecharDelete"
+              <v-btn small color=" warning" dark @click="fecharDelete"
                 >Não</v-btn
               >
-              <v-btn small color= "primary" dark  @click="deleteItemConfirm"
+              <v-btn small color="primary" dark @click="deleteItemConfirm"
                 >Sim</v-btn
               >
               <v-spacer></v-spacer>
@@ -109,6 +110,10 @@ body {
 </style>
 
 <script>
+import axios from 'axios';
+
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/periodo";
+
 export default {
   data: () => ({
     dialog: false,
@@ -124,11 +129,12 @@ export default {
         align: "center",
         value: "datacadastro",
       },
-       {
-        text: "Status", align: "center",
+      {
+        text: "Status",
+        align: "center",
         value: "ativo",
       },
-      { text: "Ações", align: "center", value: "acoes"},
+      { text: "Ações", align: "center", value: "acoes" },
     ],
     periodos: [],
     editIndice: -1,
@@ -136,16 +142,16 @@ export default {
       descricao: "",
       arquivo: "",
       datacadastro: "",
-      status: true
+      status: true,
     },
     itemPadrao: {
       descricao: "",
       arquivo: "",
       datacadastro: "",
-      status: true
+      status: true,
     },
   }),
-   
+
   computed: {
     tituloForm() {
       return this.editIndice === -1 ? "Cadastrar Periodo" : "Editar Dados";
@@ -162,7 +168,9 @@ export default {
   },
 
   created() {
-    this.inicializar();
+    axios.get(url).then((response) => {
+      this.periodos = response.data.periodos
+    });
   },
 
   methods: {
@@ -171,22 +179,22 @@ export default {
         {
           descricao: "2020/1",
           datacadastro: "12/08/2019",
-          ativo : true
+          ativo: true,
         },
         {
           descricao: "2020/2",
           datacadastro: "12/08/2019",
-          ativo : true
+          ativo: true,
         },
         {
           descricao: "2021/1",
           datacadastro: "12/08/2019",
-          ativo : true
+          ativo: true,
         },
         {
           descricao: "2021/2 ",
           datacadastro: "12/08/2019",
-          ativo : true
+          ativo: true,
         },
       ];
     },
