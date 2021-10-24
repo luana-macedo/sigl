@@ -130,7 +130,9 @@ export default {
 
   computed: {
     tituloForm() {
-      return this.editIndice === -1 ? "Cadastrar Sala" : "Editar Sala";
+      return this.editIndice === -1 
+      ? "Cadastrar Sala" 
+      : "Editar Sala";
     },
   },
 

@@ -73,6 +73,16 @@
                         required
                       ></v-text-field>
                     </v-col>
+                     <v-col cols="8" sm="6" md="4">
+                      <v-select
+                          v-model="select"
+                           :items="items"
+                            :error-messages="errors"
+                             label="Select"
+                            data-vv-name="select"
+                            required
+                            ></v-select>
+                    </v-col>
                     <v-col cols="8" sm="6" md="4"> </v-col>
                   </v-row>
                 </v-container>
