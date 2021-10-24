@@ -113,7 +113,7 @@ export default {
         align: "start",
         value: "numero",
       },
-      { text: "nome", value: "nome" },
+      { text: "Nome", value: "nome" },
       { text: "Ações", value: "acoes", sortable: false },
     ],
     sala: [],
