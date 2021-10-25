@@ -52,15 +52,16 @@
                         maxlenght="20"
                       ></v-text-field>
                     </v-col> 
-                    <v-col cols="8" sm="6" md="4">
-                      <v-text-field
-                        v-model="itemEditado.periodo"
-                        label="Período"
-                        :rules="['Campo Obrigatório']"
-                        maxlenght="20"
-                        required
-                      ></v-text-field>
-                    </v-col> 
+                     <v-col cols="8" sm="6" md="4">
+                      <v-select
+                          v-model="select"
+                           :items="periodo"
+                           :error-messages="errors"
+                            :rules="[v => !!v || '*Campo Obrigatório*']"
+                             label="Periodo"
+                            required
+                            ></v-select>
+                    </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
                         v-model="itemEditado.nome"
@@ -157,6 +158,14 @@ export default {
       descricao: "",
       disciplina: "",
     },
+    
+  select: null,
+    periodo: [
+      'Item 1',
+      'Item 2',
+      'Item 3',
+      'Item 4',
+    ],
   }),
 
   computed: {

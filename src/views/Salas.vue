@@ -39,6 +39,7 @@
                       <v-text-field
                         v-model="itemEditado.numero"
                         label="Sala"
+                        :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>
@@ -46,6 +47,31 @@
                       <v-text-field
                         v-model="itemEditado.nome"
                         label="Nome"
+                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="8" sm="6" md="4">
+                      <v-text-field
+                        v-model="itemEditado.local"
+                        label="Local"
+                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="8" sm="6" md="4">
+                      <v-text-field
+                        v-model="itemEditado.capacidade"
+                        label="Capaciadade"
+                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="8" sm="6" md="4">
+                      <v-text-field
+                        v-model="itemEditado.descrição"
+                        label="Descrição "
+                        :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>
@@ -121,10 +147,16 @@ export default {
     itemEditado: {
       numero: "",
       nome: "",
+      local: "",
+      capacidade: "",
+      descrição: "",
     },
     defaultItem: {
       numero: "",
       nome: "",
+      local: "",
+      capacidade: "",
+      descrição: "",
     },
   }),
 

@@ -39,16 +39,19 @@
                       <v-text-field
                         v-model="itemEditado.descricao"
                         label="Periodo"
+                        :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                       <v-text-field
                         v-model="itemEditado.datacadastro"
                         label="Data de Cadastro"
+                        :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                       <v-text-field
                         v-model="itemEditado.ativo"
                         label="Status"
+                        :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>

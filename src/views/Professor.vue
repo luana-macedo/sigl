@@ -39,12 +39,14 @@
                       <v-text-field
                         v-model="itemEditado.nome"
                         label="Nome"
+                        :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
 
                       <v-text-field
                         v-model="itemEditado.cpf"
                         label="CPF"
+                        :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>
@@ -52,12 +54,14 @@
                       <v-text-field
                         v-model="itemEditado.matricula"
                         label="Matricula"
+                        :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
 
                       <v-text-field
                         v-model="itemEditado.email"
                         label="E-mail"
+                        :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>
@@ -65,6 +69,7 @@
                       <v-text-field
                         v-model="itemEditado.telefone"
                         label="Telefone"
+                        :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>

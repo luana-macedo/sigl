@@ -39,6 +39,7 @@
                       <v-text-field
                         v-model="itemEditado.Status"
                         label="Status"
+                        :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>

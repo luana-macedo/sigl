@@ -39,6 +39,7 @@
                       <v-text-field
                         v-model="itemEditado.descricao"
                         label="Descrição"
+                        :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>  
@@ -46,6 +47,7 @@
                       <v-file-input truncate-length="18" 
                       v-model="itemEditado.arquivo"
                         label="Arquivo"
+                        :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-file-input>
                     </v-col> 

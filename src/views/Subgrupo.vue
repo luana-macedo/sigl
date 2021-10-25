@@ -39,6 +39,7 @@
                       <v-text-field
                         v-model="itemEditado.grupo"
                         label="Apelido do grupo"
+                        :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>
@@ -46,8 +47,29 @@
                       <v-text-field
                         v-model="itemEditado.arquivo"
                         label="Nome"
+                        :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
+                    </v-col>
+                    <v-col cols="8" sm="6" md="4">
+                      <v-select
+                          v-model="select"
+                           :items="prof"
+                            :error-messages="errors"
+                            :rules="[v => !!v || '*Campo Obrigatório*']"
+                             label="Professor"
+                            required
+                            ></v-select>
+                    </v-col>
+                    <v-col cols="8" sm="6" md="4">
+                      <v-select
+                          v-model="select1"
+                           :items="disc"
+                           :error-messages="errors"
+                            :rules="[v => !!v || '*Campo Obrigatório*']"
+                             label="Disciplina"
+                            required
+                            ></v-select>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -143,6 +165,20 @@ export default {
     itemPadrao: {
       grupo: "",
     },
+    select: null,
+      prof: [
+        'Alex Coelho ',
+        'Fred Pires',
+        'Jânio Junior',
+        'Márcia Padilha',
+      ],
+      select1: null,
+      disc: [
+        'Alg 2',
+        'Calculo 1',
+        'Projeto Integrador ',
+        'Direito',
+      ],
   }),
 
   computed: {
@@ -181,6 +217,19 @@ export default {
         },
       ];
     },
+
+    methods: {
+    validate () {
+      this.$refs.form.validate()
+    },
+    reset () {
+      this.$refs.form.reset()
+    },
+    resetValidation () {
+      this.$refs.form.resetValidation()
+    },
+  },
+
     editItem(item) {
       this.editIndice = this.manuais.indexOf(item);
       this.itemEditado = Object.assign({}, item);
