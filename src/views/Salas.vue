@@ -69,8 +69,8 @@
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="itemEditado.descrição"
-                        label="Descrição "
+                        v-model="itemEditado.descricao"
+                        label="Descrição"
                         :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
@@ -129,7 +129,16 @@ body {
   padding: 2%;
 }
 </style>
+
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+Vue.use(VueAxios, axios) 
+
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/sala"
+
+
 export default {
   data: () => ({
     dialog: false,
@@ -150,14 +159,14 @@ export default {
       nome: "",
       local: "",
       capacidade: "",
-      descrição: "",
+      descricao: "",
     },
     defaultItem: {
       numero: "",
       nome: "",
       local: "",
       capacidade: "",
-      descrição: "",
+      descricao: "",
     },
   }),
 
@@ -184,24 +193,10 @@ export default {
 
   methods: {
     inicializar() {
-      this.sala = [
-        {
-          numero: "04",
-          nome: "Clinica",
-        },
-        {
-          numero: "03",
-          nome: "Sala de Radiologia",
-        },
-        {
-          numero: "02",
-          nome: "Sala de exames",
-        },
-        {
-          numero: " 01",
-          nome: "Laboratoria de Anatomia",
-        },
-      ];
+      this.axios.get(url, this.sala).then(res => {
+				this.sala = res.data
+				console.log(res.data)
+			})
     },
     editItem(item) {
       this.editIndice = this.sala.indexOf(item);
