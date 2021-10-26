@@ -1,4 +1,4 @@
-import Vue from 'vue'
+/* import Vue from 'vue'
 import axios from 'axios'
 
 Vue.use({
@@ -7,4 +7,4 @@ Vue.use({
             baseURL: 'http://api-sig-itpac-84633.herokuapp.com'
         })
     }
-})
+}) */
