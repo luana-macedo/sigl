@@ -37,13 +37,13 @@
                   <v-row>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="itemEditado.descricao"
+                        v-model="itemEditado.periodo"
                         label="Periodo"
                         :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                       <v-text-field
-                        v-model="itemEditado.datacadastro"
+                        v-model="itemEditado.dataCadastro"
                         label="Data de Cadastro"
                         :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
@@ -112,6 +112,14 @@ body {
 </style>
 
 <script>
+
+import Vue from 'vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+Vue.use(VueAxios, axios) 
+
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/periodo"
+
 export default {
 
   data: () => ({
@@ -121,12 +129,12 @@ export default {
       {
         text: "Periodo",
         align: "center",
-        value: "descricao",
+        value: "periodo",
       },
       {
         text: "Data Cadastro",
         align: "center",
-        value: "datacadastro",
+        value: "dataCadastro",
       },
        {
         text: "Status", align: "center",
@@ -137,16 +145,14 @@ export default {
     periodos: [],
     editIndice: -1,
     itemEditado: {
-      descricao: "",
-      arquivo: "",
-      datacadastro: "",
-      status: true
+      periodo: "",
+      dataCadastro: "",
+      ativo: true
     },
     itemPadrao: {
-      descricao: "",
-      arquivo: "",
-      datacadastro: "",
-      status: true
+      periodo: "",
+      dataCadastro: "",
+      ativo: true
     },
   }),
    
@@ -171,28 +177,10 @@ export default {
 
   methods: {
     inicializar() {
-      this.periodos = [
-        {
-          descricao: "2020/1",
-          datacadastro: "12/08/2019",
-          ativo : true
-        },
-        {
-          descricao: "2020/2",
-          datacadastro: "12/08/2019",
-          ativo : true
-        },
-        {
-          descricao: "2021/1",
-          datacadastro: "12/08/2019",
-          ativo : true
-        },
-        {
-          descricao: "2021/2 ",
-          datacadastro: "12/08/2019",
-          ativo : true
-        },
-      ];
+    this.axios.get(url, this.periodos).then(res => {
+				this.periodos = res.data
+				console.log(res.data)
+			})
     },
     editItem(item) {
       this.editIndice = this.periodos.indexOf(item);
