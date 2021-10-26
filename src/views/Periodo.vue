@@ -95,9 +95,6 @@
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
-    <template v-slot:no-data>
-      <v-btn color="primary" @click="inicializar"> Reset </v-btn>
-    </template>
   </v-data-table>
 </template>
 
@@ -216,6 +213,11 @@ export default {
     },
 
     salvar() {
+      this.axios.post(url, this.periodos).then(res => {
+				this.periodos = res.data
+				console.log(res.data)
+			})
+
       if (this.editIndice > -1) {
         Object.assign(this.periodos[this.editIndice], this.itemEditado);
       } else {
