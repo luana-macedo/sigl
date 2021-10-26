@@ -113,6 +113,7 @@ body {
 
 <script>
 export default {
+
   data: () => ({
     dialog: false,
     dialogDelete: false,
