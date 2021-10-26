@@ -119,6 +119,7 @@
     </template>
   </v-data-table>
 </template>
+
 <style>
 .add {
   width: 5%;
