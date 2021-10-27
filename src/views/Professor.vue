@@ -150,6 +150,7 @@ export default {
       cpf: "",
       telefone: "",
       email: "",
+      ativo: true,
     },
     itemPadrao: {
       matricula: "",
@@ -157,6 +158,7 @@ export default {
       cpf: "",
       telefone: "",
       email: "null",
+      ativo: true,
     },
   }),
 

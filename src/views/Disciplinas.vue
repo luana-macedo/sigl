@@ -136,6 +136,12 @@
 }
 </style>
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+Vue.use(VueAxios, axios) 
+
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina"
 export default {
   data: () => ({
     dialog: false,
