@@ -55,7 +55,7 @@
                      <v-col cols="8" sm="6" md="4">
                       <v-select
                           v-model="select"
-                           :items="periodo"
+                           :items="disciplina"
                            :error-messages="errors"
                             :rules="[v => !!v || '*Campo Obrigatório*']"
                              label="Periodo"
@@ -165,7 +165,7 @@ export default {
     },
     
   select: null,
-    periodo: [
+    disciplina: [
       'Item 1',
       'Item 2',
       'Item 3',
@@ -200,25 +200,26 @@ export default {
   },
 
   methods: {
+
     inicializar() {
        this.axios.get(url, this.diciplinas).then((res) => {
         this.disciplinas = res.data;
         console.log(res.data);
       });
-    },
+
     editItem(item) {
       this.editIndice = this.disciplinas.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       this.dialog = true;
     },
 
-    removeItem(item) {
+    deleteItem(item) {
       this.editIndice = this.disciplinas.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
-    removeItemConfirm() {
+    deleteItemConfirm() {
       this.disciplinas.splice(this.editIndice, 1);
       this.fecharDelete();
     },
@@ -229,7 +230,7 @@ export default {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
       });
-    },
+    }
 
     fecharDelete() {
       this.dialogDelete = false;
@@ -237,12 +238,24 @@ export default {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
       });
-    },
+    }
 
     salvar() {
       if (this.editIndice > -1) {
+
+        axios.put(url+this.itemEditado.id,{disciplina : this.itemEditado.disciplina,dataCadastro : this.itemEditado.dataCadastro, ativo: this.itemEditado.ativo}).then(res => {
+				this.disciplinas = res.data
+				console.log(res.data)
+			})
+
         Object.assign(this.disciplinas[this.editIndice], this.itemEditado);
       } else {
+
+        axios.post(url,{disciplina: this.itemEditado.disciplina,dataCadastro: this.itemEditado.dataCadastro,ativo: this.itemEditado.ativo}).then(res => {
+				this.disciplinas = res.data
+				console.log(res.data)
+			})
+  
         this.disciplinas.push(this.itemEditado);
       }
       this.fechar();
