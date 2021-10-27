@@ -109,9 +109,6 @@
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
-    <template v-slot:no-data>
-      <v-btn color="primary" @click="inicializar"> Reset </v-btn>
-    </template>
   </v-data-table>
 </template>
 <style>
@@ -124,6 +121,14 @@ body {
 }
 </style>
 <script>
+
+import Vue from 'vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+Vue.use(VueAxios, axios) 
+
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/professores"
+
 export default {
   data: () => ({
     dialog: false,
@@ -178,24 +183,10 @@ export default {
 
   methods: {
     inicializar() {
-      this.manuais = [
-        {
-          matricula: "00000001",
-          nome: "Alex Coelho",
-        },
-        {
-          matricula: "00000002",
-          nome: "Frederico Pires",
-        },
-        {
-          matricula: "00000003",
-          nome: "Antonio Rafael",
-        },
-        {
-          matricula: "00000004",
-          nome: "Jânio Junior",
-        },
-      ];
+        axios.get(url, this.professor).then(res => {
+				this.professor = res.data
+				console.log(res.data)
+			})
     },
     editItem(item) {
       this.editIndice = this.manuais.indexOf(item);
