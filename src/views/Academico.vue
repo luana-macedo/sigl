@@ -79,14 +79,6 @@
                       ></v-text-field>
                     </v-col>
                      <v-col cols="8" sm="6" md="4">
-                      <v-select
-                          v-model="select"
-                           :items="items"
-                            :error-messages="errors"
-                             label="Select"
-                            data-vv-name="select"
-                            required
-                            ></v-select>
                     </v-col>
                     <v-col cols="8" sm="6" md="4"> </v-col>
                   </v-row>
@@ -147,9 +139,6 @@
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
-    <template v-slot:no-data>
-      <v-btn color="primary" @click="inicializar"> Reset </v-btn>
-    </template>
   </v-data-table>
 </template>
 
@@ -166,6 +155,14 @@
 }
 </style>
 <script>
+
+import Vue from 'vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+Vue.use(VueAxios, axios) 
+
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/aluno"
+
 export default {
   data: () => ({
     dialog: false,
@@ -218,24 +215,10 @@ export default {
 
   methods: {
     inicializar() {
-      this.alunos = [
-        {
-          matricula: "00000036236",
-          nome: "Joao Gomes",
-        },
-        {
-          matricula: "98645863215",
-          nome: "Vitor Fernandes",
-        },
-        {
-          matricula: "48961651646",
-          nome: "Gabriel Gava",
-        },
-        {
-          matricula: "64631654165",
-          nome: "Felipe Amorim",
-        },
-      ];
+        axios.get(url, this.alunos).then(res => {
+				this.alunos = res.data
+				console.log(res.data)
+			})
     },
     editItem(item) {
       this.editIndice = this.alunos.indexOf(item);
