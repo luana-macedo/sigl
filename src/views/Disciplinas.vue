@@ -63,14 +63,15 @@
                             ></v-select>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
-                      <v-text-field
-                        v-model="itemEditado.nome"
-                        label="Nome do Professor"
-                        :rules="['Campo Obrigatório']"
-                        maxlenght="20"
-                        required
-                      ></v-text-field>
-                    </v-col> 
+                      <v-select
+                          v-model="select1"
+                           :items="professor"
+                           :error-messages="errors"
+                            :rules="[v => !!v || '*Campo Obrigatório*']"
+                             label="Nome do Professor"
+                            required
+                            ></v-select>
+                    </v-col>
                   </v-row>
                 </v-container>
               </v-form>
@@ -161,6 +162,13 @@ export default {
     
   select: null,
     periodo: [
+      'Item 1',
+      'Item 2',
+      'Item 3',
+      'Item 4',
+    ],
+    select1: null,
+    professor: [
       'Item 1',
       'Item 2',
       'Item 3',

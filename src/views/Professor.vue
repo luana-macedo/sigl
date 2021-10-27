@@ -151,7 +151,7 @@ export default {
       nome: "",
       cpf: "",
       telefone: "",
-      email: "",
+      email: "null",
     },
   }),
 
