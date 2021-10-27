@@ -143,45 +143,40 @@ Vue.use(VueAxios, axios)
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina"
 export default {
-  data: () => ({
+ data: () => ({
     dialog: false,
     dialogDelete: false,
     titulos: [
       {
-        text: "Apelido",
-        align: "start",
-        value: "descricao",
+        text: "Periodo",
+        align: "center",
+        value: "periodo",
       },
-      { text: "disciplina", value: "disciplina" },
-      { text: "Ações", value: "acoes"},
+      {
+        text: "Data Cadastro",
+        align: "center",
+        value: "dataCadastro",
+      },
+       {
+        text: "Status", align: "center",
+        value: "ativo",
+      },
+      { text: "Ações", align: "center", value: "acoes"},
     ],
-    disciplinas: [],
+    periodos: [],
     editIndice: -1,
     itemEditado: {
-      descricao: "",
-      disciplina: "",
+      periodo: "",
+      dataCadastro: "",
+      ativo: true
     },
     itemPadrao: {
-      descricao: "",
-      disciplina: "",
+      periodo: "",
+      dataCadastro: "",
+      ativo: true
     },
-    
-  select: null,
-    disciplina: [
-      'Item 1',
-      'Item 2',
-      'Item 3',
-      'Item 4',
-    ],
-    select1: null,
-    professor: [
-      'Item 1',
-      'Item 2',
-      'Item 3',
-      'Item 4',
-    ],
   }),
-
+   
   computed: {
     tituloForm() {
       return this.editIndice === -1 ? "Cadastrar disciplina" : "Editar Dados";
@@ -241,24 +236,39 @@ export default {
       });
     },
 
-    salvar() {
+     salvar() {
       if (this.editIndice > -1) {
-
-        axios.put(url+this.itemEditado.id,{disciplina : this.itemEditado.disciplina,dataCadastro : this.itemEditado.dataCadastro, ativo: this.itemEditado.ativo}).then(res => {
-				this.disciplinas = res.data
-				console.log(res.data)
-			})
+        axios
+          .put(url + this.itemEditado.id, {
+            disciplinas: this.itemEditado.disciplinas,
+            numero: this.itemEditado.numero,
+            nome: this.itemEditado.nome,
+            local: this.itemEditado.local,
+            capacidade: this.itemEditado.capacidade,
+            descricao: this.itemEditado.descricao,
+          })
+          .then((res) => {
+            this.disciplinas = res.data;
+            console.log(res.data);
+          });
 
         Object.assign(this.disciplinas[this.editIndice], this.itemEditado);
       } else {
+        axios
+          .post(url, {
+            apelido: this.itemEditado.apelido,
+            nome: this.itemEditado.nome,
+            período: this.itemEditado.período,
+            nomedoprofessor: this.itemEditado.nomedoprofessor,      
+          })
+          .then((res) => {
+            this.disciplinas = res.data;
+            console.log(res.data);
+          });
 
-        axios.post(url,{disciplina: this.itemEditado.disciplina,dataCadastro: this.itemEditado.dataCadastro,ativo: this.itemEditado.ativo}).then(res => {
-				this.disciplinas = res.data
-				console.log(res.data)
-			})
-  
         this.disciplinas.push(this.itemEditado);
       }
+
       this.fechar();
     },
   },
