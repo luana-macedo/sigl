@@ -201,6 +201,7 @@ export default {
         this.disciplinas = res.data;
         console.log(res.data);
       });
+    },
 
     editItem(item) {
       this.editIndice = this.disciplinas.indexOf(item);
@@ -225,7 +226,7 @@ export default {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
       });
-    }
+    },
 
     fecharDelete() {
       this.dialogDelete = false;
@@ -233,7 +234,7 @@ export default {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
       });
-    }
+    },
 
      salvar() {
       if (this.editIndice > -1) {
