@@ -72,7 +72,6 @@
           { title: 'EVIDÊNCIAS', icon: 'mdi-page-next', to:'/evidencias'},
           { title: 'SALA', icon: 'mdi-google-classroom', to:'/salas'},
           { title: 'STATUS', icon: 'mdi-list-status', to:'/status'},
-          { title: 'CALENDÁRIO', icon: 'mdi-calendar-month-outline', to:'/calendario'},
         ],
     }),
   }

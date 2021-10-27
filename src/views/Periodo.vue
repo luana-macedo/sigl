@@ -227,7 +227,6 @@ export default {
 				this.periodos = res.data
 				console.log(res.data)
 			})
-  
         this.periodos.push(this.itemEditado);
       }
       this.fechar();

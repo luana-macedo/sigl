@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="titulos" :items="sala" class="elevation-2">
+  <v-data-table :headers="titulos" :items="salas" class="elevation-2">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Sala</v-toolbar-title>
@@ -16,7 +16,8 @@
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
-            <v-btn small
+            <v-btn
+              small
               class="mx-2 add"
               fab
               dark
@@ -39,7 +40,7 @@
                       <v-text-field
                         v-model="itemEditado.numero"
                         label="Sala"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>
@@ -47,7 +48,7 @@
                       <v-text-field
                         v-model="itemEditado.nome"
                         label="Nome"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>
@@ -55,15 +56,15 @@
                       <v-text-field
                         v-model="itemEditado.local"
                         label="Local"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
                         v-model="itemEditado.capacidade"
-                        label="Capaciadade"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        label="Capacidade"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>
@@ -71,7 +72,7 @@
                       <v-text-field
                         v-model="itemEditado.descricao"
                         label="Descrição"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>
@@ -91,7 +92,7 @@
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-card-title class="text-h5"
-              >Deseja remover esta sala?</v-card-title
+              >Deseja remover esta salas?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -114,8 +115,7 @@
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
-    <template v-slot:no-data>
-    </template>
+    <template v-slot:no-data> </template>
   </v-data-table>
 </template>
 
@@ -130,13 +130,12 @@ body {
 </style>
 
 <script>
-import Vue from 'vue'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
-Vue.use(VueAxios, axios) 
+import Vue from "vue";
+import axios from "axios";
+import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
 
-var url = "http://api-sig-itpac-84633.herokuapp.com/api/sala"
-
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/sala";
 
 export default {
   data: () => ({
@@ -151,29 +150,27 @@ export default {
       { text: "Nome", value: "nome" },
       { text: "Ações", value: "acoes", sortable: false },
     ],
-    sala: [],
+    salas: [],
     editIndice: -1,
     itemEditado: {
-      numero: "",
+      numero: 0,
       nome: "",
       local: "",
-      capacidade: "",
+      capacidade: 0,
       descricao: "",
     },
     defaultItem: {
-      numero: "",
+      numero: 0,
       nome: "",
       local: "",
-      capacidade: "",
+      capacidade: 0,
       descricao: "",
     },
   }),
 
   computed: {
     tituloForm() {
-      return this.editIndice === -1 
-      ? "Cadastrar Sala" 
-      : "Editar Sala";
+      return this.editIndice === -1 ? "Cadastrar Sala" : "Editar Sala";
     },
   },
 
@@ -192,25 +189,25 @@ export default {
 
   methods: {
     inicializar() {
-      this.axios.get(url, this.sala).then(res => {
-				this.sala = res.data
-				console.log(res.data)
-			})
+      this.axios.get(url, this.salas).then((res) => {
+        this.salas = res.data;
+        console.log(res.data);
+      });
     },
     editItem(item) {
-      this.editIndice = this.sala.indexOf(item);
+      this.editIndice = this.salas.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editIndice = this.sala.indexOf(item);
+      this.editIndice = this.salas.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.sala.splice(this.editIndice, 1);
+      this.salas.splice(this.editIndice, 1);
       this.fecharDelete();
     },
 
@@ -232,13 +229,41 @@ export default {
 
     salvar() {
       if (this.editIndice > -1) {
-        Object.assign(this.sala[this.editIndice], this.itemEditado);
+        axios
+          .put(url + this.itemEditado.id, {
+            salas: this.itemEditado.salas,
+            numero: this.itemEditado.numero,
+            nome: this.itemEditado.nome,
+            local: this.itemEditado.local,
+            capacidade: this.itemEditado.capacidade,
+            descricao: this.itemEditado.descricao,
+          })
+          .then((res) => {
+            this.salas = res.data;
+            console.log(res.data);
+          });
+
+        Object.assign(this.salas[this.editIndice], this.itemEditado);
       } else {
-        this.sala.push(this.itemEditado);
+        axios
+          .post(url, {
+            salas: this.itemEditado.salas,
+            numero: this.itemEditado.numero,
+            nome: this.itemEditado.nome,
+            local: this.itemEditado.local,
+            capacidade: this.itemEditado.capacidade,
+            descricao: this.itemEditado.descricao,
+          })
+          .then((res) => {
+            this.salas = res.data;
+            console.log(res.data);
+          });
+
+        this.salas.push(this.itemEditado);
       }
+
       this.fechar();
     },
   },
 };
 </script>
-

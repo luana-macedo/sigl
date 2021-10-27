@@ -1,5 +1,9 @@
 <template>
-  <v-data-table :headers="titulos" :items="manuais" class="elevation-2 data-table">
+  <v-data-table
+    :headers="titulos"
+    :items="manuais"
+    class="elevation-2 data-table"
+  >
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Manuais</v-toolbar-title>
@@ -16,7 +20,8 @@
         <v-dialog v-model="dialog" max-width="350px">
           <template v-slot:activator="{ on, attrs }" class="template-add">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
-            <v-btn small
+            <v-btn
+              small
               class="mx-2 add"
               fab
               dark
@@ -39,27 +44,28 @@
                       <v-text-field
                         v-model="itemEditado.descricao"
                         label="Descrição"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
-                    </v-col>  
+                    </v-col>
                     <v-col cols="12" sm="4" md="8">
-                      <v-file-input truncate-length="18" 
-                      v-model="itemEditado.arquivo"
+                      <v-file-input
+                        truncate-length="18"
+                        v-model="itemEditado.fileName"
                         label="Arquivo"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-file-input>
-                    </v-col> 
+                    </v-col>
                   </v-row>
                 </v-container>
               </v-form>
             </v-card-text>
             <v-card-actions id="card-actions">
-               <v-btn small color="warning" dark @click="fechar">
+              <v-btn small color="warning" dark @click="fechar">
                 Cancelar
               </v-btn>
-              <v-btn small color="primary" dark  @click="salvar"> Salvar </v-btn>
+              <v-btn small color="primary" dark @click="salvar"> Salvar </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -70,10 +76,10 @@
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-                <v-btn small color="warning" dark @click="fecharDelete"
+              <v-btn small color="warning" dark @click="fecharDelete"
                 >Não</v-btn
-              > 
-                <v-btn  small color="primary" dark  @click="deleteItemConfirm"
+              >
+              <v-btn small color="primary" dark @click="deleteItemConfirm"
                 >Sim</v-btn
               >
               <v-spacer></v-spacer>
@@ -100,20 +106,27 @@
   width: 40px;
   height: 40px;
 }
-.template-add{
-  padding-top:1%;
+.template-add {
+  padding-top: 1%;
 }
 .data-table {
   padding: 3%;
 }
-#card-actions{
-   padding-left:18%;
+#card-actions {
+  padding-left: 18%;
 }
-.card-modal{
+.card-modal {
   text-align: center;
 }
 </style>
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+Vue.use(VueAxios, axios)
+
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/manual"
+
 export default {
   data: () => ({
     dialog: false,
@@ -124,18 +137,18 @@ export default {
         align: "start",
         value: "descricao",
       },
-      { text: "Arquivo", value: "arquivo" },
+      { text: "Arquivo", value: "fileNAme" },
       { text: "Ações", value: "acoes"},
     ],
     manuais: [],
     editIndice: -1,
     itemEditado: {
       descricao: "",
-      arquivo: "",
+      fileNAme: "",
     },
     itemPadrao: {
       descricao: "",
-      arquivo: "",
+      fileNAme: "",
     },
   }),
 
@@ -160,24 +173,10 @@ export default {
 
   methods: {
     inicializar() {
-      this.manuais = [
-        {
-          descricao: "Manual da Aula",
-          arquivo: "manualdaaula2.pdf",
-        },
-        {
-          descricao: "Manual Anatomia",
-          arquivo: "manualanatomia.pdf",
-        },
-        {
-          descricao: "Manual Clinico",
-          arquivo: "manualclinico.pdf",
-        },
-        {
-          descricao: "Manual ",
-          arquivo: "manual",
-        },
-      ];
+   axios.get(url, this.periodos).then(res => {
+				this.periodos = res.data
+				console.log(res.data)
+			})
     },
     editItem(item) {
       this.editIndice = this.manuais.indexOf(item);
