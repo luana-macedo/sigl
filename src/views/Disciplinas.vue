@@ -111,9 +111,6 @@
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="removeItem(item)"> mdi-delete </v-icon>
     </template>
-    <template v-slot:no-data>
-      <v-btn color="primary" @click="inicializar"> Reset </v-btn>
-    </template>
   </v-data-table>
 </template>
 
@@ -141,7 +138,8 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 Vue.use(VueAxios, axios) 
 
-var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina"
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina" 
+
 export default {
   data: () => ({
     dialog: false,
@@ -203,24 +201,10 @@ export default {
 
   methods: {
     inicializar() {
-      this.disciplinas = [
-        {
-          descricao: "ALG 1",
-          disciplina: "Algoritmo 1",
-        },
-        {
-          descricao: "CAL 1",
-          disciplina: "Cálculo 1",
-        },
-        {
-          descricao: "IA",
-          disciplina: "Inteligência Artificial",
-        },
-        {
-          descricao: "FIS",
-          disciplina: "Física",
-        },
-      ];
+       this.axios.get(url, this.diciplinas).then((res) => {
+        this.disciplinas = res.data;
+        console.log(res.data);
+      });
     },
     editItem(item) {
       this.editIndice = this.disciplinas.indexOf(item);

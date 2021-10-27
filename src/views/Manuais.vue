@@ -72,7 +72,7 @@
         <v-dialog v-model="dialogDelete" max-width="350px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
-              >Deseja remover este manual ?</v-card-title
+              >Deseja remover este manuais ?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -94,9 +94,6 @@
       </v-icon>
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="removeItem(item)"> mdi-delete </v-icon>
-    </template>
-    <template v-slot:no-data>
-      <v-btn color="primary" @click="inicializar"> Reset </v-btn>
     </template>
   </v-data-table>
 </template>
@@ -125,7 +122,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 Vue.use(VueAxios, axios)
 
-var url = "http://api-sig-itpac-84633.herokuapp.com/api/manual"
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/manuais"
 
 export default {
   data: () => ({
@@ -137,18 +134,18 @@ export default {
         align: "start",
         value: "descricao",
       },
-      { text: "Arquivo", value: "fileNAme" },
+      { text: "Arquivo", value: "fileName" },
       { text: "Ações", value: "acoes"},
     ],
     manuais: [],
     editIndice: -1,
     itemEditado: {
       descricao: "",
-      fileNAme: "",
+      fileName: "",
     },
     itemPadrao: {
       descricao: "",
-      fileNAme: "",
+      fileName: "",
     },
   }),
 
@@ -173,8 +170,8 @@ export default {
 
   methods: {
     inicializar() {
-   axios.get(url, this.periodos).then(res => {
-				this.periodos = res.data
+   axios.get(url, this.manuais).then(res => {
+				this.manuais = res.data
 				console.log(res.data)
 			})
     },
@@ -213,8 +210,19 @@ export default {
 
     salvar() {
       if (this.editIndice > -1) {
+
+        axios.put(url+this.itemEditado.id,{manuais : this.itemEditado.manuais,descricao : this.itemEditado.descricao, fileName: this.itemEditado.fileName}).then(res => {
+				this.manuais = res.data
+				console.log(res.data)
+			})
+
         Object.assign(this.manuais[this.editIndice], this.itemEditado);
       } else {
+
+        axios.post(url,{manuais: this.itemEditado.manuais,descricao: this.itemEditado.descricao,fileName: this.itemEditado.fileName }).then(res => {
+				this.manuais = res.data
+				console.log(res.data)
+			})
         this.manuais.push(this.itemEditado);
       }
       this.fechar();

@@ -39,7 +39,7 @@
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
                         v-model="itemEditado.numero"
-                        label="Sala"
+                        label="N° Sala"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
@@ -92,7 +92,7 @@
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-card-title class="text-h5"
-              >Deseja remover esta salas?</v-card-title
+              >Deseja remover esta sala ?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
