@@ -174,7 +174,7 @@ export default {
 
   methods: {
     inicializar() {
-    this.axios.get(url, this.periodos).then(res => {
+        axios.get(url, this.periodos).then(res => {
 				this.periodos = res.data
 				console.log(res.data)
 			})
@@ -213,14 +213,21 @@ export default {
     },
 
     salvar() {
-      this.axios.post(url, this.periodos).then(res => {
+      if (this.editIndice > -1) {
+
+        axios.put(url+this.itemEditado.id,{periodo : this.itemEditado.periodo,dataCadastro : this.itemEditado.dataCadastro, ativo: this.itemEditado.ativo}).then(res => {
 				this.periodos = res.data
 				console.log(res.data)
 			})
 
-      if (this.editIndice > -1) {
         Object.assign(this.periodos[this.editIndice], this.itemEditado);
       } else {
+
+        axios.post(url,{periodo: this.itemEditado.periodo,dataCadastro: this.itemEditado.dataCadastro,ativo: this.itemEditado.ativo}).then(res => {
+				this.periodos = res.data
+				console.log(res.data)
+			})
+  
         this.periodos.push(this.itemEditado);
       }
       this.fechar();
