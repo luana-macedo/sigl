@@ -197,7 +197,7 @@ export default {
     deleteItemConfirm() {
       this.salas.splice(this.editIndice, 1);
 
-      axios.delete(url + this.itemEditado.id)
+      axios.patch(url + this.itemEditado.id)
       .then((res) => {
         this.salas = res.data;
         console.warn(res.data);

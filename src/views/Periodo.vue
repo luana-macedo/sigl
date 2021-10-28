@@ -90,7 +90,7 @@
     </template>
     <template v-slot:item.acoes="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+      <v-icon small @click="deleteItem(item)"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -191,6 +191,12 @@ export default {
 
     deleteItemConfirm() {
       this.periodos.splice(this.editIndice, 1);
+      axios.patch(url + this.itemEditado.id)
+      .then((res) => {
+        this.periodos = res.data;
+        console.warn(res.data);
+      });
+
       this.fecharDelete();
     },
 
