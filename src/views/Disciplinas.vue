@@ -148,6 +148,7 @@ var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina"
 
 export default {
   data: () => ({
+  search: "",
     dialog: false,
     dialogDelete: false,
     titulos: [
