@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="titulos" :items="salas" class="elevation-2">
+  <v-data-table :headers="titulos" :items="salas" :search="search" class="elevation-2">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Sala</v-toolbar-title>
@@ -24,8 +24,7 @@
               color="green"
               v-bind="attrs"
               v-on="on"
-              ><v-icon dark> mdi-plus</v-icon></v-btn
-            >
+              ><v-icon dark> mdi-plus</v-icon></v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -82,26 +81,18 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small color="warning" dark @click="fechar">
-                Cancelar
-              </v-btn>
+              <v-btn small color="warning" dark @click="fechar">Cancelar</v-btn>
               <v-btn small color="primary" dark @click="salvar"> Salvar </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
-            <v-card-title class="text-h5"
-              >Deseja remover esta sala ?</v-card-title
-            >
+            <v-card-title class="text-h5">Deseja remover esta sala ?</v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small color="warning" dark @click="fecharDelete"
-                >Não</v-btn
-              >
-              <v-btn small color="primary" dark @click="deleteItemConfirm"
-                >Sim</v-btn
-              >
+              <v-btn small color="warning" dark @click="fecharDelete"> Não</v-btn>
+              <v-btn small color="primary" dark @click="deleteItemConfirm">Sim</v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
@@ -109,9 +100,7 @@
       </v-toolbar>
     </template>
     <template v-slot:item.acoes="{ item }">
-      <v-icon v-icon small class="mr-2" @click="inicializar">
-        mdi-message-text
-      </v-icon>
+      <v-icon v-icon small class="mr-2" @click="inicializar">mdi-message-text</v-icon>
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
@@ -139,6 +128,7 @@ var url = "http://api-sig-itpac-84633.herokuapp.com/api/sala";
 
 export default {
   data: () => ({
+    search: "",
     dialog: false,
     dialogDelete: false,
     titulos: [
@@ -158,6 +148,7 @@ export default {
       local: "",
       capacidade: 0,
       descricao: "",
+      ativo: true,
     },
     defaultItem: {
       numero: 0,
@@ -165,6 +156,7 @@ export default {
       local: "",
       capacidade: 0,
       descricao: "",
+      ativo: true,
     },
   }),
 

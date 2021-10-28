@@ -1,11 +1,11 @@
-<template>
-  <v-data-table :headers="titulos" :items="periodos" class="elevation-2">
+<template> 
+  <v-data-table :headers="titulos" :items="periodos" :search="search" class="elevation-2">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Período</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <v-text-field
+         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
@@ -120,6 +120,7 @@ var url = "http://api-sig-itpac-84633.herokuapp.com/api/periodo"
 export default {
 
   data: () => ({
+    search: "",
     dialog: false,
     dialogDelete: false,
     titulos: [
