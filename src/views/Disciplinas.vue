@@ -1,5 +1,10 @@
 <template>
   <v-data-table :headers="titulos" :items="disciplinas" :search="search" class="elevation-2 data-table">
+  <v-data-table
+    :headers="titulos"
+    :items="disciplinas"
+    class="elevation-2 data-table"
+  >
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de disciplina</v-toolbar-title>
@@ -16,7 +21,8 @@
         <v-dialog v-model="dialog" max-width="400px">
           <template v-slot:activator="{ on, attrs }" class="template-add">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
-            <v-btn small
+            <v-btn
+              small
               class="mx-2 add"
               fab
               dark
@@ -43,7 +49,7 @@
                         maxlenght="20"
                         required
                       ></v-text-field>
-                    </v-col>  
+                    </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
                         v-model="itemEditado.disciplina"
@@ -51,26 +57,26 @@
                         :rules="['Campo Obrigatório']"
                         maxlenght="20"
                       ></v-text-field>
-                    </v-col> 
-                     <v-col cols="8" sm="6" md="4">
-                      <v-select
-                          v-model="select"
-                           :items="disciplina"
-                           :error-messages="errors"
-                            :rules="[v => !!v || '*Campo Obrigatório*']"
-                             label="Periodo"
-                            required
-                            ></v-select>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-select
-                          v-model="select1"
-                           :items="professor"
-                           :error-messages="errors"
-                            :rules="[v => !!v || '*Campo Obrigatório*']"
-                             label="Nome do Professor"
-                            required
-                            ></v-select>
+                        v-model="select"
+                        :items="disciplina"
+                        :error-messages="errors"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
+                        label="Periodo"
+                        required
+                      ></v-select>
+                    </v-col>
+                    <v-col cols="8" sm="6" md="4">
+                      <v-select
+                        v-model="select1"
+                        :items="professor"
+                        :error-messages="errors"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
+                        label="Nome do Professor"
+                        required
+                      ></v-select>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -81,7 +87,7 @@
               <v-btn small color="warning" dark @click="fechar">
                 Cancelar
               </v-btn>
-              <v-btn small color="primary" dark  @click="salvar"> Salvar </v-btn>
+              <v-btn small color="primary" dark @click="salvar"> Salvar </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -92,10 +98,10 @@
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-               <v-btn small color="warning" dark @click="fecharDelete"
+              <v-btn small color="warning" dark @click="fecharDelete"
                 >Não</v-btn
               >
-                <v-btn  small color="primary" dark  @click="removeItemConfirm"
+              <v-btn small color="primary" dark @click="removeItemConfirm"
                 >Sim</v-btn
               >
               <v-spacer></v-spacer>
@@ -119,16 +125,16 @@
   width: 40px;
   height: 40px;
 }
-.template-add{
-  padding-top:1%;
+.template-add {
+  padding-top: 1%;
 }
 .data-table {
   padding: 3%;
 }
-#card-actions{
-   padding-left:18%;
+#card-actions {
+  padding-left: 18%;
 }
-.card-modal{
+.card-modal {
   text-align: center;
 }
 </style>
@@ -141,41 +147,45 @@ Vue.use(VueAxios, axios)
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina" 
 
 export default {
- data: () => ({
-    search: "",
+  data: () => ({
     dialog: false,
     dialogDelete: false,
     titulos: [
       {
-        text: "Periodo",
-        align: "center",
-        value: "periodo",
+        text: "Apelido",
+        align: "start",
+        value: "descricao",
       },
-      {
-        text: "Data Cadastro",
-        align: "center",
-        value: "dataCadastro",
-      },
-       {
-        text: "Status", align: "center",
-        value: "ativo",
-      },
-      { text: "Ações", align: "center", value: "acoes"},
+      { text: "disciplina", value: "disciplina" },
+      { text: "Ações", value: "acoes"},
     ],
-    periodos: [],
+    disciplinas: [],
     editIndice: -1,
     itemEditado: {
-      periodo: "",
-      dataCadastro: "",
-      ativo: true
+      descricao: "",
+      disciplina: "",
     },
     itemPadrao: {
-      periodo: "",
-      dataCadastro: "",
-      ativo: true
+      descricao: "",
+      disciplina: "",
     },
+    
+  select: null,
+    disciplina: [
+      'Item 1',
+      'Item 2',
+      'Item 3',
+      'Item 4',
+    ],
+    select1: null,
+    professor: [
+      'Item 1',
+      'Item 2',
+      'Item 3',
+      'Item 4',
+    ],
   }),
-   
+
   computed: {
     tituloForm() {
       return this.editIndice === -1 ? "Cadastrar disciplina" : "Editar Dados";
@@ -201,7 +211,7 @@ export default {
        this.axios.get(url, this.diciplinas).then((res) => {
         this.disciplinas = res.data;
         console.log(res.data);
-      });
+      })
     },
 
     editItem(item) {
@@ -237,41 +247,29 @@ export default {
       });
     },
 
-     salvar() {
+    salvar() {
       if (this.editIndice > -1) {
-        axios
-          .put(url + this.itemEditado.id, {
-            disciplinas: this.itemEditado.disciplinas,
-            numero: this.itemEditado.numero,
-            nome: this.itemEditado.nome,
-            local: this.itemEditado.local,
-            capacidade: this.itemEditado.capacidade,
-            descricao: this.itemEditado.descricao,
-          })
-          .then((res) => {
-            this.disciplinas = res.data;
-            console.log(res.data);
-          });
+
+        axios.put(url+this.itemEditado.id,{disciplina : this.itemEditado.disciplina,dataCadastro : this.itemEditado.dataCadastro, ativo: this.itemEditado.ativo}).then(res => {
+				this.disciplinas = res.data
+				console.log(res.data)
+			})
 
         Object.assign(this.disciplinas[this.editIndice], this.itemEditado);
       } else {
-        axios
-          .post(url, {
-            apelido: this.itemEditado.apelido,
-            nome: this.itemEditado.nome,
-            período: this.itemEditado.período,
-            nomedoprofessor: this.itemEditado.nomedoprofessor,      
-          })
-          .then((res) => {
-            this.disciplinas = res.data;
-            console.log(res.data);
-          });
 
+        axios.post(url,{disciplina: this.itemEditado.disciplina,dataCadastro: this.itemEditado.dataCadastro,ativo: this.itemEditado.ativo}).then(res => {
+				this.disciplinas = res.data
+				console.log(res.data)
+			})
+  
         this.disciplinas.push(this.itemEditado);
       }
 
       this.fechar();
-    },
+
+    }
+
   },
 };
 </script>
