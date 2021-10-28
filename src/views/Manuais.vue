@@ -122,7 +122,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 Vue.use(VueAxios, axios)
 
-var url = "http://api-sig-itpac-84633.herokuapp.com/api/manuais"
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/manual"
 
 export default {
   data: () => ({
@@ -218,7 +218,6 @@ export default {
 
         Object.assign(this.manuais[this.editIndice], this.itemEditado);
       } else {
-
         axios.post(url,{manuais: this.itemEditado.manuais,descricao: this.itemEditado.descricao,fileName: this.itemEditado.fileName }).then(res => {
 				this.manuais = res.data
 				console.log(res.data)
