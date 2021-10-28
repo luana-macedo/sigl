@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="titulos" :items="disciplinas" :search="search" class="elevation-2"><v-data-table
+  <v-data-table :headers="titulos" :items="disciplinas" :search="search" class="elevation-2">
     :headers="titulos"
     :items="disciplinas"
     class="elevation-2 data-table"
@@ -116,7 +116,7 @@
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="removeItem(item)"> mdi-delete </v-icon>
     </template>
-  </v-data-table>
+    </v-data-table>
 </template>
 
 <style>
