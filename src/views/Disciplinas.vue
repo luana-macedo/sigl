@@ -1,6 +1,5 @@
 <template>
-  <v-data-table :headers="titulos" :items="disciplinas" :search="search" class="elevation-2 data-table">
-  <v-data-table
+  <v-data-table :headers="titulos" :items="disciplinas" :search="search" class="elevation-2"><v-data-table
     :headers="titulos"
     :items="disciplinas"
     class="elevation-2 data-table"
