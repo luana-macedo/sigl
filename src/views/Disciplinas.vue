@@ -1,5 +1,5 @@
 <template>
-  <v-data-table
+  <v-data-table :headers="titulos" :items="disciplinas" :search="search" class="elevation-2">
     :headers="titulos"
     :items="disciplinas"
     class="elevation-2 data-table"
@@ -116,7 +116,7 @@
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="removeItem(item)"> mdi-delete </v-icon>
     </template>
-  </v-data-table>
+    </v-data-table>
 </template>
 
 <style>
@@ -138,15 +138,16 @@
 }
 </style>
 <script>
-import Vue from 'vue'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
-Vue.use(VueAxios, axios) 
+import Vue from "vue";
+import axios from "axios";
+import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
 
-var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina" 
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
 
 export default {
   data: () => ({
+  search: "",
     dialog: false,
     dialogDelete: false,
     titulos: [
@@ -156,7 +157,7 @@ export default {
         value: "descricao",
       },
       { text: "disciplina", value: "disciplina" },
-      { text: "Ações", value: "acoes"},
+      { text: "Ações", value: "acoes" },
     ],
     disciplinas: [],
     editIndice: -1,
@@ -168,21 +169,11 @@ export default {
       descricao: "",
       disciplina: "",
     },
-    
-  select: null,
-    disciplina: [
-      'Item 1',
-      'Item 2',
-      'Item 3',
-      'Item 4',
-    ],
+
+    select: null,
+    disciplina: ["Item 1", "Item 2", "Item 3", "Item 4"],
     select1: null,
-    professor: [
-      'Item 1',
-      'Item 2',
-      'Item 3',
-      'Item 4',
-    ],
+    professor: ["Item 1", "Item 2", "Item 3", "Item 4"],
   }),
 
   computed: {
@@ -205,12 +196,11 @@ export default {
   },
 
   methods: {
-
     inicializar() {
-       this.axios.get(url, this.diciplinas).then((res) => {
+      this.axios.get(url, this.disciplinas).then((res) => {
         this.disciplinas = res.data;
         console.log(res.data);
-      })
+      });
     },
 
     editItem(item) {
@@ -248,27 +238,37 @@ export default {
 
     salvar() {
       if (this.editIndice > -1) {
-
-        axios.put(url+this.itemEditado.id,{disciplina : this.itemEditado.disciplina,dataCadastro : this.itemEditado.dataCadastro, ativo: this.itemEditado.ativo}).then(res => {
-				this.disciplinas = res.data
-				console.log(res.data)
-			})
+        axios
+          .put(url + this.itemEditado.id, {
+            disciplinas: this.itemEditado.disciplina,
+            nome: this.itemEditado.nome,
+            ativo: this.itemEditado.ativo,
+            apelido: this.itemEditado.apelido,
+          })
+          .then((res) => {
+            this.disciplinas = res.data;
+            console.log(res.data);
+          });
 
         Object.assign(this.disciplinas[this.editIndice], this.itemEditado);
       } else {
+        axios
+          .post(url, {
+            disciplinas: this.itemEditado.disciplina,
+            nome: this.itemEditado.nome,
+            ativo: this.itemEditado.ativo,
+            apelido: this.itemEditado.apelido,
+          })
+          .then((res) => {
+            this.disciplinas = res.data;
+            console.log(res.data);
+          });
 
-        axios.post(url,{disciplina: this.itemEditado.disciplina,dataCadastro: this.itemEditado.dataCadastro,ativo: this.itemEditado.ativo}).then(res => {
-				this.disciplinas = res.data
-				console.log(res.data)
-			})
-  
         this.disciplinas.push(this.itemEditado);
       }
 
       this.fechar();
-
-    }
-
+    },
   },
 };
 </script>

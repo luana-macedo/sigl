@@ -2,6 +2,7 @@
   <v-data-table
     :headers="titulos"
     :items="alunos"
+    :search="search"
     class="elevation-2 data-table"
   >
     <template v-slot:top>
@@ -165,6 +166,7 @@ var url = "http://api-sig-itpac-84633.herokuapp.com/api/aluno"
 
 export default {
   data: () => ({
+    search: "",
     dialog: false,
     dialogDelete: false,
     titulos: [
@@ -255,12 +257,43 @@ export default {
       });
     },
 
-    salvar() {
+     salvar() {
       if (this.editIndice > -1) {
+        axios
+          .put(url + this.itemEditado.id, {
+            alunos: this.itemEditado.alunos,
+            nome: this.itemEditado.nome,
+            matricula: this.itemEditado.matricula,
+            cpf: this.itemEditado.cpf,
+            email: this.itemEditado.email,
+            telefone: this.itemEditado.telefone,
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            this.alunos = res.data;
+            console.log(res.data);
+          });
+
         Object.assign(this.alunos[this.editIndice], this.itemEditado);
       } else {
+        axios
+          .post(url, {
+            alunos: this.itemEditado.alunos,
+            nome: this.itemEditado.nome,
+            matricula: this.itemEditado.matricula,
+            cpf: this.itemEditado.cpf,
+            email: this.itemEditado.email,
+            telefone: this.itemEditado.telefone,
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            this.alunos = res.data;
+            console.log(res.data);
+          });
+
         this.alunos.push(this.itemEditado);
       }
+
       this.fechar();
     },
   },
