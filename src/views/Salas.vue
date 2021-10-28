@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="titulos" :items="salas" class="elevation-2">
+  <v-data-table :headers="titulos" :items="salas" :search="search" class="elevation-2">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Sala</v-toolbar-title>
@@ -128,6 +128,7 @@ var url = "http://api-sig-itpac-84633.herokuapp.com/api/sala";
 
 export default {
   data: () => ({
+    search: "",
     dialog: false,
     dialogDelete: false,
     titulos: [

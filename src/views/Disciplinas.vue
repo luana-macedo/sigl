@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="titulos" :items="disciplinas" class="elevation-2 data-table">
+  <v-data-table :headers="titulos" :items="disciplinas" :search="search" class="elevation-2 data-table">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de disciplina</v-toolbar-title>
@@ -142,6 +142,7 @@ var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina"
 
 export default {
  data: () => ({
+    search: "",
     dialog: false,
     dialogDelete: false,
     titulos: [
