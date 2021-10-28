@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="titulos" :items="status" class="elevation-2">
+  <v-data-table :headers="titulos" :items="status" :search="search" class="elevation-2">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Status</v-toolbar-title>
@@ -97,6 +97,7 @@ body {
 <script>
 export default {
   data: () => ({
+    search: "",
     dialog: false,
     dialogDelete: false,
     titulos: [

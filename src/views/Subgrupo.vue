@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="titulos" :items="manuais" class="elevation-2">
+  <v-data-table :headers="titulos" :items="manuais"  :search="search" class="elevation-2">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Subgrupo</v-toolbar-title>
@@ -144,6 +144,7 @@ body {
 <script>
 export default {
   data: () => ({
+    search: "",
     dialog: false,
     dialogDelete: false,
     titulos: [
