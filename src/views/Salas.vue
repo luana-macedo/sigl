@@ -200,6 +200,13 @@ export default {
 
     deleteItemConfirm() {
       this.salas.splice(this.editIndice, 1);
+
+      axios.delete(url + this.itemEditado.id)
+      .then((res) => {
+        this.salas = res.data;
+        console.warn(res.data);
+      });
+      
       this.fecharDelete();
     },
 
@@ -223,7 +230,6 @@ export default {
       if (this.editIndice > -1) {
         axios
           .put(url + this.itemEditado.id, {
-            salas: this.itemEditado.salas,
             numero: this.itemEditado.numero,
             nome: this.itemEditado.nome,
             local: this.itemEditado.local,
@@ -239,7 +245,6 @@ export default {
       } else {
         axios
           .post(url, {
-            salas: this.itemEditado.salas,
             numero: this.itemEditado.numero,
             nome: this.itemEditado.nome,
             local: this.itemEditado.local,
@@ -259,3 +264,5 @@ export default {
   },
 };
 </script>
+
+/* obs: modal de editar funcionando normal em sala, já em outras não */
