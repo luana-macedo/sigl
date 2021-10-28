@@ -1,4 +1,5 @@
 <template>
+  <v-data-table :headers="titulos" :items="disciplinas" :search="search" class="elevation-2 data-table">
   <v-data-table
     :headers="titulos"
     :items="disciplinas"
@@ -147,6 +148,7 @@ var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina"
 
 export default {
   data: () => ({
+  search: "",
     dialog: false,
     dialogDelete: false,
     titulos: [
