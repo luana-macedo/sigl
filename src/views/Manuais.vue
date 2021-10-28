@@ -90,9 +90,6 @@
       </v-toolbar>
     </template>
     <template v-slot:item.acoes="{ item }">
-      <v-icon small class="mr-2" @click="inicializar">
-        mdi-message-text
-      </v-icon>
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="removeItem(item)"> mdi-delete </v-icon>
     </template>

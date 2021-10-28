@@ -100,7 +100,6 @@
       </v-toolbar>
     </template>
     <template v-slot:item.acoes="{ item }">
-      <v-icon v-icon small class="mr-2" @click="inicializar">mdi-message-text</v-icon>
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
@@ -132,12 +131,9 @@ export default {
     dialog: false,
     dialogDelete: false,
     titulos: [
-      {
-        text: "Descrição",
-        align: "start",
-        value: "numero",
-      },
       { text: "Nome", value: "nome" },
+      { text: "Local", value: "local" },
+      { text: "Capacidade", value: "capacidade", sortable: false },
       { text: "Ações", value: "acoes", sortable: false },
     ],
     salas: [],

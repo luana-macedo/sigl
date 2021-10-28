@@ -68,10 +68,11 @@
           { title: 'PROFESSOR', icon: 'mdi-account-tie', to:'/professor'},
           { title: 'SUBGRUPO', icon: 'mdi-account-group', to:'/subgrupo'},
           { title: 'MANUAL', icon: 'mdi-folder-cog', to:'/manuais'},
-          { title: 'AGENDAMENTO', icon: 'mdi-notebook-edit', to:'/agendamento'},
-          { title: 'EVIDÊNCIAS', icon: 'mdi-page-next', to:'/evidencias'},
           { title: 'SALA', icon: 'mdi-google-classroom', to:'/salas'},
+          /* { title: 'AGENDAMENTO', icon: 'mdi-notebook-edit', to:'/agendamento'},
+          { title: 'EVIDÊNCIAS', icon: 'mdi-page-next', to:'/evidencias'},
           { title: 'STATUS', icon: 'mdi-list-status', to:'/status'},
+          { title: 'CALENDÁRIO', icon: 'mdi-calendar', to:'/calendario'}, */
         ],
     }),
   }

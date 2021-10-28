@@ -110,33 +110,9 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <!-- Modal Detalhar 
-        <v-dialog v-model="dialogDelete" max-width="400px">
-          <v-card class="card-modal">
-            <v-card-title class="text-h6"
-              >nome</v-card-title>
- <v-list-item>
-      <v-list-item-content>
-        <v-list-item-title>Apelido: </v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-<v-list-item>
-      <v-list-item-content>
-        <v-list-item-title>nome: </v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-            <v-card-actions>
-              <v-btn small color="warning" dark @click="fecharDelete"
-                >Sair</v-btn><v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        </v-dialog> -->
       </v-toolbar>
     </template>
     <template v-slot:item.acoes="{ item }">
-      <v-icon v-icon small class="mr-2" @click="inicializar">
-        mdi-message-text
-      </v-icon>
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
