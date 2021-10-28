@@ -151,12 +151,14 @@ export default {
         align: "start",
         value: "matricula",
       },
+      { text: "ID", value: "id" },
       { text: "Nome", value: "nome" },
       { text: "Ações", value: "acoes" },
     ],
     alunos: [],
     editIndice: -1,
     itemEditado: {
+      pessoa: null,
       matricula: "",
       nome: "",
       cpf: "",
@@ -165,6 +167,7 @@ export default {
       ativo: true,
     },
     itemPadrao: {
+      pessoa: null,
       matricula: "",
       nome: "",
       cpf: "",
@@ -237,7 +240,7 @@ export default {
       if (this.editIndice > -1) {
         axios
           .put(url + this.itemEditado.id, {
-            alunos: this.itemEditado.alunos,
+            pessoa: this.itemEditado.pessoa,
             nome: this.itemEditado.nome,
             matricula: this.itemEditado.matricula,
             cpf: this.itemEditado.cpf,
@@ -254,7 +257,7 @@ export default {
       } else {
         axios
           .post(url, {
-            alunos: this.itemEditado.alunos,
+            pessoa: this.itemEditado.pessoa,
             nome: this.itemEditado.nome,
             matricula: this.itemEditado.matricula,
             cpf: this.itemEditado.cpf,
