@@ -107,9 +107,6 @@
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
-    <template v-slot:no-data>
-      <v-btn color="primary" @click="inicializar"> Reset </v-btn>
-    </template>
   </v-data-table>
 </template>
 
@@ -138,7 +135,16 @@ body {
   text-align: center;
 }
 </style>
+
 <script>
+
+import Vue from 'vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+Vue.use(VueAxios, axios)
+
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo"
+
 export default {
   data: () => ({
     search: "",
@@ -155,7 +161,7 @@ export default {
         value: "acoes", 
         sortable: false },
     ],
-    manuais: [],
+    subgrupo: [],
     editIndice: -1,
     itemEditado: {
       grupo: "",
@@ -200,7 +206,12 @@ export default {
 
   methods: {
     inicializar() {
-      this.manuais = [
+
+      this.axios.get(url, this.subgrupo).then((res) => {
+        this.subgrupo = res.data;
+        console.log(res.data);
+      });
+      /* this.manuais = [
         {
           grupo: "Grupo 1",
         },
@@ -213,7 +224,7 @@ export default {
         {
           grupo: "Grupo 4",
         },
-      ];
+      ]; */
     },
 
     methods: {
@@ -229,19 +240,19 @@ export default {
   },
 
     editItem(item) {
-      this.editIndice = this.manuais.indexOf(item);
+      this.editIndice = this.subgrupo.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editIndice = this.manuais.indexOf(item);
+      this.editIndice = this.subgrupo.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.manuais.splice(this.editIndice, 1);
+      this.subgrupo.splice(this.editIndice, 1);
       this.fecharDelete();
     },
 
@@ -263,9 +274,9 @@ export default {
 
     salvar() {
       if (this.editIndice > -1) {
-        Object.assign(this.manuais[this.editIndice], this.itemEditado);
+        Object.assign(this.subgrupo[this.editIndice], this.itemEditado);
       } else {
-        this.manuais.push(this.itemEditado);
+        this.subgrupo.push(this.itemEditado);
       }
       this.fechar();
     },
