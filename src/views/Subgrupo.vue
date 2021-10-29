@@ -164,10 +164,14 @@ export default {
     subgrupo: [],
     editIndice: -1,
     itemEditado: {
-      grupo: "",
+      nome: "",
+      dataCadastro: "",
+      ativo: true
     },
     itemPadrao: {
-      grupo: "",
+      nome: "",
+      dataCadastro: "",
+      ativo: true
     },
     select: null,
       prof: [
@@ -210,34 +214,9 @@ export default {
       this.axios.get(url, this.subgrupo).then((res) => {
         this.subgrupo = res.data;
         console.log(res.data);
-      });
-      /* this.manuais = [
-        {
-          grupo: "Grupo 1",
-        },
-        {
-          grupo: "Grupo 2",
-        },
-        {
-          grupo: "Grupo 3",
-        },
-        {
-          grupo: "Grupo 4",
-        },
-      ]; */
-    },
+      })
 
-    methods: {
-    validate () {
-      this.$refs.form.validate()
     },
-    reset () {
-      this.$refs.form.reset()
-    },
-    resetValidation () {
-      this.$refs.form.resetValidation()
-    },
-  },
 
     editItem(item) {
       this.editIndice = this.subgrupo.indexOf(item);
@@ -274,8 +253,16 @@ export default {
 
     salvar() {
       if (this.editIndice > -1) {
+        axios.put(url+this.itemEditado.id,{subgrupo : this.itemEditado.subgrupo,dataCadastro : this.itemEditado.dataCadastro, ativo: this.itemEditado.ativo}).then(res => {
+				this.subgrupo = res.data
+				console.log(res.data)
+			})
         Object.assign(this.subgrupo[this.editIndice], this.itemEditado);
       } else {
+        axios.post(url,{subgrupo: this.itemEditado.subgrupo,dataCadastro: this.itemEditado.dataCadastro,ativo: this.itemEditado.ativo}).then(res => {
+				this.subgrupo = res.data
+				console.log(res.data)
+			})
         this.subgrupo.push(this.itemEditado);
       }
       this.fechar();
