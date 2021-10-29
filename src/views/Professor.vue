@@ -139,12 +139,14 @@ export default {
         align: "start",
         value: "matricula",
       },
+      { text: "ID", value: "id"},
       { text: "Nome", value: "nome" },
       { text: "Ações", value: "acoes"},
     ],
     manuais: [],
     editIndice: -1,
     itemEditado: {
+      pessoa: null,
       matricula: "",
       nome: "",
       cpf: "",
@@ -153,6 +155,7 @@ export default {
       ativo: true,
     },
     itemPadrao: {
+      pessoa: null,
       matricula: "",
       nome: "",
       cpf: "",
@@ -225,10 +228,41 @@ export default {
 
     salvar() {
       if (this.editIndice > -1) {
-        Object.assign(this.manuais[this.editIndice], this.itemEditado);
+        axios
+          .put(url + this.itemEditado.id, {
+            pessoa: this.itemEditado.pessoa,
+            nome: this.itemEditado.nome,
+            cpf: this.itemEditado.cpf,
+            telefone: this.itemEditado.telefone,
+            email: this.itemEditado.email,
+            matricula: this.itemEditado.matricula,
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            this.professor = res.data;
+            console.log(res.data);
+          });
+
+        Object.assign(this.professor[this.editIndice], this.itemEditado);
       } else {
-        this.manuais.push(this.itemEditado);
+        axios
+          .post(url, {
+            pessoa: this.itemEditado.pessoa,
+            nome: this.itemEditado.nome,
+            cpf: this.itemEditado.cpf,
+            telefone: this.itemEditado.telefone,
+            email: this.itemEditado.email,
+            matricula: this.itemEditado.matricula,
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            this.professor = res.data;
+            console.log(res.data);
+          });
+
+        this.professor.push(this.itemEditado);
       }
+
       this.fechar();
     },
   },
