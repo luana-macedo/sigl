@@ -37,21 +37,21 @@
                   <v-row>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="itemEditado.grupo"
-                        label="Apelido do grupo"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="8" sm="6" md="4">
-                      <v-text-field
-                        v-model="itemEditado.arquivo"
+                        v-model="itemEditado.nome"
                         label="Nome"
                         :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
+                      <v-text-field
+                        v-model="itemEditado.ativo"
+                        label="Nome"
+                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                   <!-- <v-col cols="8" sm="6" md="4">
                       <v-select
                           v-model="select"
                            :items="prof"
@@ -70,7 +70,7 @@
                              label="Disciplina"
                             required
                             ></v-select>
-                    </v-col>
+                    </v-col> -->
                   </v-row>
                 </v-container>
               </v-form>
@@ -143,7 +143,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 Vue.use(VueAxios, axios)
 
-var url = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo"
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupos"
 
 export default {
   data: () => ({
@@ -152,28 +152,31 @@ export default {
     dialogDelete: false,
     titulos: [
       {
-        text: "Grupos",
-        align: "start",
-        value: "grupo",
+        text: "Subgrupo",
+        align: "center",
+        value: "nome",
+      },
+      {
+        text: "Status",
+        align: "center",
+        value: "ativo",
       },
       { text: "Ações", 
         align:"", 
         value: "acoes", 
         sortable: false },
     ],
-    subgrupo: [],
+    subgrupos: [],
     editIndice: -1,
     itemEditado: {
       nome: "",
-      dataCadastro: "",
       ativo: true
     },
     itemPadrao: {
       nome: "",
-      dataCadastro: "",
       ativo: true
     },
-    select: null,
+   /* select: null,
       prof: [
         'Alex Coelho ',
         'Fred Pires',
@@ -186,12 +189,12 @@ export default {
         'Calculo 1',
         'Projeto Integrador ',
         'Direito',
-      ],
+      ],*/
   }),
 
   computed: {
     tituloForm() {
-      return this.editIndice === -1 ? "Cadastrar Grupo" : "Dados";
+      return this.editIndice === -1 ? "Cadastrar Subgrupo" : "Editar Subgrupo";
     },
   },
 
@@ -210,28 +213,29 @@ export default {
 
   methods: {
     inicializar() {
-
-      this.axios.get(url, this.subgrupo).then((res) => {
-        this.subgrupo = res.data;
+      this.axios.get(url, this.subgrupos).then((res) => {
+        this.subgrupos = res.data;
         console.log(res.data);
-      })
+      }).catch((error) => {
+        console.log(error);
+      });
 
     },
 
     editItem(item) {
-      this.editIndice = this.subgrupo.indexOf(item);
+      this.editIndice = this.subgrupos.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editIndice = this.subgrupo.indexOf(item);
+      this.editIndice = this.subgrupos.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.subgrupo.splice(this.editIndice, 1);
+      this.subgrupos.splice(this.editIndice, 1);
       this.fecharDelete();
     },
 
@@ -253,17 +257,21 @@ export default {
 
     salvar() {
       if (this.editIndice > -1) {
-        axios.put(url+this.itemEditado.id,{subgrupo : this.itemEditado.subgrupo,dataCadastro : this.itemEditado.dataCadastro, ativo: this.itemEditado.ativo}).then(res => {
-				this.subgrupo = res.data
+        axios.put(url+this.itemEditado.id,{subgrupos : this.itemEditado.subgrupos,nome : this.itemEditado.nome, ativo: this.itemEditado.ativo}).then(res => {
+				this.subgrupos = res.data
 				console.log(res.data)
-			})
-        Object.assign(this.subgrupo[this.editIndice], this.itemEditado);
+			}).catch((error) => {
+        console.log(error);
+      });
+        Object.assign(this.subgrupos[this.editIndice], this.itemEditado);
       } else {
-        axios.post(url,{subgrupo: this.itemEditado.subgrupo,dataCadastro: this.itemEditado.dataCadastro,ativo: this.itemEditado.ativo}).then(res => {
-				this.subgrupo = res.data
+        axios.post(url,{subgrupos: this.itemEditado.subgrupos,nome: this.itemEditado.nome,ativo: this.itemEditado.ativo}).then(res => {
+				this.subgrupos = res.data
 				console.log(res.data)
-			})
-        this.subgrupo.push(this.itemEditado);
+			}).catch((error) => {
+        console.log(error);
+      });
+        this.subgrupos.push(this.itemEditado);
       }
       this.fechar();
     },
