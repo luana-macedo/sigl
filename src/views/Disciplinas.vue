@@ -42,8 +42,8 @@
                   <v-row>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="itemEditado.descricao"
-                        label="Apelido"
+                        v-model="itemEditado.nome"
+                        label="Nome"
                         :rules="['Campo Obrigatório']"
                         maxlenght="20"
                         required
@@ -51,19 +51,27 @@
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="itemEditado.disciplina"
-                        label="disciplina"
+                        v-model="itemEditado.apelido"
+                        label="Apelido"
                         :rules="['Campo Obrigatório']"
                         maxlenght="20"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
+                      <v-text-field
+                        v-model="itemEditado.ativo"
+                        label="Status"
+                        :rules="['Campo Obrigatório']"
+                        maxlenght="20"
+                      ></v-text-field>
+                    </v-col>
+                    <!-- <v-col cols="8" sm="6" md="4"> 
                       <v-select
                         v-model="select"
                         :items="disciplina"
                         :error-messages="errors"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        label="Periodo"
+                        label="Disciplina"
                         required
                       ></v-select>
                     </v-col>
@@ -73,10 +81,10 @@
                         :items="professor"
                         :error-messages="errors"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        label="Nome do Professor"
+                        label="Professor"
                         required
                       ></v-select>
-                    </v-col>
+                    </v-col> -->
                   </v-row>
                 </v-container>
               </v-form>
@@ -151,26 +159,31 @@ export default {
       {
         text: "Apelido",
         align: "start",
-        value: "descricao",
+        value: "nome",
       },
-      { text: "disciplina", value: "disciplina" },
+      { text: "Disciplina", value: "nome" },
+      { text: "Status", value: "ativo" },
+      { text: "Professor", value: "professor" },
+      { text: "Período", value: "periodo" },
       { text: "Ações", value: "acoes" },
     ],
     disciplinas: [],
     editIndice: -1,
     itemEditado: {
-      descricao: "",
-      disciplina: "",
+      nome: "",
+      apelido: "",
+      ativo: true,
     },
     itemPadrao: {
-      descricao: "",
-      disciplina: "",
+      nome: "",
+      apelido: "",
+      ativo: true,
     },
 
-    select: null,
+    /* select: null,
     disciplina: ["Item 1", "Item 2", "Item 3", "Item 4"],
     select1: null,
-    professor: ["Item 1", "Item 2", "Item 3", "Item 4"],
+    professor: ["Item 1", "Item 2", "Item 3", "Item 4"], */
   }),
 
   computed: {
@@ -237,7 +250,6 @@ export default {
       if (this.editIndice > -1) {
         axios
           .put(url + this.itemEditado.id, {
-            disciplinas: this.itemEditado.disciplina,
             nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo,
             apelido: this.itemEditado.apelido,
@@ -251,7 +263,6 @@ export default {
       } else {
         axios
           .post(url, {
-            disciplinas: this.itemEditado.disciplina,
             nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo,
             apelido: this.itemEditado.apelido,
