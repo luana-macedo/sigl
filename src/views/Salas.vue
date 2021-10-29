@@ -88,7 +88,7 @@
         </v-dialog>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
-            <v-card-title class="text-h5">Deseja remover esta sala ?</v-card-title>
+            <v-card-title class="text-h5">Deseja desativar esta sala?</v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn small color="warning" dark @click="fecharDelete"> Não</v-btn>
@@ -101,7 +101,7 @@
     </template>
     <template v-slot:item.acoes="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+      <v-icon small @click="deleteItem(item)"> mdi-power-standby </v-icon>
     </template>
     <template v-slot:no-data> </template>
   </v-data-table>
@@ -124,6 +124,7 @@ import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/sala";
+var urlStatus = "http://api-sig-itpac-84633.herokuapp.com/api/sala/5";
 
 export default {
   data: () => ({
@@ -131,10 +132,13 @@ export default {
     dialog: false,
     dialogDelete: false,
     titulos: [
+      { text: "Número", value: "numero" },
       { text: "Nome", value: "nome" },
       { text: "Local", value: "local" },
       { text: "Capacidade", value: "capacidade", sortable: false },
+      { text: "Descrição", value: "descricao", sortable: false },
       { text: "Ações", value: "acoes", sortable: false },
+      { text: "Ativo", value: "ativo", sortable: false },
     ],
     salas: [],
     editIndice: -1,
@@ -146,7 +150,7 @@ export default {
       descricao: "",
       ativo: true,
     },
-    defaultItem: {
+    itemPadrao: {
       numero: 0,
       nome: "",
       local: "",
@@ -197,7 +201,7 @@ export default {
     deleteItemConfirm() {
       this.salas.splice(this.editIndice, 1);
 
-      axios.patch(url + this.itemEditado.id)
+      axios.delete(urlStatus + this.itemEditado.id)
       .then((res) => {
         this.salas = res.data;
         console.warn(res.data);
@@ -209,7 +213,7 @@ export default {
     fechar() {
       this.dialog = false;
       this.$nextTick(() => {
-        this.itemEditado = Object.assign({}, this.defaultItem);
+        this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
       });
     },
@@ -217,7 +221,7 @@ export default {
     fecharDelete() {
       this.dialogDelete = false;
       this.$nextTick(() => {
-        this.itemEditado = Object.assign({}, this.defaultItem);
+        this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
       });
     },
@@ -239,6 +243,8 @@ export default {
 
         Object.assign(this.salas[this.editIndice], this.itemEditado);
       } else {
+        console.log(this.itemEditado);
+        
         axios
           .post(url, {
             numero: this.itemEditado.numero,
@@ -262,3 +268,4 @@ export default {
 </script>
 
 /* obs: modal de editar funcionando normal em sala, já em outras não */
+/* MATRICULA NOME CPF TELEFOME EMAIL ATIVO */

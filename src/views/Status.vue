@@ -59,7 +59,7 @@
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-card-title class="text-h5"
-              >Deseja remover este status?</v-card-title
+              >Deseja desativar este status?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -75,7 +75,7 @@
     </template>
     <template v-slot:item.acoes="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+      <v-icon small @click="deleteItem(item)"> mdi-power-standby </v-icon>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="inicializar"> Reset </v-btn>

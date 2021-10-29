@@ -1,8 +1,13 @@
 <template>
-  <v-data-table :headers="titulos" :items="manuais" :search="search" class="elevation-2">
+  <v-data-table
+    :headers="titulos"
+    :items="professores"
+    :search="search"
+    class="elevation-2"
+  >
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title>Gerenciamento de Professor</v-toolbar-title>
+        <v-toolbar-title>Gerenciamento de Professores</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-text-field
@@ -16,7 +21,8 @@
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
-            <v-btn small
+            <v-btn
+              small
               class="mx-2 add"
               fab
               dark
@@ -39,14 +45,14 @@
                       <v-text-field
                         v-model="itemEditado.nome"
                         label="Nome"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
 
                       <v-text-field
                         v-model="itemEditado.cpf"
                         label="CPF"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>
@@ -54,14 +60,14 @@
                       <v-text-field
                         v-model="itemEditado.matricula"
                         label="Matricula"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
 
                       <v-text-field
                         v-model="itemEditado.email"
                         label="E-mail"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>
@@ -69,7 +75,14 @@
                       <v-text-field
                         v-model="itemEditado.telefone"
                         label="Telefone"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
+                        required
+                      ></v-text-field>
+
+                      <v-text-field
+                        v-model="itemEditado.ativo"
+                        label="Status"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>
@@ -90,11 +103,13 @@
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-card-title class="text-h5"
-              >Deseja desativar esse professor?</v-card-title
+              >Deseja desativar este professores?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small color="warning" dark @click="fecharDelete">Não</v-btn>
+              <v-btn small color="warning" dark @click="fecharDelete"
+                >Não</v-btn
+              >
               <v-btn small color="primary" dark @click="deleteItemConfirm"
                 >Sim</v-btn
               >
@@ -110,6 +125,7 @@
     </template>
   </v-data-table>
 </template>
+
 <style>
 .add {
   width: 5%;
@@ -120,13 +136,12 @@ body {
 }
 </style>
 <script>
+import Vue from "vue";
+import axios from "axios";
+import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
 
-import Vue from 'vue'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
-Vue.use(VueAxios, axios) 
-
-var url = "http://api-sig-itpac-84633.herokuapp.com/api/professores"
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
 
 export default {
   data: () => ({
@@ -136,28 +151,28 @@ export default {
     titulos: [
       {
         text: "Matricula",
-        align: "start",
+        align: "center",
         value: "matricula",
       },
-      { text: "Nome", value: "nome" },
-      { text: "Ações", value: "acoes"},
+      { text: "Status", value: "ativo" },
+      { text: "Ações", value: "acoes", sortable: false },
     ],
-    manuais: [],
+    professores: [],
     editIndice: -1,
     itemEditado: {
       matricula: "",
-      nome: "",
+      /*  nome: "",
       cpf: "",
       telefone: "",
-      email: "",
+      email: "", */
       ativo: true,
     },
     itemPadrao: {
       matricula: "",
-      nome: "",
+      /* nome: "",
       cpf: "",
       telefone: "",
-      email: "null",
+      email: "", */
       ativo: true,
     },
   }),
@@ -165,8 +180,8 @@ export default {
   computed: {
     tituloForm() {
       return this.editIndice === -1
-        ? "Cadastrar Professor"
-        : "Editar Professor";
+        ? "Cadastrar Professores"
+        : "Editar Professores";
     },
   },
 
@@ -185,25 +200,25 @@ export default {
 
   methods: {
     inicializar() {
-        axios.get(url, this.professor).then(res => {
-				this.professor = res.data
-				console.log(res.data)
-			})
+      this.axios.get(url, this.professores).then((res) => {
+        this.professores = res.data;
+        console.log(res.data);
+      });
     },
     editItem(item) {
-      this.editIndice = this.manuais.indexOf(item);
+      this.editIndice = this.professores.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editIndice = this.manuais.indexOf(item);
+      this.editIndice = this.professores.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.manuais.splice(this.editIndice, 1);
+      this.professores.splice(this.editIndice, 1);
       this.fecharDelete();
     },
 
@@ -225,10 +240,42 @@ export default {
 
     salvar() {
       if (this.editIndice > -1) {
-        Object.assign(this.manuais[this.editIndice], this.itemEditado);
+        axios
+          .put(url + this.itemEditado.id, {
+            matricula: this.itemEditado.matricula,
+            /*  nome: this.itemEditado.nome,
+            cpf: this.itemEditado.cpf,
+            telefone: this.itemEditado.telefone,
+            email: this.itemEditado.email, */
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            this.professores = res.data;
+            console.log(res.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
+        Object.assign(this.professores[this.editIndice], this.itemEditado);
       } else {
-        this.manuais.push(this.itemEditado);
+        axios
+          .post(url, {
+            matricula: this.itemEditado.matricula,
+            nome: this.itemEditado.nome,
+            cpf: this.itemEditado.cpf,
+            telefone: this.itemEditado.telefone,
+            email: this.itemEditado.email,
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            this.professores = res.data;
+            console.log(res.data);
+          });
+
+        this.professores.push(this.itemEditado);
       }
+
       this.fechar();
     },
   },

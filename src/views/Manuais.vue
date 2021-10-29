@@ -73,7 +73,7 @@
         <v-dialog v-model="dialogDelete" max-width="350px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
-              >Deseja remover este manuais ?</v-card-title
+              >Deseja desativar este manual(is)?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -91,7 +91,7 @@
     </template>
     <template v-slot:item.acoes="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon small @click="removeItem(item)"> mdi-delete </v-icon>
+      <v-icon small @click="removeItem(item)"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
 </template>

@@ -131,6 +131,7 @@
   padding: 3%;
 }
 </style>
+
 <script>
 
 import Vue from 'vue'
@@ -146,11 +147,6 @@ export default {
     dialog: false,
     dialogDelete: false,
     titulos: [
-      {
-        text: "Matricula",
-        align: "start",
-        value: "matricula",
-      },
       { text: "ID", value: "id" },
       { text: "Nome", value: "nome" },
       { text: "Ações", value: "acoes" },
@@ -254,6 +250,7 @@ export default {
           });
 
         Object.assign(this.alunos[this.editIndice], this.itemEditado);
+
       } else {
         axios
           .post(url, {

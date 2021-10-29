@@ -72,7 +72,7 @@
         <v-dialog v-model="dialogDelete" max-width="400px">
           <v-card>
             <v-card-title class="text-h5"
-              >Deseja remover este Periodo?</v-card-title
+              >Deseja desativar este período?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -113,6 +113,7 @@ import VueAxios from 'vue-axios'
 Vue.use(VueAxios, axios) 
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/periodo"
+var url2 = "http://api-sig-itpac-84633.herokuapp.com/api/periodo/desativar"
 
 export default {
 
@@ -191,10 +192,14 @@ export default {
 
     deleteItemConfirm() {
       this.periodos.splice(this.editIndice, 1);
-      axios.patch(url + this.itemEditado.id)
-      .then((res) => {
+      axios.patch(url2 + this.itemEditado.id, {
+        periodo: this.itemEditado.periodo, dataCadastro: this.itemEditado.dataCadastro, ativo: this.itemEditado.ativo
+      }).then((res) => {
         this.periodos = res.data;
-        console.warn(res.data);
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
       });
 
       this.fecharDelete();

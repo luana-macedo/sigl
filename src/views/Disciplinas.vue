@@ -6,7 +6,7 @@
   >
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title>Gerenciamento de disciplina</v-toolbar-title>
+        <v-toolbar-title>Gerenciamento de Disciplina</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-text-field
@@ -93,7 +93,7 @@
         <v-dialog v-model="dialogDelete" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
-              >Deseja remover esta disciplina ?</v-card-title
+              >Deseja remover esta disciplina?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -111,7 +111,7 @@
     </template>
     <template v-slot:item.acoes="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon small @click="removeItem(item)"> mdi-delete </v-icon>
+      <v-icon small @click="removeItem(item)"> mdi-power-standby </v-icon>
     </template>
     </v-data-table>
 </template>
