@@ -43,44 +43,47 @@
                   <v-row>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="itemEditado.nome"
+                        v-model="itemEditado.pessoa.nome"
                         label="Nome"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
-                      ></v-text-field>
+                        ></v-text-field
+                      >
 
                       <v-text-field
-                        v-model="itemEditado.cpf"
+                        v-model="itemEditado.pessoa.cpf"
                         label="CPF"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
-                      ></v-text-field>
+                        ></v-text-field
+                      >
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
                         v-model="itemEditado.matricula"
                         label="Matricula"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
 
                       <v-text-field
-                        v-model="itemEditado.email"
+                        v-model="itemEditado.pessoa.email"
                         label="E-mail"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
-                      ></v-text-field>
+                        ></v-text-field
+                      >
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="itemEditado.telefone"
+                        v-model="itemEditado.pessoa.telefone"
                         label="Telefone"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
-                      ></v-text-field>
+                        ></v-text-field
+                      >
                     </v-col>
-                     <v-col cols="8" sm="6" md="4">
-                    </v-col>
+                    <v-col cols="8" sm="6" md="4"> </v-col>
                     <v-col cols="8" sm="6" md="4"> </v-col>
                   </v-row>
                 </v-container>
@@ -88,7 +91,7 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-               <v-btn small color="warning" dark @click="fechar">
+              <v-btn small color="warning" dark @click="fechar">
                 Cancelar
               </v-btn>
               <v-btn small color="primary" dark @click="salvar"> Salvar </v-btn>
@@ -102,7 +105,9 @@
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-               <v-btn small color="warning" dark @click="fecharDelete">Não</v-btn>
+              <v-btn small color="warning" dark @click="fecharDelete"
+                >Não</v-btn
+              >
               <v-btn small color="primary" dark @click="deleteItemConfirm"
                 >Sim</v-btn
               >
@@ -133,13 +138,12 @@
 </style>
 
 <script>
+import Vue from "vue";
+import axios from "axios";
+import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
 
-import Vue from 'vue'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
-Vue.use(VueAxios, axios) 
-
-var url = "http://api-sig-itpac-84633.herokuapp.com/api/aluno"
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/aluno";
 
 export default {
   data: () => ({
@@ -147,35 +151,52 @@ export default {
     dialog: false,
     dialogDelete: false,
     titulos: [
-      { text: "ID", value: "id" },
-      { text: "Nome", value: "nome" },
+      { text: "Nome", value: "pessoa.nome" },
+      { text: "Cpf", value: "pessoa.cpf" },
+      { text: "Telefone", value: "pessoa.telefone" },
+      { text: "Email", value: "pessoa.email" },
+      { text: "Matricula", value: "matricula" },
       { text: "Ações", value: "acoes" },
     ],
     alunos: [],
     editIndice: -1,
     itemEditado: {
-      pessoa: null,
+      pessoa: {
+        nome: "",
+        cpf: "",
+        telefone: "",
+        email: "",
+      },
       matricula: "",
-      nome: "",
-      cpf: "",
-      telefone: "",
-      email: "",
       ativo: true,
     },
     itemPadrao: {
-      pessoa: null,
+      pessoa: {
+        nome: "",
+        cpf: "",
+        telefone: "",
+        email: "",
+      },
       matricula: "",
-      nome: "",
-      cpf: "",
-      telefone: "",
-      email: "",
       ativo: true,
     },
   }),
-
   computed: {
     tituloForm() {
       return this.editIndice === -1 ? "Cadastrar Academico" : "Editar Dados";
+    },
+  },
+  props: {
+    pessoa: {
+      type: Object,
+     default: function () {
+        return {
+          nome: "",
+          cpf: "",
+          telefone: "",
+          email: "",
+        }; 
+      },
     },
   },
 
@@ -194,10 +215,10 @@ export default {
 
   methods: {
     inicializar() {
-        axios.get(url, this.alunos).then(res => {
-				this.alunos = res.data
-				console.log(res.data)
-			})
+      axios.get(url, this.alunos).then((res) => {
+        this.alunos = res.data;
+        console.log(res.data);
+      });
     },
     editItem(item) {
       this.editIndice = this.alunos.indexOf(item);
@@ -232,11 +253,10 @@ export default {
       });
     },
 
-     salvar() {
+    salvar() {
       if (this.editIndice > -1) {
         axios
           .put(url + this.itemEditado.id, {
-            pessoa: this.itemEditado.pessoa,
             nome: this.itemEditado.nome,
             matricula: this.itemEditado.matricula,
             cpf: this.itemEditado.cpf,
@@ -247,14 +267,15 @@ export default {
           .then((res) => {
             this.alunos = res.data;
             console.log(res.data);
+          })
+          .catch((error) => {
+            console.log(error);
           });
 
         Object.assign(this.alunos[this.editIndice], this.itemEditado);
-
       } else {
         axios
           .post(url, {
-            pessoa: this.itemEditado.pessoa,
             nome: this.itemEditado.nome,
             matricula: this.itemEditado.matricula,
             cpf: this.itemEditado.cpf,
@@ -265,6 +286,9 @@ export default {
           .then((res) => {
             this.alunos = res.data;
             console.log(res.data);
+          })
+          .catch((error) => {
+            console.log(error);
           });
 
         this.alunos.push(this.itemEditado);
