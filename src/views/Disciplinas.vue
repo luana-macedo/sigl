@@ -279,7 +279,8 @@ export default {
     salvar() {
       if (this.editIndice > -1) {
         axios
-          .put(url + this.itemEditado.id, {
+          .put(url, {
+            id: this.itemEditado.id,
             nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo,
             apelido: this.itemEditado.apelido,

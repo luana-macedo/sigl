@@ -300,12 +300,14 @@ export default {
     salvar() {
       if (this.editIndice > -1) {
         axios
-        .put(url + this.itemEditado.id,{
-          pessoa: {
-            nome: this.itemEditado.nome,
-            cpf: this.itemEditado.cpf,
-            telefone: this.itemEditado.telefone,
-            email: this.itemEditado.email,
+        .put(url, {
+            id: this.itemEditado.id,
+            pessoa: {
+              id: this.itemEditado.id,
+              nome: this.itemEditado.nome,
+              cpf: this.itemEditado.cpf,
+              telefone: this.itemEditado.telefone,
+              email: this.itemEditado.email,
             },
             matricula: this.itemEditado.matricula,
             ativo: this.itemEditado.ativo,
