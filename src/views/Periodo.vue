@@ -5,7 +5,7 @@
         <v-toolbar-title>Gerenciamento de Período</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-         <v-text-field
+         <v-text-field class="barraPesquisa"
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
@@ -45,12 +45,6 @@
                       <v-text-field
                         v-model="itemEditado.dataCadastro"
                         label="Data de Cadastro"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
-                        required
-                      ></v-text-field>
-                      <v-text-field
-                        v-model="itemEditado.ativo"
-                        label="Status"
                         :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
@@ -113,7 +107,7 @@ import VueAxios from 'vue-axios'
 Vue.use(VueAxios, axios) 
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/periodo"
-var url2 = "http://api-sig-itpac-84633.herokuapp.com/api/periodo/desativar"
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/periodo/desativar/"
 
 export default {
 
@@ -143,7 +137,7 @@ export default {
     itemEditado: {
       periodo: "",
       dataCadastro: "",
-      ativo: true
+      ativo: ""
     },
     itemPadrao: {
       periodo: "",
@@ -192,7 +186,7 @@ export default {
 
     deleteItemConfirm() {
       this.periodos.splice(this.editIndice, 1);
-      axios.patch(url2 + this.itemEditado.id, {
+      axios.patch(urlPatch + this.itemEditado.id, {
         periodo: this.itemEditado.periodo, dataCadastro: this.itemEditado.dataCadastro, ativo: this.itemEditado.ativo
       }).then((res) => {
         this.periodos = res.data;
