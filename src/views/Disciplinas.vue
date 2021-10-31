@@ -1,9 +1,5 @@
 <template>
   <v-data-table :headers="titulos" :items="disciplinas" :search="search" class="elevation-2">
-    :headers="titulos"
-    :items="disciplinas"
-    class="elevation-2 data-table"
-  >
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Disciplina</v-toolbar-title>
@@ -152,8 +148,8 @@ import axios from "axios";
 import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
-var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina"
-var url2 = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/desativar/1"
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/";
 
 export default {
   data: () => ({
@@ -177,7 +173,7 @@ export default {
     itemEditado: {
       nome: "",
       apelido: "",
-      ativo: true,
+      ativo: "",
     },
     itemPadrao: {
       nome: "",
@@ -232,7 +228,8 @@ export default {
 
     deleteItemConfirm() {
       this.disciplinas.splice(this.editIndice, 1);
-      axios.patch(url2 + this.itemEditado.id, {
+
+      axios.patch(urlPatch + this.itemEditado.id, {
        nome: this.itemEditado.nome,
        ativo: this.itemEditado.ativo,
        apelido: this.itemEditado.apelido,
@@ -245,6 +242,27 @@ export default {
       });
 
     this.fecharDelete();
+       if (this.editIndice > -1) {
+       axios
+          .patch(urlPatch + this.itemEditado.id, {
+              pessoa: {
+              nome: this.itemEditado.nome,
+              cpf: this.itemEditado.cpf,
+              email: this.itemEditado.email,
+              telefone: this.itemEditado.telefone,
+            },
+            matricula: this.itemEditado.matricula, 
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            this.alunos = res.data;
+            console.log(res.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      this.fecharDelete();
+      }
     },
 
     fechar() {
