@@ -37,14 +37,6 @@
                   <v-row>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="itemEditado.numero"
-                        label="N° Sala"
-                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="8" sm="6" md="4">
-                      <v-text-field
                         v-model="itemEditado.nome"
                         label="Nome"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
@@ -103,7 +95,6 @@
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="deleteItem(item)"> mdi-power-standby </v-icon>
     </template>
-    <template v-slot:no-data> </template>
   </v-data-table>
 </template>
 
@@ -127,7 +118,7 @@ import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/sala";
-var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/sala/5";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/sala/desativar/";
 
 export default {
   data: () => ({
@@ -135,18 +126,15 @@ export default {
     dialog: false,
     dialogDelete: false,
     titulos: [
-      { text: "Número", value: "numero" },
-      { text: "Nome", value: "nome" },
+      { text: "Sala", value: "nome" },
       { text: "Local", value: "local" },
       { text: "Capacidade", value: "capacidade", sortable: false },
       { text: "Descrição", value: "descricao", sortable: false },
       { text: "Ações", value: "acoes", sortable: false },
-      { text: "Ativo", value: "ativo", sortable: false },
     ],
     salas: [],
     editIndice: -1,
     itemEditado: {
-      numero: 0,
       nome: "",
       local: "",
       capacidade: 0,
@@ -154,7 +142,6 @@ export default {
       ativo: "",
     },
     itemPadrao: {
-      numero: 0,
       nome: "",
       local: "",
       capacidade: 0,
@@ -205,8 +192,7 @@ export default {
       this.salas.splice(this.editIndice, 1);
 
       axios.patch(urlPatch + this.itemEditado.id, {
-        numero: this.itemEditado.numero, nome: this.itemEditado.nome, local: this.itemEditado.local, descricao: this.itemEditado.descricao, ativo: this.itemEditado.ativo
-      }).then((res) => {
+      nome: this.itemEditado.nome, local: this.itemEditado.local, descricao: this.itemEditado.descricao, ativo: this.itemEditado.ativo}).then((res) => {
         this.salas = res.data;
         console.log(res.data);
       })
@@ -237,7 +223,6 @@ export default {
       if (this.editIndice > -1) {
         axios
           .put(url + this.itemEditado.id, {
-            numero: this.itemEditado.numero,
             nome: this.itemEditado.nome,
             local: this.itemEditado.local,
             capacidade: this.itemEditado.capacidade,
@@ -254,7 +239,6 @@ export default {
         
         axios
           .post(url, {
-            numero: this.itemEditado.numero,
             nome: this.itemEditado.nome,
             local: this.itemEditado.local,
             capacidade: this.itemEditado.capacidade,
