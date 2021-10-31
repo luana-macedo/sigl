@@ -137,7 +137,7 @@ export default {
     itemEditado: {
       periodo: "",
       dataCadastro: "",
-      ativo: ""
+      ativo: "",
     },
     itemPadrao: {
       periodo: "",
@@ -218,7 +218,8 @@ export default {
     salvar() {
       if (this.editIndice > -1) {
 
-        axios.put(url+this.itemEditado.id,{periodo : this.itemEditado.periodo,dataCadastro : this.itemEditado.dataCadastro, ativo: this.itemEditado.ativo}).then(res => {
+        axios.put(url, {
+        id : this.itemEditado.id,periodo : this.itemEditado.periodo,dataCadastro : this.itemEditado.dataCadastro, ativo: this.itemEditado.ativo}).then(res => {
 				this.periodos = res.data
 				console.log(res.data)
 			})
