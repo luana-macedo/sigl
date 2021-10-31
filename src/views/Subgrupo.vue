@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="titulos" :items="manuais"  :search="search" class="elevation-2">
+  <v-data-table :headers="titulos" :items="subgrupos"  :search="search" class="elevation-2">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Subgrupo</v-toolbar-title>
@@ -146,7 +146,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 Vue.use(VueAxios, axios)
 
-var url = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupos"
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo"
 
 export default {
   data: () => ({
@@ -224,6 +224,10 @@ export default {
       });
 
     },
+ 
+   mounted() {
+    this.inicializar();
+   },
 
     editItem(item) {
       this.editIndice = this.subgrupos.indexOf(item);
@@ -260,7 +264,7 @@ export default {
 
     salvar() {
       if (this.editIndice > -1) {
-        axios.put(url+this.itemEditado.id,{ nome : this.itemEditado.nome, ativo: this.itemEditado.ativo}).then(res => {
+        axios.put(url,{ id : this.itemEditado.id, nome : this.itemEditado.nome, ativo: this.itemEditado.ativo}).then(res => {
 				this.subgrupos = res.data
 				console.log(res.data)
 			}).catch((error) => {

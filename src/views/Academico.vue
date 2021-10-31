@@ -182,7 +182,7 @@ export default {
         email: "",
       },
       matricula: "",
-      ativo: "true",
+      ativo: true,
     },
   }),
   computed: {
@@ -280,8 +280,10 @@ export default {
     salvar() {
       if (this.editIndice > -1) {
         axios
-          .put(url + this.itemEditado.id, {
+          .put(url, {
+            id: this.itemEditado.id,
             pessoa: {
+              id: this.itemEditado.id,
               nome: this.itemEditado.nome,
               cpf: this.itemEditado.cpf,
               email: this.itemEditado.email,
