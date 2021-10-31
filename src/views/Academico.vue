@@ -47,16 +47,14 @@
                         label="Nome"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
-                        ></v-text-field
-                      >
+                      ></v-text-field>
 
                       <v-text-field
                         v-model="itemEditado.pessoa.cpf"
                         label="CPF"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
-                        ></v-text-field
-                      >
+                      ></v-text-field>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
@@ -71,8 +69,7 @@
                         label="E-mail"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
-                        ></v-text-field
-                      >
+                      ></v-text-field>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
@@ -80,8 +77,14 @@
                         label="Telefone"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
-                        ></v-text-field
-                      >
+                      ></v-text-field>
+                     <!--   <v-text-field
+                        v-model="itemEditado.ativo"
+                        label="Status"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
+                        required
+                      ></v-text-field> -->
+
                     </v-col>
                     <v-col cols="8" sm="6" md="4"> </v-col>
                     <v-col cols="8" sm="6" md="4"> </v-col>
@@ -101,7 +104,7 @@
         <v-dialog v-model="dialogDelete" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
-              >Deseja remover esta alunos ?</v-card-title
+              >Deseja desativar este aluno ?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -144,6 +147,7 @@ import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/aluno";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/aluno/desativar/"; 
 
 export default {
   data: () => ({
@@ -168,7 +172,7 @@ export default {
         email: "",
       },
       matricula: "",
-      ativo: true,
+      ativo: "",
     },
     itemPadrao: {
       pessoa: {
@@ -178,7 +182,7 @@ export default {
         email: "",
       },
       matricula: "",
-      ativo: true,
+      ativo: "true",
     },
   }),
   computed: {
@@ -189,13 +193,13 @@ export default {
   props: {
     pessoa: {
       type: Object,
-     default: function () {
+      default: function () {
         return {
           nome: "",
           cpf: "",
           telefone: "",
           email: "",
-        }; 
+        };
       },
     },
   },
@@ -232,11 +236,31 @@ export default {
       this.dialogDelete = true;
     },
 
-    deleteItemConfirm() {
+   async deleteItemConfirm() {
       this.alunos.splice(this.editIndice, 1);
+      if (this.editIndice > -1) {
+       axios
+          .patch(urlPatch + this.itemEditado.id, {
+              pessoa: {
+              nome: this.itemEditado.nome,
+              cpf: this.itemEditado.cpf,
+              email: this.itemEditado.email,
+              telefone: this.itemEditado.telefone,
+            },
+            matricula: this.itemEditado.matricula, 
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            this.alunos = res.data;
+            console.log(res.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       this.fecharDelete();
+      }
     },
-
+  
     fechar() {
       this.dialog = false;
       this.$nextTick(() => {
@@ -256,12 +280,12 @@ export default {
     salvar() {
       if (this.editIndice > -1) {
         axios
-        .put(url + this.itemEditado.id,{
-          pessoa: {
-            nome: this.itemEditado.nome,
-            cpf: this.itemEditado.cpf,
-            email: this.itemEditado.email,
-            telefone: this.itemEditado.telefone,
+          .put(url + this.itemEditado.id, {
+            pessoa: {
+              nome: this.itemEditado.nome,
+              cpf: this.itemEditado.cpf,
+              email: this.itemEditado.email,
+              telefone: this.itemEditado.telefone,
             },
             matricula: this.itemEditado.matricula,
             ativo: this.itemEditado.ativo,
@@ -278,14 +302,14 @@ export default {
       } else {
         axios
           .post(url, {
-            pessoa: { 
-            nome: this.itemEditado.pessoa.nome,
-            cpf: this.itemEditado.pessoa.cpf,
-            email: this.itemEditado.pessoa.email,
-            telefone: this.itemEditado.pessoa.telefone,
-          }, 
-          ativo: this.itemEditado.ativo,
-          matricula: this.itemEditado.matricula,
+            pessoa: {
+              nome: this.itemEditado.pessoa.nome,
+              cpf: this.itemEditado.pessoa.cpf,
+              email: this.itemEditado.pessoa.email,
+              telefone: this.itemEditado.pessoa.telefone,
+            },
+            ativo: this.itemEditado.ativo,
+            matricula: this.itemEditado.matricula,
           })
           .then((res) => {
             this.alunos = res.data;
