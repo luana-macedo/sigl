@@ -142,7 +142,7 @@ export default {
     itemPadrao: {
       periodo: "",
       dataCadastro: "",
-      ativo: true
+      ativo: "",
     },
   }),
    
@@ -188,6 +188,7 @@ export default {
       this.periodos.splice(this.editIndice, 1);
       axios.patch(urlPatch + this.itemEditado.id, {
         periodo: this.itemEditado.periodo, dataCadastro: this.itemEditado.dataCadastro, ativo: this.itemEditado.ativo
+
       }).then((res) => {
         this.periodos = res.data;
         console.log(res.data);
