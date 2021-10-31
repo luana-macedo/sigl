@@ -101,7 +101,7 @@
         <v-dialog v-model="dialogDelete" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
-              >Deseja remover esta alunos ?</v-card-title
+              >Deseja remover este aluno?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -152,7 +152,7 @@ export default {
     dialogDelete: false,
     titulos: [
       { text: "Nome", value: "pessoa.nome" },
-      { text: "Cpf", value: "pessoa.cpf" },
+      { text: "CPF", value: "pessoa.cpf" },
       { text: "Telefone", value: "pessoa.telefone" },
       { text: "Email", value: "pessoa.email" },
       { text: "Matricula", value: "matricula" },
