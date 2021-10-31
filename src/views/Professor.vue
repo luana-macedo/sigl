@@ -179,7 +179,7 @@ export default {
         email: "",
       },
       matricula: "",
-      ativo: "true",
+      ativo: true,
     },
   }),
   computed: {
@@ -323,10 +323,10 @@ export default {
         axios
           .post(url, {
           pessoa: { 
-            nome: this.itemEditado.pessoa.nome,
-            cpf: this.itemEditado.pessoa.cpf,
-            telefone: this.itemEditado.pessoa.telefone,
-            email: this.itemEditado.pessoa.email,
+            nome: this.itemEditado.nome,
+            cpf: this.itemEditado.cpf,
+            telefone: this.itemEditado.telefone,
+            email: this.itemEditado.email,
           }, 
           ativo: this.itemEditado.ativo,
           matricula: this.itemEditado.matricula,
