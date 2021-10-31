@@ -10,7 +10,7 @@
         <v-toolbar-title>Gerenciamento de Professores</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <v-text-field class="barraPesquisa2"
+        <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
@@ -133,8 +133,6 @@
 body {
   padding: 2%;
 }
-
-
 </style>
 
 <script>
@@ -145,6 +143,7 @@ Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
 var url2 = "http://api-sig-itpac-84633.herokuapp.com/api/professores/desativar"
+var url3 = "http://api-sig-itpac-84633.herokuapp.com/api/professores/ativar/1";
 
 export default {
   data: () => ({
@@ -235,8 +234,9 @@ export default {
     },
 
     deleteItemConfirm() {
+      var status = this.ativo
       this.professores.splice(this.editIndice, 1);
-      if (this.editIndice > -1) {
+      if (this.editIndice > -1 && status == true) {
        axios
           .patch(url2 + this.itemEditado.id, {
               pessoa: {
@@ -255,7 +255,29 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-        this.fecharDelete();
+        
+      } else{
+        axios
+          .patch(url3 + this.itemEditado.id, {
+              pessoa: {
+              nome: this.itemEditado.nome,
+              cpf: this.itemEditado.cpf,
+              email: this.itemEditado.email,
+              telefone: this.itemEditado.telefone,
+            },
+            matricula: this.itemEditado.matricula, 
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            this.professores = res.data;
+            console.log(res.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+          
+        this.fecharDesativar();
+
       }
     },
 
