@@ -9,7 +9,7 @@
         <v-toolbar-title>Gerenciamento de Disciplina</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <v-text-field
+        <v-text-field class="barraPesquisa"
           v-model="pesquisa"
           append-icon="mdi-magnify"
           label="Pesquisar"
@@ -141,6 +141,10 @@
 .card-modal {
   text-align: center;
 }
+
+.barraPesquisa{
+    padding-right:930px;
+}
 </style>
 <script>
 import Vue from "vue";
@@ -148,7 +152,8 @@ import axios from "axios";
 import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
-var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina"
+var url2 = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/desativar/1"
 
 export default {
   data: () => ({
@@ -227,7 +232,19 @@ export default {
 
     deleteItemConfirm() {
       this.disciplinas.splice(this.editIndice, 1);
-      this.fecharDelete();
+      axios.patch(url2 + this.itemEditado.id, {
+       nome: this.itemEditado.nome,
+       ativo: this.itemEditado.ativo,
+       apelido: this.itemEditado.apelido,
+      }).then((res) => {
+        this.disciplinas = res.data;
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    this.fecharDelete();
     },
 
     fechar() {
@@ -261,12 +278,7 @@ export default {
 
         Object.assign(this.disciplinas[this.editIndice], this.itemEditado);
       } else {
-        axios
-          .post(url, {
-            nome: this.itemEditado.nome,
-            ativo: this.itemEditado.ativo,
-            apelido: this.itemEditado.apelido,
-          })
+        axios.post(url, {nome: this.itemEditado.nome,ativo: this.itemEditado.ativo, apelido: this.itemEditado.apelido,})
           .then((res) => {
             this.disciplinas = res.data;
             console.log(res.data);

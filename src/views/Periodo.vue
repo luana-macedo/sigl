@@ -5,7 +5,7 @@
         <v-toolbar-title>Gerenciamento de Período</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-         <v-text-field
+         <v-text-field class="barraPesquisa"
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"

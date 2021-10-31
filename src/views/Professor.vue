@@ -10,7 +10,7 @@
         <v-toolbar-title>Gerenciamento de Professores</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <v-text-field
+        <v-text-field class="barraPesquisa2"
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
@@ -134,6 +134,8 @@
 body {
   padding: 2%;
 }
+
+
 </style>
 <script>
 import Vue from "vue";
