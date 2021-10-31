@@ -236,7 +236,7 @@ export default {
       this.dialogDelete = true;
     },
 
-   async deleteItemConfirm() {
+   deleteItemConfirm() {
       this.alunos.splice(this.editIndice, 1);
       if (this.editIndice > -1) {
        axios

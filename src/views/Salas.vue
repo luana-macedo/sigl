@@ -124,7 +124,7 @@ import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/sala";
-var urlStatus = "http://api-sig-itpac-84633.herokuapp.com/api/sala/5";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/sala/5";
 
 export default {
   data: () => ({
@@ -148,7 +148,7 @@ export default {
       local: "",
       capacidade: 0,
       descricao: "",
-      ativo: true,
+      ativo: "",
     },
     itemPadrao: {
       numero: 0,
@@ -201,12 +201,16 @@ export default {
     deleteItemConfirm() {
       this.salas.splice(this.editIndice, 1);
 
-      axios.delete(urlStatus + this.itemEditado.id)
-      .then((res) => {
+      axios.patch(urlPatch + this.itemEditado.id, {
+        numero: this.itemEditado.numero, nome: this.itemEditado.nome, local: this.itemEditado.local, descricao: this.itemEditado.descricao, ativo: this.itemEditado.ativo
+      }).then((res) => {
         this.salas = res.data;
-        console.warn(res.data);
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
       });
-      
+
       this.fecharDelete();
     },
 
@@ -267,5 +271,3 @@ export default {
 };
 </script>
 
-/* obs: modal de editar funcionando normal em sala, já em outras não */
-/* MATRICULA NOME CPF TELEFOME EMAIL ATIVO */

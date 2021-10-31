@@ -64,7 +64,7 @@
       items: [
           { title: 'PERÍODO', icon: 'mdi-view-dashboard', to:'/periodo' },
           { title: 'DISCIPLINA', icon: 'mdi-book-multiple', to:'/disciplinas' },
-          { title: 'ACADÊMICO', icon: 'mdi-badge-account', to:'/academico'},
+          { title: 'ALUNO', icon: 'mdi-badge-account', to:'/academico'},
           { title: 'PROFESSOR', icon: 'mdi-account-tie', to:'/professor'},
           { title: 'SUBGRUPO', icon: 'mdi-account-group', to:'/subgrupo'},
           { title: 'MANUAL', icon: 'mdi-folder-cog', to:'/manuais'},

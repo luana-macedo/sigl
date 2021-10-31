@@ -104,7 +104,7 @@
               <v-btn small color="warning" dark @click="fecharDelete"
                 >Não</v-btn
               >
-              <v-btn small color="primary" dark @click="removeItemConfirm"
+              <v-btn small color="primary" dark @click="desativeItemConfirm"
                 >Sim</v-btn
               >
               <v-spacer></v-spacer>
@@ -115,7 +115,7 @@
     </template>
     <template v-slot:item.acoes="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon small @click="removeItem(item)"> mdi-power-standby </v-icon>
+      <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
     </v-data-table>
 </template>
@@ -145,7 +145,7 @@ import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
-var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/3";
 
 export default {
   data: () => ({
@@ -216,28 +216,23 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem(item) {
+    desativeItem(item) {
       this.editIndice = this.disciplinas.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
-    deleteItemConfirm() {
+    desativeItemConfirm() {
       this.disciplinas.splice(this.editIndice, 1);
        if (this.editIndice > -1) {
        axios
           .patch(urlPatch + this.itemEditado.id, {
-              pessoa: {
-              nome: this.itemEditado.nome,
-              cpf: this.itemEditado.cpf,
-              email: this.itemEditado.email,
-              telefone: this.itemEditado.telefone,
-            },
-            matricula: this.itemEditado.matricula, 
+            nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo,
+            apelido: this.itemEditado.apelido,
           })
           .then((res) => {
-            this.alunos = res.data;
+            this.disciplinas = res.data;
             console.log(res.data);
           })
           .catch((error) => {

@@ -46,7 +46,7 @@
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
                         v-model="itemEditado.ativo"
-                        label="Nome"
+                        label="Status"
                         :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
@@ -162,7 +162,7 @@ export default {
         value: "ativo",
       },
       { text: "Ações", 
-        align:"", 
+        align:"center", 
         value: "acoes", 
         sortable: false },
     ],
@@ -170,7 +170,7 @@ export default {
     editIndice: -1,
     itemEditado: {
       nome: "",
-      ativo: true
+      ativo: ""
     },
     itemPadrao: {
       nome: "",
@@ -257,7 +257,7 @@ export default {
 
     salvar() {
       if (this.editIndice > -1) {
-        axios.put(url+this.itemEditado.id,{subgrupos : this.itemEditado.subgrupos,nome : this.itemEditado.nome, ativo: this.itemEditado.ativo}).then(res => {
+        axios.put(url+this.itemEditado.id,{ nome : this.itemEditado.nome, ativo: this.itemEditado.ativo}).then(res => {
 				this.subgrupos = res.data
 				console.log(res.data)
 			}).catch((error) => {
@@ -265,7 +265,7 @@ export default {
       });
         Object.assign(this.subgrupos[this.editIndice], this.itemEditado);
       } else {
-        axios.post(url,{subgrupos: this.itemEditado.subgrupos,nome: this.itemEditado.nome,ativo: this.itemEditado.ativo}).then(res => {
+        axios.post(url,{nome: this.itemEditado.nome,ativo: this.itemEditado.ativo}).then(res => {
 				this.subgrupos = res.data
 				console.log(res.data)
 			}).catch((error) => {
