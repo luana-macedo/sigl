@@ -300,8 +300,10 @@ export default {
     salvar() {
       if (this.editIndice > -1) {
         axios
-        .put(url + this.itemEditado.id,{
+        .put(url,{
+          id: this.itemEditado.id,
           pessoa: {
+            id: this.itemEditado.id,
             nome: this.itemEditado.nome,
             cpf: this.itemEditado.cpf,
             telefone: this.itemEditado.telefone,
@@ -323,10 +325,10 @@ export default {
         axios
           .post(url, {
           pessoa: { 
-            nome: this.itemEditado.nome,
-            cpf: this.itemEditado.cpf,
-            telefone: this.itemEditado.telefone,
-            email: this.itemEditado.email,
+              nome: this.itemEditado.pessoa.nome,
+              cpf: this.itemEditado.pessoa.cpf,
+              email: this.itemEditado.pessoa.email,
+              telefone: this.itemEditado.pessoa.telefone,
           }, 
           ativo: this.itemEditado.ativo,
           matricula: this.itemEditado.matricula,
