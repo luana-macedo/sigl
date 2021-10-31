@@ -256,12 +256,14 @@ export default {
     salvar() {
       if (this.editIndice > -1) {
         axios
-          .put(url + this.itemEditado.id, {
+        .put(url + this.itemEditado.id,{
+          pessoa: {
             nome: this.itemEditado.nome,
-            matricula: this.itemEditado.matricula,
             cpf: this.itemEditado.cpf,
             email: this.itemEditado.email,
             telefone: this.itemEditado.telefone,
+            },
+            matricula: this.itemEditado.matricula,
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
@@ -276,12 +278,14 @@ export default {
       } else {
         axios
           .post(url, {
-            nome: this.itemEditado.nome,
-            matricula: this.itemEditado.matricula,
-            cpf: this.itemEditado.cpf,
-            email: this.itemEditado.email,
-            telefone: this.itemEditado.telefone,
-            ativo: this.itemEditado.ativo,
+            pessoa: { 
+            nome: this.itemEditado.pessoa.nome,
+            cpf: this.itemEditado.pessoa.cpf,
+            email: this.itemEditado.pessoa.email,
+            telefone: this.itemEditado.pessoa.telefone,
+          }, 
+          ativo: this.itemEditado.ativo,
+          matricula: this.itemEditado.matricula,
           })
           .then((res) => {
             this.alunos = res.data;
