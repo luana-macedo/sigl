@@ -156,7 +156,7 @@ export default {
     dialogDelete: false,
     titulos: [
       { text: "Nome", value: "pessoa.nome" },
-      { text: "Cpf", value: "pessoa.cpf" },
+      { text: "CPF", value: "pessoa.cpf" },
       { text: "Telefone", value: "pessoa.telefone" },
       { text: "Email", value: "pessoa.email" },
       { text: "Matricula", value: "matricula" },

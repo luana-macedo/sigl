@@ -43,14 +43,14 @@
                   <v-row>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="itemEditado.nome"
+                        v-model="itemEditado.pessoa.nome"
                         label="Nome"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
 
                       <v-text-field
-                        v-model="itemEditado.cpf"
+                        v-model="itemEditado.pessoa.cpf"
                         label="CPF"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
@@ -65,7 +65,7 @@
                       ></v-text-field>
 
                       <v-text-field
-                        v-model="itemEditado.email"
+                        v-model="itemEditado.pessoa.email"
                         label="E-mail"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
@@ -73,7 +73,7 @@
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
-                        v-model="itemEditado.telefone"
+                        v-model="itemEditado.pessoa.telefone"
                         label="Telefone"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
@@ -103,7 +103,7 @@
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-card-title class="text-h5"
-              >Deseja desativar este professores?</v-card-title
+              >Deseja desativar este professor?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -135,6 +135,7 @@ body {
   padding: 2%;
 }
 </style>
+
 <script>
 import Vue from "vue";
 import axios from "axios";
@@ -149,39 +150,53 @@ export default {
     dialog: false,
     dialogDelete: false,
     titulos: [
-      {
-        text: "Matricula",
-        align: "center",
-        value: "matricula",
-      },
+      { text: "Nome", value: "pessoa.nome" },
+      { text: "CPF", value: "pessoa.cpf" },
+      { text: "Telefone", value: "pessoa.telefone" },
+      { text: "Email", value: "pessoa.email" },
+      { text: "Matricula", value: "matricula" },
       { text: "Status", value: "ativo" },
-      { text: "Ações", value: "acoes", sortable: false },
+      { text: "Ações", value: "acoes" },
     ],
-    professores: [],
+   professores: [],
     editIndice: -1,
     itemEditado: {
+      pessoa: {
+        nome: "",
+        cpf: "",
+        telefone: "",
+        email: "",
+      },
       matricula: "",
-      /*  nome: "",
-      cpf: "",
-      telefone: "",
-      email: "", */
       ativo: true,
     },
     itemPadrao: {
+      pessoa: {
+        nome: "",
+        cpf: "",
+        telefone: "",
+        email: "",
+      },
       matricula: "",
-      /* nome: "",
-      cpf: "",
-      telefone: "",
-      email: "", */
       ativo: true,
     },
   }),
-
   computed: {
     tituloForm() {
-      return this.editIndice === -1
-        ? "Cadastrar Professores"
-        : "Editar Professores";
+      return this.editIndice === -1 ? "Cadastrar Professor" : "Editar Dados";
+    },
+  },
+  props: {
+    pessoa: {
+      type: Object,
+     default: function () {
+        return {
+          nome: "",
+          cpf: "",
+          telefone: "",
+          email: "",
+        }; 
+      },
     },
   },
 
@@ -200,7 +215,7 @@ export default {
 
   methods: {
     inicializar() {
-      this.axios.get(url, this.professores).then((res) => {
+      axios.get(url, this.professores).then((res) => {
         this.professores = res.data;
         console.log(res.data);
       });
@@ -241,12 +256,14 @@ export default {
     salvar() {
       if (this.editIndice > -1) {
         axios
-          .put(url + this.itemEditado.id, {
-            matricula: this.itemEditado.matricula,
-            /*  nome: this.itemEditado.nome,
+        .put(url + this.itemEditado.id,{
+          pessoa: {
+            nome: this.itemEditado.nome,
             cpf: this.itemEditado.cpf,
             telefone: this.itemEditado.telefone,
-            email: this.itemEditado.email, */
+            email: this.itemEditado.email,
+            },
+            matricula: this.itemEditado.matricula,
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
@@ -261,16 +278,21 @@ export default {
       } else {
         axios
           .post(url, {
-            matricula: this.itemEditado.matricula,
-            nome: this.itemEditado.nome,
-            cpf: this.itemEditado.cpf,
-            telefone: this.itemEditado.telefone,
-            email: this.itemEditado.email,
-            ativo: this.itemEditado.ativo,
+          pessoa: { 
+            nome: this.itemEditado.pessoa.nome,
+            cpf: this.itemEditado.pessoa.cpf,
+            telefone: this.itemEditado.pessoa.telefone,
+            email: this.itemEditado.pessoa.email,
+          }, 
+          ativo: this.itemEditado.ativo,
+          matricula: this.itemEditado.matricula,
           })
           .then((res) => {
             this.professores = res.data;
             console.log(res.data);
+          })
+          .catch((error) => {
+            console.log(error);
           });
 
         this.professores.push(this.itemEditado);
