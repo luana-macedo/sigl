@@ -10,7 +10,7 @@
         <v-toolbar-title>Gerenciamento de Professores</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <v-text-field
+        <v-text-field class="barraPesquisa2"
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
@@ -29,8 +29,7 @@
               color="green"
               v-bind="attrs"
               v-on="on"
-              ><v-icon dark> mdi-plus</v-icon></v-btn
-            >
+              ><v-icon dark> mdi-plus</v-icon></v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -134,6 +133,8 @@
 body {
   padding: 2%;
 }
+
+
 </style>
 
 <script>
@@ -143,6 +144,7 @@ import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
+var url2 = "http://api-sig-itpac-84633.herokuapp.com/api/professores/desativar"
 
 export default {
   data: () => ({
@@ -168,7 +170,7 @@ export default {
         email: "",
       },
       matricula: "",
-      ativo: true,
+      ativo: "",
     },
     itemPadrao: {
       pessoa: {
@@ -178,7 +180,7 @@ export default {
         email: "",
       },
       matricula: "",
-      ativo: true,
+      ativo: "true",
     },
   }),
   computed: {
@@ -189,7 +191,7 @@ export default {
   props: {
     pessoa: {
       type: Object,
-     default: function () {
+     default: function() {
         return {
           nome: "",
           cpf: "",
@@ -234,7 +236,27 @@ export default {
 
     deleteItemConfirm() {
       this.professores.splice(this.editIndice, 1);
-      this.fecharDelete();
+      if (this.editIndice > -1) {
+       axios
+          .patch(url2 + this.itemEditado.id, {
+              pessoa: {
+              nome: this.itemEditado.nome,
+              cpf: this.itemEditado.cpf,
+              email: this.itemEditado.email,
+              telefone: this.itemEditado.telefone,
+            },
+            matricula: this.itemEditado.matricula, 
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            this.professores = res.data;
+            console.log(res.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        this.fecharDelete();
+      }
     },
 
     fechar() {
