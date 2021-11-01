@@ -124,6 +124,7 @@ import VueAxios from 'vue-axios'
 Vue.use(VueAxios, axios)
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/manual"
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/manual/desativar/"
 
 export default {
   data: () => ({
@@ -144,10 +145,12 @@ export default {
     itemEditado: {
       descricao: "",
       fileName: "",
+      ativo: "",
     },
     itemPadrao: {
       descricao: "",
       fileName: "",
+      ativo: true ,
     },
   }),
 
@@ -191,7 +194,24 @@ export default {
 
     deleteItemConfirm() {
       this.manuais.splice(this.editIndice, 1);
+      if (this.editIndice > -1) {
+       axios
+          .patch(urlPatch + this.itemEditado.id, {
+              pessoa: {
+              descricao: this.itemEditado.descricao,
+              fileName: this.itemEditado.fileName,
+            },
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            this.manuais = res.data;
+            console.log(res.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       this.fecharDelete();
+      }
     },
 
     fechar() {
