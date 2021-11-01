@@ -1,12 +1,16 @@
 <template>
-  <v-data-table :headers="titulos" :items="disciplinas" :search="search" class="elevation-2">
+  <v-data-table 
+  :headers="titulos" 
+  :items="disciplinas" 
+  :search="search" 
+  class="elevation-2">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Disciplina</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-text-field class="barraPesquisa"
-          v-model="pesquisa"
+          v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
           single-line
@@ -153,7 +157,7 @@ var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/";
 
 export default {
   data: () => ({
-  search: "",
+    search: "",
     dialog: false,
     dialogDelete: false,
     titulos: [
