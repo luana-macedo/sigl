@@ -55,14 +55,7 @@
                         label="Apelido"
                         :rules="['Campo Obrigatório']"
                         maxlenght="20"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="8" sm="6" md="4">
-                      <v-text-field
-                        v-model="itemEditado.ativo"
-                        label="Status"
-                        :rules="['Campo Obrigatório']"
-                        maxlenght="20"
+                        required
                       ></v-text-field>
                     </v-col>
                      <v-col cols="8" sm="6" md="4">
