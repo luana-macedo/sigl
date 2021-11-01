@@ -149,7 +149,7 @@ import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
-var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/3";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/";
 
 export default {
   data: () => ({
@@ -228,6 +228,24 @@ export default {
 
     desativeItemConfirm() {
       this.disciplinas.splice(this.editIndice, 1);
+<<<<<<< Updated upstream
+=======
+       if (this.editIndice > -1) {
+      axios.patch(urlPatch + this.itemEditado.id, {
+       nome: this.itemEditado.nome,
+       ativo: this.itemEditado.ativo,
+       apelido: this.itemEditado.apelido,
+      }).then((res) => {
+        this.disciplinas = res.data;
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    this.fecharDelete();
+       }
+>>>>>>> Stashed changes
        if (this.editIndice > -1) {
        axios
           .patch(urlPatch + this.itemEditado.id, {
