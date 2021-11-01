@@ -65,6 +65,18 @@
                         maxlenght="20"
                       ></v-text-field>
                     </v-col>
+                     <v-col cols="8" sm="6" md="4">
+                      <v-select
+                          v-model="select0"
+                           :items="status"
+                            :error-messages="errors"
+                             label="Status"
+                            data-vv-name="select"
+                            :rules="[(v) => !!v ||'Campo Obrigatório']"
+                            maxlenght="20"
+                            required
+                            ></v-select>
+                     </v-col>
                     <!-- <v-col cols="8" sm="6" md="4"> 
                       <v-select
                         v-model="select"
@@ -184,6 +196,8 @@ export default {
       apelido: "",
       ativo: true,
     },
+     select0: null,
+     status: ["true", "false"],
 
     /* select: null,
     disciplina: ["Item 1", "Item 2", "Item 3", "Item 4"],
