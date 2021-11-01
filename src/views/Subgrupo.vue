@@ -160,6 +160,16 @@ export default {
         value: "nome",
       },
       {
+        text: "Professor",
+        align: "center",
+        value: "professor",
+      },
+      {
+        text: "Disciplina",
+        align: "center",
+        value: "disciplina",
+      },
+      {
         text: "Status",
         align: "center",
         value: "ativo",
@@ -173,11 +183,15 @@ export default {
     editIndice: -1,
     itemEditado: {
       nome: "",
-      ativo: ""
+      ativo: "",
+    /*   professor: "",
+      disciplina:"", */
     },
     itemPadrao: {
       nome: "",
-      ativo: true
+      ativo: true,
+   /*    professor: "",
+      disciplina:"", */
     },
    /* select: null,
       prof: [

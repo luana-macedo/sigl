@@ -110,7 +110,6 @@ var url = "http://api-sig-itpac-84633.herokuapp.com/api/periodo"
 var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/periodo/desativar/"
 
 export default {
-
   data: () => ({
     search: "",
     dialog: false,
