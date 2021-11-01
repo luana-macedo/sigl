@@ -158,7 +158,7 @@ import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
-var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/desativar/";
 
 export default {
   data: () => ({
