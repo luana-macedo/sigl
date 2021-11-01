@@ -43,13 +43,17 @@
                         required
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="8" sm="6" md="4">
-                      <v-text-field
-                        v-model="itemEditado.ativo"
+                    <v-col cols="8" sm="6" md="4"> 
+                      <v-select
+                        v-model="select2"
+                        :items="status"
+                        :error-messages="errors"
                         label="Status"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        data-vv-name="select"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
+                        maxlenght="20"
                         required
-                      ></v-text-field>
+                      ></v-select>
                     </v-col>
                    <!-- <v-col cols="8" sm="6" md="4">
                       <v-select
@@ -194,20 +198,8 @@ export default {
    /*    professor: "",
       disciplina:"", */
     },
-   /* select: null,
-      prof: [
-        'Alex Coelho ',
-        'Fred Pires',
-        'Jânio Junior',
-        'Márcia Padilha',
-      ],
-      select1: null,
-      disc: [
-        'Alg 2',
-        'Calculo 1',
-        'Projeto Integrador ',
-        'Direito',
-      ],*/
+     select2: null,
+     status: ["true", "false"],
   }),
 
   computed: {

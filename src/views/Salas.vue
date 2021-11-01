@@ -1,5 +1,9 @@
 <template>
-  <v-data-table :headers="titulos" :items="salas" :search="search" class="elevation-2">
+  <v-data-table 
+  :headers="titulos" 
+  :items="salas" 
+  :search="search" 
+  class="elevation-2">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Sala</v-toolbar-title>
@@ -8,7 +12,7 @@
         <v-text-field class="barraPesquisa3"
           v-model="search"
           append-icon="mdi-magnify"
-          label="Search"
+          label="Pesquisar"
           single-line
           hide-details
         ></v-text-field>

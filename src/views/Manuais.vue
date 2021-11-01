@@ -197,11 +197,10 @@ export default {
       if (this.editIndice > -1) {
        axios
           .patch(urlPatch + this.itemEditado.id, {
-              pessoa: {
+
               descricao: this.itemEditado.descricao,
-              fileName: this.itemEditado.fileName,
-            },
-            ativo: this.itemEditado.ativo,
+
+              ativo: this.itemEditado.ativo,
           })
           .then((res) => {
             this.manuais = res.data;
