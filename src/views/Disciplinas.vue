@@ -228,26 +228,10 @@ export default {
 
     desativeItemConfirm() {
       this.disciplinas.splice(this.editIndice, 1);
-
-      axios.patch(urlPatch + this.itemEditado.id, {
-       nome: this.itemEditado.nome,
-       ativo: this.itemEditado.ativo,
-       apelido: this.itemEditado.apelido,
-      }).then((res) => {
-        this.disciplinas = res.data;
-        console.log(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    this.fecharDelete();
        if (this.editIndice > -1) {
        axios
           .patch(urlPatch + this.itemEditado.id, {
-            nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo,
-            apelido: this.itemEditado.apelido,
           })
           .then((res) => {
             this.disciplinas = res.data;
