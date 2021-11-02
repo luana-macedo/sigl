@@ -260,6 +260,7 @@ export default {
           })
           .then((res) => {
             this.subgrupos = res.data;
+            alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
           })
           .catch((error) => {
@@ -294,6 +295,7 @@ export default {
         console.log(error);
       });
         Object.assign(this.subgrupos[this.editIndice], this.itemEditado);
+        alert("Os dados foram alterados com sucesso !");
       } else {
         axios.post(url,{nome: this.itemEditado.nome,ativo: this.itemEditado.ativo}).then(res => {
 				this.subgrupos = res.data
@@ -302,6 +304,7 @@ export default {
         console.log(error);
       });
         this.subgrupos.push(this.itemEditado);
+        alert("Os dados foram deletados com sucesso !");
       }
       this.fechar();
     },

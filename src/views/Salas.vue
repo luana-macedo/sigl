@@ -234,10 +234,12 @@ export default {
           })
           .then((res) => {
             this.salas = res.data;
+            alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
           });
 
         Object.assign(this.salas[this.editIndice], this.itemEditado);
+        alert("Os dados foram alterados com sucesso !");
       } else {
         console.log(this.itemEditado);
         
@@ -254,6 +256,7 @@ export default {
           });
 
         this.salas.push(this.itemEditado);
+        alert("Os dados foram deletados com sucesso !");
       }
 
       this.fechar();
