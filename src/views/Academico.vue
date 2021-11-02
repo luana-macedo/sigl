@@ -185,7 +185,7 @@ export default {
         email: "",
       },
       matricula: "",
-      ativo: true,
+      ativo: true ,
     },
   }),
   computed: {
@@ -230,13 +230,13 @@ export default {
     editItem(item) {
       this.editIndice = this.alunos.indexOf(item);
       this.itemEditado = Object.assign({}, item);
-      this.dialog = true;
+      this.dialog = true ;
     },
 
     deleteItem(item) {
       this.editIndice = this.alunos.indexOf(item);
       this.itemEditado = Object.assign({}, item);
-      this.dialogDelete = true;
+      this.dialogDelete = true ;
     },
 
    deleteItemConfirm() {
@@ -266,7 +266,7 @@ export default {
     },
   
     fechar() {
-      this.dialog = false;
+      this.dialog = false ;
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
@@ -274,7 +274,7 @@ export default {
     },
 
     fecharDelete() {
-      this.dialogDelete = false;
+      this.dialogDelete = false ;
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
