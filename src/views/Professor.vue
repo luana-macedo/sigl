@@ -50,6 +50,7 @@
 
                       <v-text-field
                         v-model="itemEditado.pessoa.cpf"
+                        v-mask="'###.###.###-##'"
                         label="CPF"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
@@ -73,6 +74,7 @@
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
                         v-model="itemEditado.pessoa.telefone"
+                        v-mask="'(##)#####-####'"
                         label="Telefone"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required

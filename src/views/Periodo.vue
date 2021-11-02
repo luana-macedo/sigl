@@ -44,6 +44,7 @@
                       ></v-text-field>
                       <v-text-field
                         v-model="itemEditado.dataCadastro"
+                        v-mask="'####/##/##'"
                         label="Data de Cadastro"
                         :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
