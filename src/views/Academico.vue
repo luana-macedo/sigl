@@ -237,7 +237,7 @@ export default {
     },
 
    deleteItemConfirm() {
-      this.alunos.splice(this.editIndice, 1);
+      //this.alunos.splice(this.editIndice, 1);
       if (this.editIndice > -1) {
        axios
           .patch(urlPatch + this.itemEditado.id, {
@@ -251,7 +251,8 @@ export default {
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            this.alunos = res.data;
+            //this.alunos = res.data;
+            console.log("res:");
             console.log(res.data);
           })
           .catch((error) => {
@@ -293,7 +294,7 @@ export default {
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            this.alunos = res.data;
+            //this.alunos = res.data;
             console.log(res.data);
           })
           .catch((error) => {
@@ -314,7 +315,7 @@ export default {
             matricula: this.itemEditado.matricula,
           })
           .then((res) => {
-            this.alunos = res.data;
+            //this.alunos = res.data;
             console.log(res.data);
           })
           .catch((error) => {

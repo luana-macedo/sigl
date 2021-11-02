@@ -1,12 +1,16 @@
 <template>
-  <v-data-table :headers="titulos" :items="disciplinas" :search="search" class="elevation-2">
+  <v-data-table 
+  :headers="titulos" 
+  :items="disciplinas" 
+  :search="search" 
+  class="elevation-2">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Disciplina</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-text-field class="barraPesquisa"
-          v-model="pesquisa"
+          v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
           single-line
@@ -51,6 +55,7 @@
                         label="Apelido"
                         :rules="['Campo Obrigatório']"
                         maxlenght="20"
+                        required
                       ></v-text-field>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
@@ -62,6 +67,18 @@
                       ></v-text-field>
                     </v-col>
                      <v-col cols="8" sm="6" md="4"> 
+                      <v-select
+                          v-model="select0"
+                           :items="status"
+                            :error-messages="errors"
+                             label="Status"
+                            data-vv-name="select"
+                            :rules="[(v) => !!v ||'Campo Obrigatório']"
+                            maxlenght="20"
+                            required
+                            ></v-select>
+                     </v-col>
+                    <v-col cols="8" sm="6" md="4"> 
                       <v-select
                         v-model="select"
                         :items="periodo"
@@ -149,13 +166,14 @@ import axios from "axios";
 import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
-var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina"
 var urlPeriodo = "http://api-sig-itpac-84633.herokuapp.com/api/periodo"
-var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/3";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/desativar/"
+
 
 export default {
   data: () => ({
-  search: "",
+    search: "",
     dialog: false,
     dialogDelete: false,
     titulos: [
@@ -183,6 +201,8 @@ export default {
       apelido: "",
       ativo: true,
     },
+     select0: null,
+     status: ["true", "false"],
 
     select: [],
     periodo: [],
@@ -249,6 +269,23 @@ export default {
 
     desativeItemConfirm() {
       this.disciplinas.splice(this.editIndice, 1);
+      if (this.editIndice > -1) {
+      axios
+      .patch(urlPatch + this.itemEditado.id, {
+       nome: this.itemEditado.nome,
+       ativo: this.itemEditado.ativo,
+       apelido: this.itemEditado.apelido,
+      }).then((res) => {
+        this.disciplinas = res.data;
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+       }
+
+    this.fecharDelete();
+       
        if (this.editIndice > -1) {
        axios
           .patch(urlPatch + this.itemEditado.id, {
