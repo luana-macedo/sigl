@@ -329,10 +329,12 @@ export default {
           })
           .then((res) => {
             this.disciplinas = res.data;
+            alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
           });
 
         Object.assign(this.disciplinas[this.editIndice], this.itemEditado);
+        alert("Os dados foram adicionados com sucesso !");
       } else {
         axios.post(url, {nome: this.itemEditado.nome,ativo: this.itemEditado.ativo, apelido: this.itemEditado.apelido,})
           .then((res) => {
@@ -341,6 +343,7 @@ export default {
           });
 
         this.disciplinas.push(this.itemEditado);
+        alert("Os dados foram adicionados com sucesso !");
       }
 
       this.fechar();
