@@ -191,6 +191,7 @@ export default {
 
       }).then((res) => {
         this.periodos = res.data;
+        alert("Os dados foram adicionados com sucesso !");
         console.log(res.data);
       })
       .catch((error) => {
@@ -224,8 +225,8 @@ export default {
 				this.periodos = res.data
 				console.log(res.data)
 			})
-
         Object.assign(this.periodos[this.editIndice], this.itemEditado);
+        alert("Os dados foram adicionados com sucesso !");
       } else {
 
         axios.post(url,{periodo: this.itemEditado.periodo,dataCadastro: this.itemEditado.dataCadastro,ativo: this.itemEditado.ativo}).then(res => {
@@ -233,7 +234,9 @@ export default {
 				console.log(res.data)
 			})
         this.periodos.push(this.itemEditado);
+        alert("Os dados foram adicionados com sucesso !");
       }
+  
       this.fechar();
     },
   },
