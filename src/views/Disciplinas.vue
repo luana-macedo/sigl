@@ -61,13 +61,13 @@
                         maxlenght="20"
                       ></v-text-field>
                     </v-col>
-                    <!-- <v-col cols="8" sm="6" md="4"> 
+                     <v-col cols="8" sm="6" md="4"> 
                       <v-select
                         v-model="select"
-                        :items="disciplina"
+                        :items="periodo"
                         :error-messages="errors"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        label="Disciplina"
+                        label="Periodo"
                         required
                       ></v-select>
                     </v-col>
@@ -75,12 +75,13 @@
                       <v-select
                         v-model="select1"
                         :items="professor"
+                        @change="()=> console.log('hsdgfe')"
                         :error-messages="errors"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         label="Professor"
                         required
                       ></v-select>
-                    </v-col> -->
+                    </v-col>  
                   </v-row>
                 </v-container>
               </v-form>
@@ -149,6 +150,7 @@ import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
+var urlPeriodo = "http://api-sig-itpac-84633.herokuapp.com/api/periodo"
 var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/3";
 
 export default {
@@ -165,10 +167,11 @@ export default {
       { text: "Disciplina", value: "nome" },
       { text: "Status", value: "ativo" },
       { text: "Professor", value: "professor" },
-      { text: "Período", value: "periodo" },
+      { text: "Período", value: "periodo.periodo" },
       { text: "Ações", value: "acoes" },
     ],
     disciplinas: [],
+    periodosRaw: [],
     editIndice: -1,
     itemEditado: {
       nome: "",
@@ -181,10 +184,13 @@ export default {
       ativo: true,
     },
 
-    /* select: null,
-    disciplina: ["Item 1", "Item 2", "Item 3", "Item 4"],
-    select1: null,
-    professor: ["Item 1", "Item 2", "Item 3", "Item 4"], */
+    select: [],
+    periodo: [],
+
+    select1: [],
+    professor: ["Item 1", "Item 2", "Item 3", "Item 4"],
+    // select1: null,
+    // professor: ["Item 1", "Item 2", "Item 3", "Item 4"],
   }),
 
   computed: {
@@ -204,6 +210,7 @@ export default {
 
   created() {
     this.inicializar();
+    this.getPeriodos();
   },
 
   methods: {
@@ -213,6 +220,20 @@ export default {
         console.log(res.data);
       });
     },
+
+    async getPeriodos(){
+      const  {
+       data 
+      } = await this.axios.get(urlPeriodo)
+     this.periodosRaw = data
+     this.periodo = data.map(d => d.periodo).filter(Boolean)
+     console.log("periodo",data,data.map(d => d.periodo))
+   },
+
+   achaidperiodo(){
+      const [selectedPeriodo] = this.periodosRaw.filter(d => d.periodo ===  this.select[0])
+      console.log(selectedPeriodo)
+   },
 
     editItem(item) {
       this.editIndice = this.disciplinas.indexOf(item);
