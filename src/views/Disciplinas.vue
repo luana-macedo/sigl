@@ -5,7 +5,7 @@
         <v-toolbar-title>Gerenciamento de Disciplina</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <v-text-field class="barraPesquisa"
+        <v-text-field
           v-model="pesquisa"
           append-icon="mdi-magnify"
           label="Pesquisar"
@@ -228,24 +228,6 @@ export default {
 
     desativeItemConfirm() {
       this.disciplinas.splice(this.editIndice, 1);
-<<<<<<< Updated upstream
-=======
-       if (this.editIndice > -1) {
-      axios.patch(urlPatch + this.itemEditado.id, {
-       nome: this.itemEditado.nome,
-       ativo: this.itemEditado.ativo,
-       apelido: this.itemEditado.apelido,
-      }).then((res) => {
-        this.disciplinas = res.data;
-        console.log(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    this.fecharDelete();
-       }
->>>>>>> Stashed changes
        if (this.editIndice > -1) {
        axios
           .patch(urlPatch + this.itemEditado.id, {
