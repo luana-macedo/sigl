@@ -188,7 +188,7 @@ export default {
       ativo: true,
     },
     select1: null,
-     status: ["true", "false"],
+     status: ["ativo", "inativo"],
   }),
   computed: {
     tituloForm() {
@@ -258,6 +258,7 @@ export default {
           })
           .then((res) => {
             this.professores = res.data;
+            alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
           })
           .catch((error) => {
@@ -329,6 +330,7 @@ export default {
           });
 
         Object.assign(this.professores[this.editIndice], this.itemEditado);
+        alert("Os dados foram adicionados com sucesso !");
       } else {
         axios
           .post(url, {
@@ -350,6 +352,7 @@ export default {
           });
 
         this.professores.push(this.itemEditado);
+        alert("Os dados foram adicionados com sucesso !");
       }
 
       this.fechar();

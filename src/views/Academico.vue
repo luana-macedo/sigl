@@ -297,6 +297,7 @@ export default {
           })
           .then((res) => {
             //this.alunos = res.data;
+            alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
           })
           .catch((error) => {
@@ -304,6 +305,7 @@ export default {
           });
 
         Object.assign(this.alunos[this.editIndice], this.itemEditado);
+        alert("Os dados foram adicionados com sucesso !");
       } else {
         axios
           .post(url, {
@@ -325,6 +327,7 @@ export default {
           });
 
         this.alunos.push(this.itemEditado);
+        alert("Os dados foram adicionados com sucesso !");
       }
 
       this.fechar();

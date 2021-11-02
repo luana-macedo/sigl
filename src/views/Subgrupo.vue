@@ -199,7 +199,7 @@ export default {
       disciplina:"", */
     },
      select2: null,
-     status: ["true", "false"],
+     status: ["ativo", "inativo"],
   }),
 
   computed: {
@@ -295,7 +295,7 @@ export default {
         console.log(error);
       });
         Object.assign(this.subgrupos[this.editIndice], this.itemEditado);
-        alert("Os dados foram alterados com sucesso !");
+        alert("Os dados foram adicionados com sucesso !");
       } else {
         axios.post(url,{nome: this.itemEditado.nome,ativo: this.itemEditado.ativo}).then(res => {
 				this.subgrupos = res.data
@@ -304,7 +304,7 @@ export default {
         console.log(error);
       });
         this.subgrupos.push(this.itemEditado);
-        alert("Os dados foram deletados com sucesso !");
+        alert("Os dados foram adicionados com sucesso !");
       }
       this.fechar();
     },

@@ -239,7 +239,7 @@ export default {
           });
 
         Object.assign(this.salas[this.editIndice], this.itemEditado);
-        alert("Os dados foram alterados com sucesso !");
+        alert("Os dados foram adicionados com sucesso !");
       } else {
         console.log(this.itemEditado);
         
@@ -256,7 +256,7 @@ export default {
           });
 
         this.salas.push(this.itemEditado);
-        alert("Os dados foram deletados com sucesso !");
+        alert("Os dados foram adicionados com sucesso !");
       }
 
       this.fechar();

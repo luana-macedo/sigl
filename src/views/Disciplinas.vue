@@ -202,7 +202,7 @@ export default {
       ativo: true,
     },
      select0: null,
-     status: ["true", "false"],
+     status: ["ativo", "inativo"],
 
     select: [],
     periodo: [],
