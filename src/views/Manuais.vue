@@ -193,13 +193,10 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.manuais.splice(this.editIndice, 1);
+      // this.manuais.splice(this.editIndice, 1);
       if (this.editIndice > -1) {
        axios
           .patch(urlPatch + this.itemEditado.id, {
-
-              descricao: this.itemEditado.descricao,
-
               ativo: this.itemEditado.ativo,
           })
           .then((res) => {

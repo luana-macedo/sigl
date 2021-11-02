@@ -142,7 +142,7 @@ export default {
     itemPadrao: {
       periodo: "",
       dataCadastro: "",
-      ativo: "",
+      ativo: true,
     },
   }),
    
@@ -178,17 +178,16 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem(item) {
+    desativeItem(item) {
       this.editIndice = this.periodos.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
-    deleteItemConfirm() {
-      this.periodos.splice(this.editIndice, 1);
+    desativeItemConfirm() {
+      // this.periodos.splice(this.editIndice, 1);
       axios.patch(urlPatch + this.itemEditado.id, {
-        periodo: this.itemEditado.periodo, dataCadastro: this.itemEditado.dataCadastro, ativo: this.itemEditado.ativo
-
+        ativo: this.itemEditado.ativo
       }).then((res) => {
         this.periodos = res.data;
         alert("Os dados foram adicionados com sucesso !");
@@ -198,7 +197,7 @@ export default {
         console.log(error);
       });
 
-      this.fecharDelete();
+      this.fecharDesativar();
     },
 
     fechar() {
@@ -209,7 +208,7 @@ export default {
       });
     },
 
-    fecharDelete() {
+    fecharDesativar() {
       this.dialogDelete = false;
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);

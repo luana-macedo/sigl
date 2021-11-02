@@ -1,11 +1,17 @@
 <template>
-  <v-data-table :headers="titulos" :items="subgrupos"  :search="search" class="elevation-2">
+  <v-data-table
+    :headers="titulos"
+    :items="subgrupos"
+    :search="search"
+    class="elevation-2"
+  >
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Subgrupo</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <v-text-field class="barraPesquisa"
+        <v-text-field
+          class="barraPesquisa"
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
@@ -16,7 +22,8 @@
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
-            <v-btn small
+            <v-btn
+              small
               class="mx-2 add"
               fab
               dark
@@ -32,49 +39,46 @@
             </v-card-title>
 
             <v-card-text>
-              <v-form v-model="valid">
+              <v-form>
                 <v-container>
                   <v-row>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
                         v-model="itemEditado.nome"
                         label="Nome"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="8" sm="6" md="4"> 
-                      <v-select
+                     <!-- <v-col cols="8" sm="6" md="4">
+                     <v-select
                         v-model="select2"
                         :items="status"
-                        :error-messages="errors"
                         label="Status"
                         data-vv-name="select"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         maxlenght="20"
                         required
                       ></v-select>
-                    </v-col>
-                   <!-- <v-col cols="8" sm="6" md="4">
+                    </v-col> -->
+                    <v-col cols="8" sm="6" md="4">
                       <v-select
-                          v-model="select"
-                           :items="prof"
-                            :error-messages="errors"
-                            :rules="[v => !!v || '*Campo Obrigatório*']"
-                             label="Professor"
-                            required
-                            ></v-select>
+                        v-model="select"
+                        :items="profs"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
+                        label="Professor"
+                        required
+                      ></v-select>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-select
-                          v-model="select1"
-                           :items="disc"
-                           :error-messages="errors"
-                            :rules="[v => !!v || '*Campo Obrigatório*']"
-                             label="Disciplina"
-                            required
-                            ></v-select>
-                    </v-col> -->
+                        v-model="select1"
+                        :items="disciplinas"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
+                        label="Disciplina"
+                        required
+                      ></v-select>
+                    </v-col>
                   </v-row>
                 </v-container>
               </v-form>
@@ -91,14 +95,14 @@
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-card-title class="text-h5"
-              >Deseja remover este Subgrupo?</v-card-title
+              >Deseja desativar este Subgrupo?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small color="warning" dark @click="fecharDelete"
+              <v-btn small color="warning" dark @click="fecharDesativar"
                 >Não</v-btn
               >
-              <v-btn small color="primary" dark  @click="deleteItemConfirm"
+              <v-btn small color="primary" dark @click="desativeItemConfirm"
                 >Sim</v-btn
               >
               <v-spacer></v-spacer>
@@ -109,7 +113,7 @@
     </template>
     <template v-slot:item.acoes="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+      <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -126,32 +130,33 @@ body {
   width: 40px;
   height: 40px;
 }
-.template-add{
-  padding-top:1%;
+.template-add {
+  padding-top: 1%;
 }
 .data-table {
   padding: 3%;
 }
-#card-actions{
-   padding-left:18%;
+#card-actions {
+  padding-left: 18%;
 }
-.card-modal{
+.card-modal {
   text-align: center;
 }
-.barraPesquisa{
-    padding-right: 830px;
+.barraPesquisa {
+  padding-right: 830px;
 }
 </style>
 
 <script>
+import Vue from "vue";
+import axios from "axios";
+import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
 
-import Vue from 'vue'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
-Vue.use(VueAxios, axios)
-
-var url = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo"
-var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/"; 
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo";
+var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
+var urlDisciplina = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
 
 export default {
   data: () => ({
@@ -167,39 +172,40 @@ export default {
       {
         text: "Professor",
         align: "center",
-        value: "professor",
+        value: "professor.pessoa.nome",
       },
       {
         text: "Disciplina",
         align: "center",
-        value: "disciplina",
+        value: "disciplina.nome",
       },
       {
         text: "Status",
         align: "center",
         value: "ativo",
       },
-      { text: "Ações", 
-        align:"center", 
-        value: "acoes", 
-        sortable: false },
+      { text: "Ações", align: "center", value: "acoes", sortable: false },
     ],
     subgrupos: [],
+    profs: [],
+    disciplinas: [],
     editIndice: -1,
     itemEditado: {
       nome: "",
       ativo: "",
-    /*   professor: "",
+      /*   professor: "",
       disciplina:"", */
     },
     itemPadrao: {
       nome: "",
       ativo: true,
-   /*    professor: "",
+      /*    professor: "",
       disciplina:"", */
     },
-     select2: null,
-     status: ["ativo", "inativo"],
+    //  select2: null,
+    //  status: ["ativo", "inativo"],
+    select: [],
+    select1: [],
   }),
 
   computed: {
@@ -213,28 +219,68 @@ export default {
       val || this.fechar();
     },
     dialogDelete(val) {
-      val || this.fecharDelete();
+      val || this.fecharDesativar();
     },
   },
 
   created() {
     this.inicializar();
+    this.getProfessores();
+    this.getDisciplinas();
   },
 
   methods: {
     inicializar() {
-      this.axios.get(url, this.subgrupos).then((res) => {
-        this.subgrupos = res.data;
-        console.log(res.data);
-      }).catch((error) => {
-        console.log(error);
-      });
-
+      this.axios
+        .get(url, this.subgrupos)
+        .then((res) => {
+          this.subgrupos = res.data;
+          console.log(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
- 
-   mounted() {
-    this.inicializar();
-   },
+
+    mounted() {
+      this.inicializar();
+      // this.getProfessores();
+      // this.getDisciplinas();
+    },
+
+    async getProfessores() {
+      const { data } = await this.axios.get(urlProfessor);
+      this.profs = data;
+      this.professor = data.map((d) => d.professor).filter(Boolean);
+      console.log(
+        "professor",
+        data,
+        data.map((d) => d.professor)
+      );
+    },
+
+    achaidprofessor() {
+      const [selectedProfessor] = this.profs.filter((d) => d.professor === this.select[0]);
+        console.log(selectedProfessor);
+    },
+
+    async getDisciplinas() {
+      const { data } = await this.axios.get(urlDisciplina);
+      this.disciplinas = data;
+      this.disciplina = data.map((d) => d.disciplina).filter(Boolean);
+      console.log(
+        "disciplina",
+        data,
+        data.map((d) => d.disciplina)
+      );
+    },
+
+    achaiddisciplina() {
+      const [selectedDisciplina] = this.disciplinas.filter(
+        (d) => d.disciplina === this.select1[0]
+      );
+      console.log(selectedDisciplina);
+    },
 
     editItem(item) {
       this.editIndice = this.subgrupos.indexOf(item);
@@ -242,31 +288,28 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem(item) {
+    desativeItem(item) {
       this.editIndice = this.subgrupos.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
-    deleteItemConfirm() {
+    desativeItemConfirm() {
       this.subgrupos.splice(this.editIndice, 1);
       if (this.editIndice > -1) {
-       axios
+        axios
           .patch(urlPatch + this.itemEditado.id, {
-              pessoa: {
-              nome: this.itemEditado.nome,
-            },
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
             this.subgrupos = res.data;
-            alert("Os dados foram adicionados com sucesso !");
+            alert("O subgrupo foi desativado com sucesso !");
             console.log(res.data);
           })
           .catch((error) => {
             console.log(error);
           });
-      this.fecharDelete()
+        this.fecharDelete();
       }
     },
 
@@ -288,21 +331,34 @@ export default {
 
     salvar() {
       if (this.editIndice > -1) {
-        axios.put(url,{ id : this.itemEditado.id, nome : this.itemEditado.nome, ativo: this.itemEditado.ativo}).then(res => {
-				this.subgrupos = res.data
-				console.log(res.data)
-			}).catch((error) => {
-        console.log(error);
-      });
+        axios
+          .put(url, {
+            id: this.itemEditado.id,
+            nome: this.itemEditado.nome,
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            this.subgrupos = res.data;
+            console.log(res.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
         Object.assign(this.subgrupos[this.editIndice], this.itemEditado);
-        alert("Os dados foram adicionados com sucesso !");
+        alert("Os dados foram atualizados com sucesso !");
       } else {
-        axios.post(url,{nome: this.itemEditado.nome,ativo: this.itemEditado.ativo}).then(res => {
-				this.subgrupos = res.data
-				console.log(res.data)
-			}).catch((error) => {
-        console.log(error);
-      });
+        axios
+          .post(url, {
+            nome: this.itemEditado.nome,
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            this.subgrupos = res.data;
+            console.log(res.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
         this.subgrupos.push(this.itemEditado);
         alert("Os dados foram adicionados com sucesso !");
       }

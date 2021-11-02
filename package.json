@@ -14,6 +14,7 @@
     "v-select": "0.0.1",
     "vue": "^2.6.11",
     "vue-axios": "^3.3.7",
+    "vue-mask": "^1.0.0",
     "vue-router": "^3.2.0",
     "vue-select": "^3.16.0",
     "vuetify": "^2.4.0",

@@ -193,10 +193,10 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.salas.splice(this.editIndice, 1);
+      // this.salas.splice(this.editIndice, 1);
 
       axios.patch(urlPatch + this.itemEditado.id, {
-      nome: this.itemEditado.nome, local: this.itemEditado.local, descricao: this.itemEditado.descricao, ativo: this.itemEditado.ativo}).then((res) => {
+       ativo: this.itemEditado.ativo}).then((res) => {
         this.salas = res.data;
         console.log(res.data);
       })
@@ -234,12 +234,11 @@ export default {
           })
           .then((res) => {
             this.salas = res.data;
-            alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
           });
 
         Object.assign(this.salas[this.editIndice], this.itemEditado);
-        alert("Os dados foram adicionados com sucesso !");
+        alert("Os dados foram atualizados com sucesso !");
       } else {
         console.log(this.itemEditado);
         

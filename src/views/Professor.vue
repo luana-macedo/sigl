@@ -149,7 +149,7 @@ Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
 var url2 = "http://api-sig-itpac-84633.herokuapp.com/api/professores/desativar"
-var url3 = "http://api-sig-itpac-84633.herokuapp.com/api/professores/ativar/1";
+// var url3 = "http://api-sig-itpac-84633.herokuapp.com/api/professores/ativar/1";
 
 export default {
   data: () => ({
@@ -235,56 +235,28 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem(item) {
+    desativeItem(item) {
       this.editIndice = this.professores.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
-    deleteItemConfirm() {
-      var status = this.ativo
-      this.professores.splice(this.editIndice, 1);
-      if (this.editIndice > -1 && status == true) {
+    desativeItemConfirm() {
+
+      if (this.editIndice > -1) {
        axios
           .patch(url2 + this.itemEditado.id, {
-              pessoa: {
-              nome: this.itemEditado.nome,
-              cpf: this.itemEditado.cpf,
-              email: this.itemEditado.email,
-              telefone: this.itemEditado.telefone,
-            },
-            matricula: this.itemEditado.matricula, 
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
             this.professores = res.data;
-            alert("Os dados foram adicionados com sucesso !");
+            alert("O professor foi desativado com sucesso !");
             console.log(res.data);
           })
           .catch((error) => {
             console.log(error);
           });
-        
-      } else{
-        axios
-          .patch(url3 + this.itemEditado.id, {
-              pessoa: {
-              nome: this.itemEditado.nome,
-              cpf: this.itemEditado.cpf,
-              email: this.itemEditado.email,
-              telefone: this.itemEditado.telefone,
-            },
-            matricula: this.itemEditado.matricula, 
-            ativo: this.itemEditado.ativo,
-          })
-          .then((res) => {
-            this.professores = res.data;
-            console.log(res.data);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-          
+      } 
         this.fecharDesativar();
 
       }
@@ -298,7 +270,7 @@ export default {
       });
     },
 
-    fecharDelete() {
+    fecharDesativar() {
       this.dialogDelete = false;
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
@@ -330,7 +302,7 @@ export default {
           });
 
         Object.assign(this.professores[this.editIndice], this.itemEditado);
-        alert("Os dados foram adicionados com sucesso !");
+        alert("Os dados foram atualizados com sucesso !");
       } else {
         axios
           .post(url, {
@@ -357,6 +329,5 @@ export default {
 
       this.fechar();
     },
-  },
 };
 </script>

@@ -82,7 +82,6 @@
                       <v-select
                         v-model="select"
                         :items="periodo"
-                        :error-messages="errors"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         label="Periodo"
                         required
@@ -93,7 +92,6 @@
                         v-model="select1"
                         :items="professor"
                         @change="()=> console.log('hsdgfe')"
-                        :error-messages="errors"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         label="Professor"
                         required
@@ -166,9 +164,10 @@ import axios from "axios";
 import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
-var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina"
-var urlPeriodo = "http://api-sig-itpac-84633.herokuapp.com/api/periodo"
-var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/desativar/"
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
+var urlPeriodo = "http://api-sig-itpac-84633.herokuapp.com/api/periodo";
+var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/desativar/";
 
 
 export default {
@@ -183,13 +182,14 @@ export default {
         value: "nome",
       },
       { text: "Disciplina", value: "nome" },
-      { text: "Status", value: "ativo" },
-      { text: "Professor", value: "professor" },
+      { text: "Professor", value: "professor.pessoa.nome" },
       { text: "Período", value: "periodo.periodo" },
+       { text: "Status", value: "ativo" },
       { text: "Ações", value: "acoes" },
     ],
     disciplinas: [],
     periodosRaw: [],
+    profs: [],
     editIndice: -1,
     itemEditado: {
       nome: "",
@@ -201,16 +201,12 @@ export default {
       apelido: "",
       ativo: true,
     },
-     select0: null,
-     status: ["ativo", "inativo"],
+    //  select0: null,
+    //  status: ["ativo", "inativo"],
 
     select: [],
-    periodo: [],
-
     select1: [],
-    professor: ["Item 1", "Item 2", "Item 3", "Item 4"],
-    // select1: null,
-    // professor: ["Item 1", "Item 2", "Item 3", "Item 4"],
+
   }),
 
   computed: {
@@ -231,6 +227,7 @@ export default {
   created() {
     this.inicializar();
     this.getPeriodos();
+    this.getProfessores();
   },
 
   methods: {
@@ -255,6 +252,24 @@ export default {
       console.log(selectedPeriodo)
    },
 
+   async getProfessores() {
+      const { data } = await this.axios.get(urlProfessor);
+      this.profs = data;
+      this.professor = data.map((d) => d.professor).filter(Boolean);
+      console.log(
+        "professor",
+        data,
+        data.map((d) => d.professor)
+      );
+    },
+
+    achaidprofessor() {
+      const [selectedProfessor] = this.profs.filter(
+        (d) => d.professor === this.select1[0]
+      );
+      console.log(selectedProfessor);
+    },
+
     editItem(item) {
       this.editIndice = this.disciplinas.indexOf(item);
       this.itemEditado = Object.assign({}, item);
@@ -268,7 +283,7 @@ export default {
     },
 
     desativeItemConfirm() {
-      this.disciplinas.splice(this.editIndice, 1);
+      // this.disciplinas.splice(this.editIndice, 1);
        if (this.editIndice > -1) {
        axios
           .patch(urlPatch + this.itemEditado.id, {
@@ -281,7 +296,7 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-      this.fecharDelete();
+      this.fecharDesativar();
       }
     },
 
@@ -293,7 +308,7 @@ export default {
       });
     },
 
-    fecharDelete() {
+    fecharDesativar() {
       this.dialogDelete = false;
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
