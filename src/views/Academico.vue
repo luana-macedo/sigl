@@ -50,6 +50,7 @@
                       ></v-text-field>
 
                       <v-text-field
+                        v-mask="'###.###.###-##'"
                         v-model="itemEditado.pessoa.cpf"
                         label="CPF"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
@@ -74,6 +75,7 @@
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
                         v-model="itemEditado.pessoa.telefone"
+                        v-mask="'(##)#####-####'"
                         label="Telefone"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
@@ -97,7 +99,7 @@
               <v-btn small color="warning" dark @click="fechar">
                 Cancelar
               </v-btn>
-              <v-btn small color="primary" dark @click="salvar"> Salvar </v-btn>
+              <v-btn small color="primary" dark @click="salvar" > Salvar </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -141,6 +143,7 @@
 </style>
 
 <script>
+
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
@@ -237,7 +240,7 @@ export default {
     },
 
    deleteItemConfirm() {
-      this.alunos.splice(this.editIndice, 1);
+      //this.alunos.splice(this.editIndice, 1);
       if (this.editIndice > -1) {
        axios
           .patch(urlPatch + this.itemEditado.id, {
@@ -251,7 +254,8 @@ export default {
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            this.alunos = res.data;
+            //this.alunos = res.data;
+            console.log("res:");
             console.log(res.data);
           })
           .catch((error) => {
@@ -293,7 +297,8 @@ export default {
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            this.alunos = res.data;
+            //this.alunos = res.data;
+            alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
           })
           .catch((error) => {
@@ -301,6 +306,7 @@ export default {
           });
 
         Object.assign(this.alunos[this.editIndice], this.itemEditado);
+        alert("Os dados foram adicionados com sucesso !");
       } else {
         axios
           .post(url, {
@@ -314,7 +320,7 @@ export default {
             matricula: this.itemEditado.matricula,
           })
           .then((res) => {
-            this.alunos = res.data;
+            //this.alunos = res.data;
             console.log(res.data);
           })
           .catch((error) => {
@@ -322,6 +328,7 @@ export default {
           });
 
         this.alunos.push(this.itemEditado);
+        alert("Os dados foram adicionados com sucesso !");
       }
 
       this.fechar();

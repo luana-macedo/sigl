@@ -50,6 +50,7 @@
 
                       <v-text-field
                         v-model="itemEditado.pessoa.cpf"
+                        v-mask="'###.###.###-##'"
                         label="CPF"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
@@ -73,18 +74,23 @@
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
                         v-model="itemEditado.pessoa.telefone"
+                        v-mask="'(##)#####-####'"
                         label="Telefone"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
-
-                      <v-text-field
-                        v-model="itemEditado.ativo"
-                        label="Status"
-                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        required
-                      ></v-text-field>
                     </v-col>
+                    <v-col cols="8" sm="6" md="4">
+                      <v-select
+                          v-model="select1"
+                           :items="status"
+                            :error-messages="errors"
+                             label="Status"
+                            :rules="[(v) => !!v ||'Campo Obrigatório']"
+                            maxlenght="20"
+                            required
+                            ></v-select>
+                     </v-col>
                     <v-col cols="8" sm="6" md="4"> </v-col>
                   </v-row>
                 </v-container>
@@ -181,6 +187,8 @@ export default {
       matricula: "",
       ativo: true,
     },
+    select1: null,
+     status: ["ativo", "inativo"],
   }),
   computed: {
     tituloForm() {
@@ -250,6 +258,7 @@ export default {
           })
           .then((res) => {
             this.professores = res.data;
+            alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
           })
           .catch((error) => {
@@ -321,6 +330,7 @@ export default {
           });
 
         Object.assign(this.professores[this.editIndice], this.itemEditado);
+        alert("Os dados foram adicionados com sucesso !");
       } else {
         axios
           .post(url, {
@@ -342,6 +352,7 @@ export default {
           });
 
         this.professores.push(this.itemEditado);
+        alert("Os dados foram adicionados com sucesso !");
       }
 
       this.fechar();
