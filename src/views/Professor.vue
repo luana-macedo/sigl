@@ -88,7 +88,7 @@
                             :error-messages="errors"
                              label="Status"
                             :rules="[(v) => !!v ||'Campo Obrigatório']"
-                            maxlenght="20"
+                            maxlenght="20"1'
                             required
                             ></v-select>
                      </v-col>
