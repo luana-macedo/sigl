@@ -81,7 +81,7 @@
                         required
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="8" sm="6" md="4">
+                    <!-- <v-col cols="8" sm="6" md="4">
                       <v-select
                           v-model="select1"
                            :items="status"
@@ -91,7 +91,7 @@
                             maxlenght="20"
                             required
                             ></v-select>
-                     </v-col>
+                     </v-col> -->
                     <v-col cols="8" sm="6" md="4"> </v-col>
                   </v-row>
                 </v-container>
