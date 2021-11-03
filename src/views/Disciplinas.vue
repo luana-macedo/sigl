@@ -58,15 +58,20 @@
                         required
                       ></v-text-field>
                     </v-col>
+
                     <!-- <v-col cols="8" sm="6" md="4">
+                    <v-col cols="8" sm="6" md="4"> 
                       <v-text-field
                         v-model="itemEditado.ativo"
                         label="Status"
                         :rules="['Campo Obrigatório']"
                         maxlenght="20"
                       ></v-text-field>
+
                     </v-col> -->
                      <!-- <v-col cols="8" sm="6" md="4"> 
+                       </v-col>
+                     <v-col cols="8" sm="6" md="4"> 
                       <v-select
                           v-model="select0"
                            :items="status"
@@ -183,7 +188,7 @@ export default {
       { text: "Disciplina", value: "nome" },
       { text: "Professor", value: "professor.pessoa.nome" },
       { text: "Período", value: "periodo.periodo" },
-       { text: "Status", value: "ativo" },
+      { text: "Status", value: "ativo" },
       { text: "Ações", value: "acoes" },
     ],
     disciplinas: [],
@@ -200,8 +205,8 @@ export default {
       apelido: "",
       ativo: true,
     },
-    //  select0: null,
-    //  status: ["ativo", "inativo"],
+     select0: null,
+     status: ["ativo", "inativo"],
 
     select: [],
     select1: [],
