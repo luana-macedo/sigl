@@ -103,17 +103,17 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogDelete" max-width="400px">
+        <v-dialog v-model="dialogDesativar" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
               >Deseja desativar este aluno ?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small color="warning" dark @click="fecharDelete"
+              <v-btn small color="warning" dark @click="fecharDesativar"
                 >Não</v-btn
               >
-              <v-btn small color="primary" dark @click="deleteItemConfirm"
+              <v-btn small color="primary" dark @click="desativeItemConfirm"
                 >Sim</v-btn
               >
               <v-spacer></v-spacer>
@@ -124,7 +124,7 @@
     </template>
     <template v-slot:item.acoes="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon small @click="deleteItem(item)"> mdi-power-standby </v-icon>
+      <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -156,7 +156,7 @@ export default {
   data: () => ({
     search: "",
     dialog: false,
-    dialogDelete: false,
+    dialogDesativar: false,
     titulos: [
       { text: "Nome", value: "pessoa.nome" },
       { text: "CPF", value: "pessoa.cpf" },
@@ -211,8 +211,8 @@ export default {
     dialog(val) {
       val || this.fechar();
     },
-    dialogDelete(val) {
-      val || this.fecharDelete();
+    dialogDesativar(val) {
+      val || this.fecharDesativar();
     },
   },
 
@@ -233,35 +233,36 @@ export default {
       this.dialog = true ;
     },
 
-    deleteItem(item) {
+    desativeItem(item) {
       this.editIndice = this.alunos.indexOf(item);
       this.itemEditado = Object.assign({}, item);
-      this.dialogDelete = true ;
+      this.dialogDesativar = true ;
     },
 
-   deleteItemConfirm() {
+   desativeItemConfirm() {
       //this.alunos.splice(this.editIndice, 1);
       if (this.editIndice > -1) {
        axios
           .patch(urlPatch + this.itemEditado.id, {
-              pessoa: {
-              nome: this.itemEditado.nome,
-              cpf: this.itemEditado.cpf,
-              email: this.itemEditado.email,
-              telefone: this.itemEditado.telefone,
-            },
-            matricula: this.itemEditado.matricula, 
+            //   pessoa: {
+            //   nome: this.itemEditado.nome,
+            //   cpf: this.itemEditado.cpf,
+            //   email: this.itemEditado.email,
+            //   telefone: this.itemEditado.telefone,
+            // },
+            // matricula: this.itemEditado.matricula, 
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
             //this.alunos = res.data;
             console.log("res:");
             console.log(res.data);
+            alert("O acadêmico foi desativado com sucesso !");
           })
           .catch((error) => {
             console.log(error);
           });
-        this.fecharDelete();
+        this.fecharDesativar();
       }
     },
   
@@ -273,8 +274,8 @@ export default {
       });
     },
 
-    fecharDelete() {
-      this.dialogDelete = false ;
+    fecharDesativar() {
+      this.dialogDesativar = false ;
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
@@ -297,8 +298,8 @@ export default {
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            //this.alunos = res.data;
-            alert("Os dados foram adicionados com sucesso !");
+            this.alunos = res.data;
+            alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
           })
           .catch((error) => {
@@ -306,7 +307,6 @@ export default {
           });
 
         Object.assign(this.alunos[this.editIndice], this.itemEditado);
-        alert("Os dados foram adicionados com sucesso !");
       } else {
         axios
           .post(url, {
@@ -320,7 +320,7 @@ export default {
             matricula: this.itemEditado.matricula,
           })
           .then((res) => {
-            //this.alunos = res.data;
+            this.alunos = res.data;
             console.log(res.data);
           })
           .catch((error) => {

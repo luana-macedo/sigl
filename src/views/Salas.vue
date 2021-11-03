@@ -36,7 +36,7 @@
             </v-card-title>
 
             <v-card-text>
-              <v-form v-model="valid">
+              <v-form>
                 <v-container>
                   <v-row>
                     <v-col cols="8" sm="6" md="4">
@@ -82,13 +82,13 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogDelete" max-width="500px">
+        <v-dialog v-model="dialogDesativar" max-width="500px">
           <v-card>
             <v-card-title class="text-h5">Deseja desativar esta sala?</v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small color="warning" dark @click="fecharDelete"> Não</v-btn>
-              <v-btn small color="primary" dark @click="deleteItemConfirm">Sim</v-btn>
+              <v-btn small color="warning" dark @click="fecharDesativar"> Não</v-btn>
+              <v-btn small color="primary" dark @click="desativeItemConfirm">Sim</v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
@@ -97,7 +97,7 @@
     </template>
     <template v-slot:item.acoes="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon small @click="deleteItem(item)"> mdi-power-standby </v-icon>
+      <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -128,12 +128,13 @@ export default {
   data: () => ({
     search: "",
     dialog: false,
-    dialogDelete: false,
+    dialogDesativar: false,
     titulos: [
       { text: "Sala", value: "nome" },
       { text: "Local", value: "local" },
       { text: "Capacidade", value: "capacidade", sortable: false },
       { text: "Descrição", value: "descricao", sortable: false },
+      { text: "Status", value: "ativo", sortable: false },
       { text: "Ações", value: "acoes", sortable: false },
     ],
     salas: [],
@@ -164,8 +165,8 @@ export default {
     dialog(val) {
       val || this.fechar();
     },
-    dialogDelete(val) {
-      val || this.fecharDelete();
+    dialogDesativar(val) {
+      val || this.fecharDesativar();
     },
   },
 
@@ -186,13 +187,13 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem(item) {
+    desativeItem(item) {
       this.editIndice = this.salas.indexOf(item);
       this.itemEditado = Object.assign({}, item);
-      this.dialogDelete = true;
+      this.dialogDesativar = true;
     },
 
-    deleteItemConfirm() {
+    desativeItemConfirm() {
       // this.salas.splice(this.editIndice, 1);
 
       axios.patch(urlPatch + this.itemEditado.id, {
@@ -204,7 +205,7 @@ export default {
         console.log(error);
       });
 
-      this.fecharDelete();
+      this.fecharDesativar();
     },
 
     fechar() {
@@ -215,8 +216,8 @@ export default {
       });
     },
 
-    fecharDelete() {
-      this.dialogDelete = false;
+    fecharDesativar() {
+      this.dialogDesativar = false;
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
@@ -231,6 +232,7 @@ export default {
             local: this.itemEditado.local,
             capacidade: this.itemEditado.capacidade,
             descricao: this.itemEditado.descricao,
+            ativo: this.itemEditado.ativo,
           })
           .then((res) => {
             this.salas = res.data;
@@ -248,6 +250,7 @@ export default {
             local: this.itemEditado.local,
             capacidade: this.itemEditado.capacidade,
             descricao: this.itemEditado.descricao,
+            ativo: this.itemEditado.ativo,
           })
           .then((res) => {
             this.salas = res.data;

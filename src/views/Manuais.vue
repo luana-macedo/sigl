@@ -10,7 +10,8 @@
         <v-toolbar-title>Gerenciamento de Manuais</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <v-text-field class="barraPesquisa2"
+        <v-text-field
+          class="barraPesquisa2"
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
@@ -70,17 +71,17 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogDelete" max-width="350px">
+        <v-dialog v-model="dialogDesativar" max-width="350px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
               >Deseja desativar este manual(is)?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small color="warning" dark @click="fecharDelete"
+              <v-btn small color="warning" dark @click="fecharDesativar"
                 >Não</v-btn
               >
-              <v-btn small color="primary" dark @click="deleteItemConfirm"
+              <v-btn small color="primary" dark @click="desativeItemConfirm"
                 >Sim</v-btn
               >
               <v-spacer></v-spacer>
@@ -91,7 +92,7 @@
     </template>
     <template v-slot:item.acoes="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon small @click="removeItem(item)"> mdi-power-standby </v-icon>
+      <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -113,24 +114,24 @@
 .card-modal {
   text-align: center;
 }
-.barraPesquisa2{
- padding-right:860px;
+.barraPesquisa2 {
+  padding-right: 860px;
 }
 </style>
 <script>
-import Vue from 'vue'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
-Vue.use(VueAxios, axios)
+import Vue from "vue";
+import axios from "axios";
+import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
 
-var url = "http://api-sig-itpac-84633.herokuapp.com/api/manual"
-var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/manual/desativar/"
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/manual";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/manual/desativar/";
 
 export default {
   data: () => ({
     search: "",
     dialog: false,
-    dialogDelete: false,
+    dialogDesativar: false,
     titulos: [
       {
         text: "Descrição",
@@ -138,7 +139,7 @@ export default {
         value: "descricao",
       },
       { text: "Arquivo", value: "fileName" },
-      { text: "Ações", value: "acoes"},
+      { text: "Ações", value: "acoes" },
     ],
     manuais: [],
     editIndice: -1,
@@ -150,7 +151,7 @@ export default {
     itemPadrao: {
       descricao: "",
       fileName: "",
-      ativo: true ,
+      ativo: true,
     },
   }),
 
@@ -164,8 +165,8 @@ export default {
     dialog(val) {
       val || this.fechar();
     },
-    dialogDelete(val) {
-      val || this.fecharDelete();
+    dialogDesativar(val) {
+      val || this.fecharDesativar();
     },
   },
 
@@ -175,10 +176,10 @@ export default {
 
   methods: {
     inicializar() {
-   axios.get(url, this.manuais).then(res => {
-				this.manuais = res.data
-				console.log(res.data)
-			})
+      axios.get(url, this.manuais).then((res) => {
+        this.manuais = res.data;
+        console.log(res.data);
+      });
     },
     editItem(item) {
       this.editIndice = this.manuais.indexOf(item);
@@ -186,27 +187,28 @@ export default {
       this.dialog = true;
     },
 
-    removeItem(item) {
+    desativeItem(item) {
       this.editIndice = this.manuais.indexOf(item);
       this.itemEditado = Object.assign({}, item);
-      this.dialogDelete = true;
+      this.dialogDesativar = true;
     },
 
-    deleteItemConfirm() {
+    desativeItemConfirm() {
       // this.manuais.splice(this.editIndice, 1);
       if (this.editIndice > -1) {
-       axios
+        axios
           .patch(urlPatch + this.itemEditado.id, {
-              ativo: this.itemEditado.ativo,
+            ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            this.manuais = res.data;
+            // this.manuais = res.data;
             console.log(res.data);
+            alert("O período foi desativado com sucesso !");
           })
           .catch((error) => {
             console.log(error);
           });
-      this.fecharDelete();
+        this.fecharDesativar();
       }
     },
 
@@ -218,8 +220,8 @@ export default {
       });
     },
 
-    fecharDelete() {
-      this.dialogDelete = false;
+    fecharDesativar() {
+      this.dialogDesativar = false;
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
@@ -228,19 +230,29 @@ export default {
 
     salvar() {
       if (this.editIndice > -1) {
-
-        axios.put(url+this.itemEditado.id,{manuais : this.itemEditado.manuais,descricao : this.itemEditado.descricao, fileName: this.itemEditado.fileName}).then(res => {
-				this.manuais = res.data
-				console.log(res.data)
-			})
-
+        axios
+          .put(url + this.itemEditado.id, {
+            descricao: this.itemEditado.descricao,
+          })
+          .then((res) => {
+            this.manuais = res.data;
+            console.log(res.data);
+          });
+        alert("A descrição do manual foi alterada com sucesso !");
         Object.assign(this.manuais[this.editIndice], this.itemEditado);
       } else {
-        axios.post(url,{manuais: this.itemEditado.manuais,descricao: this.itemEditado.descricao,fileName: this.itemEditado.fileName }).then(res => {
-				this.manuais = res.data
-				console.log(res.data)
-			})
+        axios
+          .post(url, {
+            manuais: this.itemEditado.manuais,
+            descricao: this.itemEditado.descricao,
+            fileName: this.itemEditado.fileName,
+          })
+          .then((res) => {
+            this.manuais = res.data;
+            console.log(res.data);
+          });
         this.manuais.push(this.itemEditado);
+        alert("O manual foi adicionado com sucesso !");
       }
       this.fechar();
     },

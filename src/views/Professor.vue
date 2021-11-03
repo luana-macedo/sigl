@@ -105,17 +105,17 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogDelete" max-width="500px">
+        <v-dialog v-model="dialogDesativar" max-width="500px">
           <v-card>
             <v-card-title class="text-h5"
               >Deseja desativar este professor?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small color="warning" dark @click="fecharDelete"
+              <v-btn small color="warning" dark @click="fecharDesativar"
                 >Não</v-btn
               >
-              <v-btn small color="primary" dark @click="deleteItemConfirm"
+              <v-btn small color="primary" dark @click="desativeItemConfirm"
                 >Sim</v-btn
               >
               <v-spacer></v-spacer>
@@ -126,7 +126,7 @@
     </template>
     <template v-slot:item.acoes="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon small @click="deleteItem(item)"> mdi-power-standby </v-icon>
+      <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -155,7 +155,7 @@ export default {
   data: () => ({
     search: "",
     dialog: false,
-    dialogDelete: false,
+    dialogDesativar: false,
     titulos: [
       { text: "Nome", value: "pessoa.nome" },
       { text: "CPF", value: "pessoa.cpf" },
@@ -213,8 +213,8 @@ export default {
     dialog(val) {
       val || this.fechar();
     },
-    dialogDelete(val) {
-      val || this.fecharDelete();
+    dialogDesativar(val) {
+      val || this.fecharDesativar();
     },
   },
 
@@ -238,7 +238,7 @@ export default {
     desativeItem(item) {
       this.editIndice = this.professores.indexOf(item);
       this.itemEditado = Object.assign({}, item);
-      this.dialogDelete = true;
+      this.dialogDesativar = true;
     },
 
     desativeItemConfirm() {
@@ -271,7 +271,7 @@ export default {
     },
 
     fecharDesativar() {
-      this.dialogDelete = false;
+      this.dialogDesativar = false;
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;

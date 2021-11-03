@@ -58,26 +58,25 @@
                         required
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="8" sm="6" md="4">
+                    <!-- <v-col cols="8" sm="6" md="4">
                       <v-text-field
                         v-model="itemEditado.ativo"
                         label="Status"
                         :rules="['Campo Obrigatório']"
                         maxlenght="20"
                       ></v-text-field>
-                    </v-col>
-                     <v-col cols="8" sm="6" md="4"> 
+                    </v-col> -->
+                     <!-- <v-col cols="8" sm="6" md="4"> 
                       <v-select
                           v-model="select0"
                            :items="status"
-                            :error-messages="errors"
                              label="Status"
                             data-vv-name="select"
                             :rules="[(v) => !!v ||'Campo Obrigatório']"
                             maxlenght="20"
                             required
                             ></v-select>
-                     </v-col>
+                     </v-col> -->
                     <v-col cols="8" sm="6" md="4"> 
                       <v-select
                         v-model="select"
@@ -110,14 +109,14 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogDelete" max-width="400px">
+        <v-dialog v-model="dialogDesativar" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
               >Deseja remover esta disciplina?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small color="warning" dark @click="fecharDelete"
+              <v-btn small color="warning" dark @click="fecharDesativar"
                 >Não</v-btn
               >
               <v-btn small color="primary" dark @click="desativeItemConfirm"
@@ -174,7 +173,7 @@ export default {
   data: () => ({
     search: "",
     dialog: false,
-    dialogDelete: false,
+    dialogDesativar: false,
     titulos: [
       {
         text: "Apelido",
@@ -219,8 +218,8 @@ export default {
     dialog(val) {
       val || this.fechar();
     },
-    dialogDelete(val) {
-      val || this.fecharDelete();
+    dialogDesativar(val) {
+      val || this.fecharDesativar();
     },
   },
 
@@ -279,7 +278,7 @@ export default {
     desativeItem(item) {
       this.editIndice = this.disciplinas.indexOf(item);
       this.itemEditado = Object.assign({}, item);
-      this.dialogDelete = true;
+      this.dialogDesativar = true;
     },
 
     desativeItemConfirm() {
@@ -290,8 +289,9 @@ export default {
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            this.disciplinas = res.data;
+            // this.disciplinas = res.data;
             console.log(res.data);
+            alert("O acadêmico foi desativado com sucesso !");
           })
           .catch((error) => {
             console.log(error);
@@ -309,7 +309,7 @@ export default {
     },
 
     fecharDesativar() {
-      this.dialogDelete = false;
+      this.dialogDesativar = false;
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
@@ -327,7 +327,7 @@ export default {
           })
           .then((res) => {
             this.disciplinas = res.data;
-            alert("Os dados foram adicionados com sucesso !");
+            alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
           });
 

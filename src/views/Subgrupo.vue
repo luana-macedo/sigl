@@ -92,7 +92,7 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogDelete" max-width="500px">
+        <v-dialog v-model="dialogDesativar" max-width="500px">
           <v-card>
             <v-card-title class="text-h5"
               >Deseja desativar este Subgrupo?</v-card-title
@@ -162,7 +162,7 @@ export default {
   data: () => ({
     search: "",
     dialog: false,
-    dialogDelete: false,
+    dialogDesativar: false,
     titulos: [
       {
         text: "Subgrupo",
@@ -218,7 +218,7 @@ export default {
     dialog(val) {
       val || this.fechar();
     },
-    dialogDelete(val) {
+    dialogDesativar(val) {
       val || this.fecharDesativar();
     },
   },
@@ -291,11 +291,11 @@ export default {
     desativeItem(item) {
       this.editIndice = this.subgrupos.indexOf(item);
       this.itemEditado = Object.assign({}, item);
-      this.dialogDelete = true;
+      this.dialogDesativar = true;
     },
 
     desativeItemConfirm() {
-      this.subgrupos.splice(this.editIndice, 1);
+      // this.subgrupos.splice(this.editIndice, 1);
       if (this.editIndice > -1) {
         axios
           .patch(urlPatch + this.itemEditado.id, {
@@ -309,7 +309,7 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-        this.fecharDelete();
+        this.fecharDesativar();
       }
     },
 
@@ -321,8 +321,8 @@ export default {
       });
     },
 
-    fecharDelete() {
-      this.dialogDelete = false;
+    fecharDesativar() {
+      this.dialogDesativar = false;
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
