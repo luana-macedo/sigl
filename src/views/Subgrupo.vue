@@ -353,6 +353,7 @@ export default {
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
+            this.fetchItems()
             this.subgrupos = res.data;
             console.log(res.data);
           })
