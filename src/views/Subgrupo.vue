@@ -50,17 +50,15 @@
                         required
                       ></v-text-field>
                     </v-col>
-                     <!-- <v-col cols="8" sm="6" md="4">
+                    <v-col cols="8" sm="6" md="4">
                      <v-select
-                        v-model="select2"
-                        :items="status"
-                        label="Status"
-                        data-vv-name="select"
+                        v-model="selectAluno"
+                        :items="alunos"
+                        label="Alunos"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        maxlenght="20"
                         required
                       ></v-select>
-                    </v-col> -->
+                    </v-col> 
                     <v-col cols="8" sm="6" md="4">
                       <v-select
                         v-model="select"
@@ -155,12 +153,14 @@ Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo";
 var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
+var urlALuno = "http://api-sig-itpac-84633.herokuapp.com/api/aluno";
 var urlDisciplina = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
-var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
+var urlPatch ="http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
 
 export default {
   data: () => ({
     search: "",
+    nomesProfessor: "",
     dialog: false,
     dialogDesativar: false,
     titulos: [
@@ -179,6 +179,11 @@ export default {
         align: "center",
         value: "disciplina.nome",
       },
+       {
+        text: "Alunos",
+        align: "center",
+        value: "aluno.pessoa.nome",
+      },
       {
         text: "Status",
         align: "center",
@@ -188,15 +193,18 @@ export default {
     ],
     subgrupos: [],
     profs: [],
+    aluno: [],
     disciplinas: [],
     editIndice: -1,
     itemEditado: {
+      id: null,
       nome: "",
       ativo: "",
       /*   professor: "",
       disciplina:"", */
     },
     itemPadrao: {
+      id: null,
       nome: "",
       ativo: true,
       /*    professor: "",
@@ -204,6 +212,7 @@ export default {
     },
     //  select2: null,
     //  status: ["ativo", "inativo"],
+    selectAluno: [],
     select: [],
     select1: [],
   }),
@@ -227,6 +236,7 @@ export default {
     this.inicializar();
     this.getProfessores();
     this.getDisciplinas();
+    this.getNomeProfessor();
   },
 
   methods: {
@@ -248,20 +258,32 @@ export default {
       // this.getDisciplinas();
     },
 
+    getNomeProfessor() {
+      const nomes = [];
+      this.profs.forEach((item) => {
+        console.log(item.pessoa.nome);
+        nomes.push(item.pessoa.nome);
+      });
+      this.nomesProfessor = nomes;
+      console.log("Nomes: " + nomes);
+    },
+
     async getProfessores() {
       const { data } = await this.axios.get(urlProfessor);
       this.profs = data;
-      this.professor = data.map((d) => d.professor).filter(Boolean);
+      this.professor = data.map((d) => d.professor.pessoa.nome).filter(Boolean);
       console.log(
         "professor",
         data,
-        data.map((d) => d.professor)
+        data.map((d) => d.professor.pessoa.nome)
       );
     },
 
     achaidprofessor() {
-      const [selectedProfessor] = this.profs.filter((d) => d.professor === this.select[0]);
-        console.log(selectedProfessor);
+      const [selectedProfessor] = this.profs.filter(
+        (d) => d.professor === this.select[0]
+      );
+      console.log(selectedProfessor);
     },
 
     async getDisciplinas() {
@@ -280,6 +302,24 @@ export default {
         (d) => d.disciplina === this.select1[0]
       );
       console.log(selectedDisciplina);
+    },
+
+    async getAlunos() {
+      const { data } = await this.axios.get(urlALuno);
+      this.aluno = data;
+      this.alunos = data.map((d) => d.alunos.pessoa.nome).filter(Boolean);
+      console.log(
+        "aluno",
+        data,
+        data.map((d) => d.alunos.pessoa.nome)
+      );
+    },
+
+    achaidaluno() {
+      const [selectedAluno] = this.profs.filter(
+        (d) => d.aluno === this.selectAluno[0]
+      );
+      console.log(selectedAluno);
     },
 
     editItem(item) {
@@ -302,7 +342,7 @@ export default {
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            this.subgrupos = res.data;
+            //this.subgrupos = res.data;
             alert("O subgrupo foi desativado com sucesso !");
             console.log(res.data);
           })

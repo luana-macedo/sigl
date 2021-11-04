@@ -3,14 +3,14 @@
     :headers="titulos"
     :items="professores"
     :search="search"
-    class="elevation-2"
+    class="elevation-2 data-table"
   >
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title>Gerenciamento de Professores</v-toolbar-title>
+        <v-toolbar-title>Gerenciamento de Professor</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
-        <v-spacer></v-spacer>
-        <v-text-field
+        <v-ster></v-ster>
+        <v-text-field class="barraPesquisa"
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
@@ -18,8 +18,8 @@
           hide-details
         ></v-text-field>
         <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="500px">
-          <template v-slot:activator="{ on, attrs }">
+        <v-dialog v-model="dialog" max-width="400px">
+          <template v-slot:activator="{ on, attrs }" class="template-add">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
             <v-btn
               small
@@ -29,7 +29,8 @@
               color="green"
               v-bind="attrs"
               v-on="on"
-              ><v-icon dark> mdi-plus</v-icon></v-btn>
+              ><v-icon dark> mdi-plus</v-icon></v-btn
+            >
           </template>
           <v-card>
             <v-card-title>
@@ -49,8 +50,8 @@
                       ></v-text-field>
 
                       <v-text-field
-                        v-model="itemEditado.pessoa.cpf"
                         v-mask="'###.###.###-##'"
+                        v-model="itemEditado.pessoa.cpf"
                         label="CPF"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
@@ -70,7 +71,6 @@
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
-
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
@@ -80,18 +80,15 @@
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
+                     <!--   <v-text-field
+                        v-model="itemEditado.ativo"
+                        label="Status"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
+                        required
+                      ></v-text-field> -->
+
                     </v-col>
-                    <!-- <v-col cols="8" sm="6" md="4">
-                      <v-select
-                          v-model="select1"
-                           :items="status"
-                            :error-messages="errors"
-                             label="Status"
-                            :rules="[(v) => !!v ||'Campo Obrigatório']"
-                            maxlenght="20"1'
-                            required
-                            ></v-select>
-                     </v-col> -->
+                    <v-col cols="8" sm="6" md="4"> </v-col>
                     <v-col cols="8" sm="6" md="4"> </v-col>
                   </v-row>
                 </v-container>
@@ -106,10 +103,10 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogDesativar" max-width="500px">
-          <v-card>
-            <v-card-title class="text-h5"
-              >Deseja desativar este professor?</v-card-title
+        <v-dialog v-model="dialogDesativar" max-width="400px">
+          <v-card class="card-modal">
+            <v-card-title class="text-h6"
+              >Deseja desativar este aluno ?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -134,23 +131,26 @@
 
 <style>
 .add {
-  width: 5%;
-  height: 5%;
+  width: 40px;
+  height: 40px;
 }
-body {
-  padding: 2%;
+.template-add {
+  padding-top: 1%;
+}
+.data-table {
+  padding: 3%;
 }
 </style>
 
 <script>
+
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
-var url2 = "http://api-sig-itpac-84633.herokuapp.com/api/professores/desativar"
-// var url3 = "http://api-sig-itpac-84633.herokuapp.com/api/professores/ativar/1";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/professores/desativar/"; 
 
 export default {
   data: () => ({
@@ -166,19 +166,10 @@ export default {
       { text: "Status", value: "ativo" },
       { text: "Ações", value: "acoes" },
     ],
-   professores: [],
+    professores: [],
     editIndice: -1,
     itemEditado: {
-      pessoa: {
-        nome: "",
-        cpf: "",
-        telefone: "",
-        email: "",
-      },
-      matricula: "",
-      ativo: "",
-    },
-    itemPadrao: {
+      id: null,
       pessoa: {
         nome: "",
         cpf: "",
@@ -188,8 +179,17 @@ export default {
       matricula: "",
       ativo: true,
     },
-   // select1: null,
-    // status: ["ativo", "inativo"],
+    itemPadrao: {
+      id: null,
+      pessoa: {
+        nome: "",
+        cpf: "",
+        telefone: "",
+        email: "",
+      },
+      matricula: "",
+      ativo: true,
+    },
   }),
   computed: {
     tituloForm() {
@@ -199,13 +199,13 @@ export default {
   props: {
     pessoa: {
       type: Object,
-     default: function() {
+      default: function () {
         return {
           nome: "",
           cpf: "",
           telefone: "",
           email: "",
-        }; 
+        };
       },
     },
   },
@@ -233,38 +233,44 @@ export default {
     editItem(item) {
       this.editIndice = this.professores.indexOf(item);
       this.itemEditado = Object.assign({}, item);
-      this.dialog = true;
+      this.dialog = true ;
     },
 
     desativeItem(item) {
       this.editIndice = this.professores.indexOf(item);
       this.itemEditado = Object.assign({}, item);
-      this.dialogDesativar = true;
+      this.dialogDesativar = true ;
     },
 
-    desativeItemConfirm() {
-
+   desativeItemConfirm() {
+      //this.professores.splice(this.editIndice, 1);
       if (this.editIndice > -1) {
        axios
-          .patch(url2 + this.itemEditado.id, {
+          .patch(urlPatch + this.itemEditado.id, {
+            //   pessoa: {
+            //   nome: this.itemEditado.nome,
+            //   cpf: this.itemEditado.cpf,
+            //   email: this.itemEditado.email,
+            //   telefone: this.itemEditado.telefone,
+            // },
+            // matricula: this.itemEditado.matricula, 
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            this.professores = res.data;
-            alert("O professor foi desativado com sucesso !");
+            //this.professores = res.data;
+            console.log("res:");
             console.log(res.data);
+            alert("O acadêmico foi desativado com sucesso !");
           })
           .catch((error) => {
             console.log(error);
           });
-      } 
         this.fecharDesativar();
-
       }
     },
-
+  
     fechar() {
-      this.dialog = false;
+      this.dialog = false ;
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
@@ -272,7 +278,7 @@ export default {
     },
 
     fecharDesativar() {
-      this.dialogDesativar = false;
+      this.dialogDesativar = false ;
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
@@ -282,20 +288,21 @@ export default {
     salvar() {
       if (this.editIndice > -1) {
         axios
-        .put(url,{
-          id: this.itemEditado.id,
-          pessoa: {
+          .put(url, {
             id: this.itemEditado.id,
-            nome: this.itemEditado.nome,
-            cpf: this.itemEditado.cpf,
-            telefone: this.itemEditado.telefone,
-            email: this.itemEditado.email,
+            pessoa: {
+              id: this.itemEditado.pessoa.id,
+              nome: this.itemEditado.pessoa.nome,
+              cpf: this.itemEditado.pessoa.cpf,
+              email: this.itemEditado.pessoa.email,
+              telefone: this.itemEditado.pessoa.telefone,
             },
             matricula: this.itemEditado.matricula,
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
             this.professores = res.data;
+            alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
           })
           .catch((error) => {
@@ -303,18 +310,17 @@ export default {
           });
 
         Object.assign(this.professores[this.editIndice], this.itemEditado);
-        alert("Os dados foram atualizados com sucesso !");
       } else {
         axios
           .post(url, {
-          pessoa: { 
+            pessoa: {
               nome: this.itemEditado.pessoa.nome,
               cpf: this.itemEditado.pessoa.cpf,
               email: this.itemEditado.pessoa.email,
               telefone: this.itemEditado.pessoa.telefone,
-          }, 
-          ativo: this.itemEditado.ativo,
-          matricula: this.itemEditado.matricula,
+            },
+            ativo: this.itemEditado.ativo,
+            matricula: this.itemEditado.matricula,
           })
           .then((res) => {
             this.professores = res.data;
@@ -330,5 +336,6 @@ export default {
 
       this.fechar();
     },
+  },
 };
 </script>

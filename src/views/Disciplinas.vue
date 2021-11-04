@@ -3,7 +3,7 @@
   :headers="titulos" 
   :items="disciplinas" 
   :search="search" 
-  class="elevation-2">
+  class="elevation-2 data-table">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Disciplina</v-toolbar-title>
@@ -45,7 +45,7 @@
                         v-model="itemEditado.nome"
                         label="Nome"
                         :rules="['Campo Obrigatório']"
-                        maxlenght="20"
+                        maxlenght="100"
                         required
                       ></v-text-field>
                     </v-col>
@@ -54,21 +54,10 @@
                         v-model="itemEditado.apelido"
                         label="Apelido"
                         :rules="['Campo Obrigatório']"
-                        maxlenght="20"
+                        maxlenght="30"
                         required
                       ></v-text-field>
                     </v-col>
-
-                    <!-- <v-col cols="8" sm="6" md="4">
-                    <v-col cols="8" sm="6" md="4"> 
-                      <v-text-field
-                        v-model="itemEditado.ativo"
-                        label="Status"
-                        :rules="['Campo Obrigatório']"
-                        maxlenght="20"
-                      ></v-text-field>
-
-                    </v-col> -->
                      <!-- <v-col cols="8" sm="6" md="4"> 
                        </v-col>
                      <v-col cols="8" sm="6" md="4"> 
@@ -95,7 +84,6 @@
                       <v-select
                         v-model="select1"
                         :items="professor"
-                        @change="()=> console.log('hsdgfe')"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         label="Professor"
                         required
@@ -117,7 +105,7 @@
         <v-dialog v-model="dialogDesativar" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
-              >Deseja remover esta disciplina?</v-card-title
+              >Deseja desativar esta disciplina?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -180,12 +168,12 @@ export default {
     dialog: false,
     dialogDesativar: false,
     titulos: [
+      { text: "Disciplina", value: "nome" },
       {
         text: "Apelido",
         align: "start",
-        value: "nome",
+        value: "apelido",
       },
-      { text: "Disciplina", value: "nome" },
       { text: "Professor", value: "professor.pessoa.nome" },
       { text: "Período", value: "periodo.periodo" },
       { text: "Status", value: "ativo" },
@@ -196,21 +184,19 @@ export default {
     profs: [],
     editIndice: -1,
     itemEditado: {
-      nome: "",
-      apelido: "",
-      ativo: "",
-    },
-    itemPadrao: {
+      id: null,
       nome: "",
       apelido: "",
       ativo: true,
     },
-     select0: null,
-     status: ["ativo", "inativo"],
-
+    itemPadrao: {
+      id: null,
+      nome: "",
+      apelido: "",
+      ativo: true,
+    },
     select: [],
     select1: [],
-
   }),
 
   computed: {
@@ -259,7 +245,7 @@ export default {
    async getProfessores() {
       const { data } = await this.axios.get(urlProfessor);
       this.profs = data;
-      this.professor = data.map((d) => d.professor).filter(Boolean);
+      this.professor = data.map((d) => d.professor.pessoa.nome).filter(Boolean);
       console.log(
         "professor",
         data,
@@ -288,21 +274,20 @@ export default {
 
     desativeItemConfirm() {
       // this.disciplinas.splice(this.editIndice, 1);
-       if (this.editIndice > -1) {
        axios
           .patch(urlPatch + this.itemEditado.id, {
+            id: this.itemEditado.id,
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
             // this.disciplinas = res.data;
             console.log(res.data);
-            alert("O acadêmico foi desativado com sucesso !");
+            alert("A disciplina foi desativada com sucesso !");
           })
           .catch((error) => {
             console.log(error);
           });
       this.fecharDesativar();
-      }
     },
 
     fechar() {
@@ -323,30 +308,31 @@ export default {
 
     salvar() {
       if (this.editIndice > -1) {
+
         axios
           .put(url, {
             id: this.itemEditado.id,
             nome: this.itemEditado.nome,
-            ativo: this.itemEditado.ativo,
             apelido: this.itemEditado.apelido,
+            ativo: this.itemEditado.ativo,
           })
           .then((res) => {
             this.disciplinas = res.data;
             alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
           });
-
         Object.assign(this.disciplinas[this.editIndice], this.itemEditado);
-        alert("Os dados foram adicionados com sucesso !");
+        
       } else {
-        axios.post(url, {nome: this.itemEditado.nome,ativo: this.itemEditado.ativo, apelido: this.itemEditado.apelido,})
+        axios.post(url, {nome: this.itemEditado.nome,ativo: this.itemEditado.ativo, apelido: this.itemEditado.apelido})
           .then((res) => {
             this.disciplinas = res.data;
+             alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
           });
 
         this.disciplinas.push(this.itemEditado);
-        alert("Os dados foram adicionados com sucesso !");
+       
       }
 
       this.fechar();

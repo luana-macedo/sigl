@@ -43,7 +43,6 @@
                       ></v-text-field>
                       <v-text-field
                         v-model="itemEditado.dataCadastro"
-                        v-mask="'####/##/##'"
                         label="Data de Cadastro"
                         :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
@@ -134,13 +133,15 @@ export default {
     periodos: [],
     editIndice: -1,
     itemEditado: {
+      id: null,
       periodo: "",
       dataCadastro: "",
-      ativo: "",
+      ativo: true,
     },
     itemPadrao: {
+      id: null,
       periodo: "",
-      dataCadastro: "",
+      dataCadastro:"",
       ativo: true,
     },
   }),
@@ -186,9 +187,11 @@ export default {
     desativeItemConfirm() {
       // this.periodos.splice(this.editIndice, 1);
       axios.patch(urlPatch + this.itemEditado.id, {
+        id: this.itemEditado.id,
+        dataCadastro: this.itemEditado.dataCadastro,
         ativo: this.itemEditado.ativo
       }).then((res) => {
-        this.periodos = res.data;
+        //this.periodos = res.data;
         alert("O período foi desativado com sucesso !");
         console.log(res.data);
       })
@@ -219,20 +222,22 @@ export default {
       if (this.editIndice > -1) {
 
         axios.put(url, {
-        id : this.itemEditado.id,periodo : this.itemEditado.periodo,dataCadastro : this.itemEditado.dataCadastro, ativo: this.itemEditado.ativo}).then(res => {
+        id : this.itemEditado.id,periodo : this.itemEditado.periodo,dataCadastro : this.itemEditado.dataCadastro, ativo: this.itemEditado.ativo})
+        .then(res => {
 				this.periodos = res.data
+        alert("Os dados foram atualizados com sucesso !");
 				console.log(res.data)
 			})
         Object.assign(this.periodos[this.editIndice], this.itemEditado);
-        alert("Os dados foram atualizados com sucesso !");
       } else {
 
         axios.post(url,{periodo: this.itemEditado.periodo,dataCadastro: this.itemEditado.dataCadastro,ativo: this.itemEditado.ativo}).then(res => {
 				this.periodos = res.data
+        alert("Os dados foram adicionados com sucesso !");
 				console.log(res.data)
 			})
         this.periodos.push(this.itemEditado);
-        alert("Os dados foram adicionados com sucesso !");
+
       }
   
       this.fechar();
