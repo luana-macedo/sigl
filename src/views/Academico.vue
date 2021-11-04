@@ -9,7 +9,6 @@
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Aluno</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
-        <v-ster></v-ster>
         <v-text-field class="barraPesquisa"
           v-model="search"
           append-icon="mdi-magnify"
@@ -38,7 +37,7 @@
             </v-card-title>
 
             <v-card-text>
-              <v-form v-model="valid">
+              <v-form>
                 <v-container>
                   <v-row>
                     <v-col cols="8" sm="6" md="4">
@@ -99,7 +98,7 @@
               <v-btn small color="warning" dark @click="fechar">
                 Cancelar
               </v-btn>
-              <v-btn small color="primary" dark @click="salvar" > Salvar </v-btn>
+              <v-btn small color="primary" dark @click="salvar"> Salvar </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -163,11 +162,13 @@ export default {
       { text: "Telefone", value: "pessoa.telefone" },
       { text: "Email", value: "pessoa.email" },
       { text: "Matricula", value: "matricula" },
+      { text: "Status", value: "ativo" },
       { text: "Ações", value: "acoes" },
     ],
     alunos: [],
     editIndice: -1,
     itemEditado: {
+      id: null,
       pessoa: {
         nome: "",
         cpf: "",
@@ -175,9 +176,10 @@ export default {
         email: "",
       },
       matricula: "",
-      ativo: "",
+      ativo: null,
     },
     itemPadrao: {
+      id: null,
       pessoa: {
         nome: "",
         cpf: "",
@@ -288,11 +290,11 @@ export default {
           .put(url, {
             id: this.itemEditado.id,
             pessoa: {
-              id: this.itemEditado.id,
-              nome: this.itemEditado.nome,
-              cpf: this.itemEditado.cpf,
-              email: this.itemEditado.email,
-              telefone: this.itemEditado.telefone,
+              id: this.itemEditado.pessoa.id,
+              nome: this.itemEditado.pessoa.nome,
+              cpf: this.itemEditado.pessoa.cpf,
+              email: this.itemEditado.pessoa.email,
+              telefone: this.itemEditado.pessoa.telefone,
             },
             matricula: this.itemEditado.matricula,
             ativo: this.itemEditado.ativo,
@@ -321,6 +323,7 @@ export default {
           })
           .then((res) => {
             this.alunos = res.data;
+            alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
           })
           .catch((error) => {
@@ -328,7 +331,7 @@ export default {
           });
 
         this.alunos.push(this.itemEditado);
-        alert("Os dados foram adicionados com sucesso !");
+       
       }
 
       this.fechar();

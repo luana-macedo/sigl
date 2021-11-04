@@ -95,7 +95,7 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:item.acoes="{ item }">
+    <template v-slot:item.acoes="{ item }" > 
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
@@ -140,16 +140,18 @@ export default {
     salas: [],
     editIndice: -1,
     itemEditado: {
+      id: null,
       nome: "",
       local: "",
-      capacidade: 0,
+      capacidade: null,
       descricao: "",
-      ativo: "",
+      ativo: true,
     },
     itemPadrao: {
+      id: null,
       nome: "",
       local: "",
-      capacidade: 0,
+      capacidade: null,
       descricao: "",
       ativo: true,
     },
@@ -225,9 +227,11 @@ export default {
     },
 
     salvar() {
+    
       if (this.editIndice > -1) {
         axios
-          .put(url + this.itemEditado.id, {
+          .put(url, {
+            id: this.itemEditado.id,
             nome: this.itemEditado.nome,
             local: this.itemEditado.local,
             capacidade: this.itemEditado.capacidade,
@@ -236,14 +240,13 @@ export default {
           })
           .then((res) => {
             this.salas = res.data;
+            alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
           });
 
         Object.assign(this.salas[this.editIndice], this.itemEditado);
-        alert("Os dados foram atualizados com sucesso !");
+  
       } else {
-        console.log(this.itemEditado);
-        
         axios
           .post(url, {
             nome: this.itemEditado.nome,
@@ -254,13 +257,12 @@ export default {
           })
           .then((res) => {
             this.salas = res.data;
+            alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
           });
 
         this.salas.push(this.itemEditado);
-        alert("Os dados foram adicionados com sucesso !");
       }
-
       this.fechar();
     },
   },
