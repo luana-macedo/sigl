@@ -85,7 +85,7 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:item.acoes="{ item }">
+    <template v-slot:[`item.acoes`]="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
