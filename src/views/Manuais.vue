@@ -51,6 +51,7 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="4" md="8">
+                      {{itemEditado.fileName}}
                       <v-file-input
                         truncate-length="18"
                         v-model="itemEditado.fileName"
@@ -232,28 +233,24 @@ export default {
     },
 
     salvar() {
+      const formData = new FormData();
+
+      formData.set("descricao", this.itemEditado.descricao);
+
       if (this.editIndice > -1) {
-        axios
-          .put(url + this.itemEditado.id, {
-            descricao: this.itemEditado.descricao,
-          })
-          .then((res) => {
-            this.manuais = res.data;
-            console.log(res.data);
-          });
+        axios.patch(url + "\\", formData).then((res) => {
+          // this.manuais = res.data;
+          console.log(res.data);
+        });
         alert("A descrição do manual foi alterada com sucesso !");
         Object.assign(this.manuais[this.editIndice], this.itemEditado);
       } else {
-        axios
-          .post(url, {
-            manuais: this.itemEditado.manuais,
-            descricao: this.itemEditado.descricao,
-            fileName: this.itemEditado.fileName,
-          })
-          .then((res) => {
-            this.manuais = res.data;
-            console.log(res.data);
-          });
+        formData.append("file", this.itemEditado.fileName);
+
+        axios.post(url, formData).then((res) => {
+          this.manuais = res.data;
+          console.log(res.data);
+        });
         this.manuais.push(this.itemEditado);
         alert("O manual foi adicionado com sucesso !");
       }
