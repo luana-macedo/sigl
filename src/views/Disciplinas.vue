@@ -317,7 +317,7 @@ export default {
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            this.disciplinas = res.data;
+            //this.disciplinas = res.data;
             alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
           });

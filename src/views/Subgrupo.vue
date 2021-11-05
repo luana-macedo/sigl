@@ -51,22 +51,22 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
-                     <v-select
+                      <vue-select
                         v-model="selectAluno"
-                        :items="alunos"
-                        label="Alunos"
+                        :options="alunos"
+                        label="nome"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
-                      ></v-select>
-                    </v-col> 
+                      ></vue-select>
+                    </v-col>
                     <v-col cols="8" sm="6" md="4">
-                      <v-select
-                        v-model="select"
-                        :items="profs"
+                      <vue-select
+                        v-model="profSelecionado"
+                        :options="professor"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        label="Professor"
+                        label="nome"
                         required
-                      ></v-select>
+                      ></vue-select>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-select
@@ -109,10 +109,10 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:item.acoes="{ item }">
+    <!-- <template v-slot:item.acoes="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
-    </template>
+     </template>  -->
   </v-data-table>
 </template>
 
@@ -155,67 +155,71 @@ var url = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo";
 var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
 var urlALuno = "http://api-sig-itpac-84633.herokuapp.com/api/aluno";
 var urlDisciplina = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
-var urlPatch ="http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
+var urlPatch =
+  "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
 
 export default {
-  data: () => ({
-    search: "",
-    nomesProfessor: "",
-    dialog: false,
-    dialogDesativar: false,
-    titulos: [
-      {
-        text: "Subgrupo",
-        align: "center",
-        value: "nome",
-      },
-      {
-        text: "Professor",
-        align: "center",
-        value: "professor.pessoa.nome",
-      },
-      {
-        text: "Disciplina",
-        align: "center",
-        value: "disciplina.nome",
-      },
-       {
-        text: "Alunos",
-        align: "center",
-        value: "aluno.pessoa.nome",
-      },
-      {
-        text: "Status",
-        align: "center",
-        value: "ativo",
-      },
-      { text: "Ações", align: "center", value: "acoes", sortable: false },
-    ],
-    subgrupos: [],
-    profs: [],
-    aluno: [],
-    disciplinas: [],
-    editIndice: -1,
-    itemEditado: {
-      id: null,
-      nome: "",
-      ativo: "",
-      /*   professor: "",
+  data() {
+    return {
+      search: "",
+      dialog: false,
+      dialogDesativar: false,
+      titulos: [
+        {
+          text: "Subgrupo",
+          align: "center",
+          value: "nome",
+        },
+        {
+          text: "Professor",
+          align: "center",
+          value: "professor.pessoa.nome",
+        },
+        {
+          text: "Disciplina",
+          align: "center",
+          value: "disciplina.nome",
+        },
+        {
+          text: "Alunos",
+          align: "center",
+          value: "alunos",
+        },
+        {
+          text: "Status",
+          align: "center",
+          value: "ativo",
+        },
+        { text: "Ações", align: "center", value: "acoes", sortable: false },
+      ],
+      subgrupos: [],
+      professor: [],
+      profsRaw: [],
+      alunos: [],
+      disciplinas: [],
+      editIndice: -1,
+      itemEditado: {
+        id: null,
+        nome: "",
+        ativo: "",
+        profSelecionado: null,
+        /*   professor: "",
       disciplina:"", */
-    },
-    itemPadrao: {
-      id: null,
-      nome: "",
-      ativo: true,
-      /*    professor: "",
+      },
+      itemPadrao: {
+        id: null,
+        nome: "",
+        ativo: true,
+        /*    professor: "",
       disciplina:"", */
-    },
-    //  select2: null,
-    //  status: ["ativo", "inativo"],
-    selectAluno: [],
-    select: [],
-    select1: [],
-  }),
+      },
+      //  select2: null,
+      //  status: ["ativo", "inativo"],
+      selectAluno: [],
+      profSelecionado: null,
+      select1: [],
+    };
+  },
 
   computed: {
     tituloForm() {
@@ -232,69 +236,43 @@ export default {
     },
   },
 
-  created() {
+  mounted() {
     this.inicializar();
-    this.getProfessores();
-    this.getDisciplinas();
-    this.getNomeProfessor();
   },
 
   methods: {
-    inicializar() {
+    async inicializar() {
       this.axios
         .get(url, this.subgrupos)
         .then((res) => {
-          this.subgrupos = res.data;
-          console.log(res.data);
+          console.log(res);
+          this.subgrupos = res.data.map((d) => ({
+            ...d,
+            alunos: d.alunos.map((a) => a.pessoa.nome).filter(Boolean),
+          }));
         })
         .catch((error) => {
-          console.log(error);
+          console.warn(error);
         });
-    },
-
-    mounted() {
-      this.inicializar();
-      // this.getProfessores();
-      // this.getDisciplinas();
-    },
-
-    getNomeProfessor() {
-      const nomes = [];
-      this.profs.forEach((item) => {
-        console.log(item.pessoa.nome);
-        nomes.push(item.pessoa.nome);
-      });
-      this.nomesProfessor = nomes;
-      console.log("Nomes: " + nomes);
+      await Promise.all([
+        this.getProfessores(),
+        this.getDisciplinas(),
+        this.getAlunos(),
+      ]);
     },
 
     async getProfessores() {
       const { data } = await this.axios.get(urlProfessor);
-      this.profs = data;
-      this.professor = data.map((d) => d.professor.pessoa.nome).filter(Boolean);
-      console.log(
-        "professor",
-        data,
-        data.map((d) => d.professor.pessoa.nome)
-      );
-    },
-
-    achaidprofessor() {
-      const [selectedProfessor] = this.profs.filter(
-        (d) => d.professor === this.select[0]
-      );
-      console.log(selectedProfessor);
+      this.profsRaw = data;
+      this.professor = data
+        .filter((d) => d.pessoa.nome)
+        .map((d) => ({ ...d.pessoa, idprofessor: d.id }));
     },
 
     async getDisciplinas() {
       const { data } = await this.axios.get(urlDisciplina);
       this.disciplinas = data;
       this.disciplina = data.map((d) => d.disciplina).filter(Boolean);
-      console.log(
-        "disciplina",
-        data,
-        data.map((d) => d.disciplina)
-      );
     },
 
     achaiddisciplina() {
@@ -306,17 +284,17 @@ export default {
 
     async getAlunos() {
       const { data } = await this.axios.get(urlALuno);
+      console.log(data);
       this.aluno = data;
-      this.alunos = data.map((d) => d.alunos.pessoa.nome).filter(Boolean);
-      console.log(
-        "aluno",
-        data,
-        data.map((d) => d.alunos.pessoa.nome)
-      );
+      const alunos = data
+        .filter((d) => d.pessoa.nome)
+        .map((d) => ({ ...d.pessoa, idaluno: d.id }));
+      console.log(alunos);
+      this.alunos = alunos;
     },
 
     achaidaluno() {
-      const [selectedAluno] = this.profs.filter(
+      const [selectedAluno] = this.profsRaw.filter(
         (d) => d.aluno === this.selectAluno[0]
       );
       console.log(selectedAluno);
@@ -378,7 +356,7 @@ export default {
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            this.subgrupos = res.data;
+            //this.subgrupos = res.data;
             console.log(res.data);
           })
           .catch((error) => {
@@ -391,6 +369,9 @@ export default {
           .post(url, {
             nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo,
+            professor :{
+              id: this.profSelecionado.idprofessor,
+            } 
           })
           .then((res) => {
             this.subgrupos = res.data;

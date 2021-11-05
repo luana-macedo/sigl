@@ -224,7 +224,7 @@ export default {
         axios.put(url, {
         id : this.itemEditado.id,periodo : this.itemEditado.periodo,dataCadastro : this.itemEditado.dataCadastro, ativo: this.itemEditado.ativo})
         .then(res => {
-				this.periodos = res.data
+				//this.periodos = res.data
         alert("Os dados foram atualizados com sucesso !");
 				console.log(res.data)
 			})

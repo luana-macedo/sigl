@@ -6,7 +6,7 @@ import router from './router'
 import vSelect from "vue-select"
 import "vue-select/dist/vue-select.css"
 
-Vue.component("v-select", vSelect);
+Vue.component("vue-select", vSelect);
 Vue.use(VueMask);
 Vue.config.productionTip = false
 
