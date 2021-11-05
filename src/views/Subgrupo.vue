@@ -111,7 +111,7 @@
     <template v-slot:[`item.acoes`]="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
-     </template> 
+    </template>
   </v-data-table>
 </template>
 
@@ -139,7 +139,6 @@ body {
 .card-modal {
   text-align: center;
 }
-
 </style>
 
 <script>
@@ -152,7 +151,8 @@ var url = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo";
 var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
 var urlALuno = "http://api-sig-itpac-84633.herokuapp.com/api/aluno";
 var urlDisciplina = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
-var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
+var urlPatch =
+  "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
 
 export default {
   data() {
@@ -197,20 +197,14 @@ export default {
       itemEditado: {
         id: null,
         nome: "",
-        ativo: "",
         profSelecionado: null,
-        /*   professor: "",
-      disciplina:"", */
+        ativo: "",
       },
       itemPadrao: {
         id: null,
         nome: "",
         ativo: true,
-        /*    professor: "",
-      disciplina:"", */
       },
-      //  select2: null,
-      //  status: ["ativo", "inativo"],
       selectAluno: [],
       profSelecionado: null,
       select1: [],
@@ -290,7 +284,7 @@ export default {
     },
 
     achaidaluno() {
-      const [selectedAluno] = this.profsRaw.filter(
+      const [selectedAluno] = this.alunos.filter(
         (d) => d.aluno === this.selectAluno[0]
       );
       console.log(selectedAluno);
@@ -365,9 +359,9 @@ export default {
           .post(url, {
             nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo,
-            professor :{
+            professor: {
               id: this.profSelecionado.idprofessor,
-            } 
+            },
           })
           .then((res) => {
             this.subgrupos = res.data;
