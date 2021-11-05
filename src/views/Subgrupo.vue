@@ -11,7 +11,6 @@
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-text-field
-          class="barraPesquisa"
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
@@ -109,10 +108,10 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    <!-- <template v-slot:item.acoes="{ item }">
+    <template v-slot:item.acoes="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
-     </template>  -->
+     </template> 
   </v-data-table>
 </template>
 
@@ -140,9 +139,7 @@ body {
 .card-modal {
   text-align: center;
 }
-.barraPesquisa {
-  padding-right: 830px;
-}
+
 </style>
 
 <script>
@@ -155,8 +152,7 @@ var url = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo";
 var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
 var urlALuno = "http://api-sig-itpac-84633.herokuapp.com/api/aluno";
 var urlDisciplina = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
-var urlPatch =
-  "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
 
 export default {
   data() {

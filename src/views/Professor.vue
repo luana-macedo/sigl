@@ -10,7 +10,7 @@
         <v-toolbar-title>Gerenciamento de Professor</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-ster></v-ster>
-        <v-text-field class="barraPesquisa"
+        <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"

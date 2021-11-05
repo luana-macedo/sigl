@@ -3,13 +3,12 @@
     :headers="titulos"
     :items="alunos"
     :search="search"
-    class="elevation-2 data-table"
-  >
+    class="elevation-2 data-table">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Aluno</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
-        <v-text-field class="barraPesquisa"
+        <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"

@@ -1,11 +1,15 @@
 <template> 
-  <v-data-table :headers="titulos" :items="periodos" :search="search" class="elevation-2">
+  <v-data-table 
+  :headers="titulos" 
+  :items="periodos" 
+  :search="search" 
+  class="elevation-2 data-table">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Período</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-         <v-text-field class="barraPesquisa"
+         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
@@ -96,6 +100,11 @@
 body {
   padding: 2%;
 }
+
+.data-table{
+  padding: 3%;
+}
+
 </style>
 
 <script>

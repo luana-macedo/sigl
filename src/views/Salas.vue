@@ -9,7 +9,7 @@
         <v-toolbar-title>Gerenciamento de Sala</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <v-text-field class="barraPesquisa3"
+        <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
@@ -110,9 +110,7 @@
 body {
   padding: 2%;
 }
-.barraPesquisa3{
- padding-right: 950px;
-}
+
 </style>
 
 <script>
