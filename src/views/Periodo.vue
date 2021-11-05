@@ -1,15 +1,16 @@
-<template> 
-  <v-data-table 
-  :headers="titulos" 
-  :items="periodos" 
-  :search="search" 
-  class="elevation-2 data-table">
+<template>
+  <v-data-table
+    :headers="titulos"
+    :items="periodos"
+    :search="search"
+    class="elevation-2 data-table"
+  >
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Período</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
-        <v-spacer></v-spacer>
-         <v-text-field
+        <v-ster></v-ster>
+        <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
@@ -20,7 +21,8 @@
         <v-dialog v-model="dialog" max-width="400px">
           <template v-slot:activator="{ on, attrs }">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
-            <v-btn small
+            <v-btn
+              small
               class="mx-2 add"
               fab
               dark
@@ -43,14 +45,14 @@
                         v-model="itemEditado.periodo"
                         label="Periodo"
                         v-mask="'####/##'"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                       <v-text-field
                         v-model="itemEditado.dataCadastro"
                         label="Data de Cadastro"
                         v-mask="'####-##-##'"
-                        :rules="[v => !!v || '*Campo Obrigatório*']"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                     </v-col>
@@ -61,10 +63,10 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small color = "warning" dark  @click="fechar">
+              <v-btn small color="warning" dark @click="fechar">
                 Cancelar
               </v-btn>
-              <v-btn small color = "primary" dark  @click="salvar">Salvar</v-btn>
+              <v-btn small color="primary" dark @click="salvar">Salvar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -75,10 +77,10 @@
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small color = " warning" dark @click="fecharDesativar"
+              <v-btn small color=" warning" dark @click="fecharDesativar"
                 >Não</v-btn
               >
-              <v-btn small color= "primary" dark  @click="desativeItemConfirm"
+              <v-btn small color="primary" dark @click="desativeItemConfirm"
                 >Sim</v-btn
               >
               <v-spacer></v-spacer>
@@ -103,21 +105,20 @@ body {
   padding: 2%;
 }
 
-.data-table{
+.data-table {
   padding: 3%;
 }
-
 </style>
 
 <script>
+import Vue from "vue";
+import axios from "axios";
+import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
 
-import Vue from 'vue'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
-Vue.use(VueAxios, axios) 
-
-var url = "http://api-sig-itpac-84633.herokuapp.com/api/periodo"
-var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/periodo/desativar/"
+var url = "http://api-sig-itpac-84633.herokuapp.com/api/periodo";
+var urlPatch =
+  "http://api-sig-itpac-84633.herokuapp.com/api/periodo/desativar/";
 
 export default {
   data: () => ({
@@ -135,11 +136,12 @@ export default {
         align: "center",
         value: "dataCadastro",
       },
-       {
-        text: "Status", align: "center",
+      {
+        text: "Status",
+        align: "center",
         value: "ativo",
       },
-      { text: "Ações", align: "center", value: "acoes"},
+      { text: "Ações", align: "center", value: "acoes" },
     ],
     periodos: [],
     editIndice: -1,
@@ -152,11 +154,11 @@ export default {
     itemPadrao: {
       id: null,
       periodo: "",
-      dataCadastro:"",
+      dataCadastro: "",
       ativo: true,
     },
   }),
-   
+
   computed: {
     tituloForm() {
       return this.editIndice === -1 ? "Cadastrar Periodo" : "Editar Dados";
@@ -178,11 +180,16 @@ export default {
 
   methods: {
     inicializar() {
-        axios.get(url, this.periodos).then(res => {
-				this.periodos = res.data
-				console.log(res.data)
-			})
+      axios.get(url, this.periodos).then((res) => {
+        this.periodos = res.data;
+        console.log(res.data);
+      });
     },
+
+    reloadPage() {
+      window.location.reload();
+    },
+
     editItem(item) {
       this.editIndice = this.periodos.indexOf(item);
       this.itemEditado = Object.assign({}, item);
@@ -197,18 +204,20 @@ export default {
 
     desativeItemConfirm() {
       // this.periodos.splice(this.editIndice, 1);
-      axios.patch(urlPatch + this.itemEditado.id, {
-        id: this.itemEditado.id,
-        dataCadastro: this.itemEditado.dataCadastro,
-        ativo: this.itemEditado.ativo
-      }).then((res) => {
-        //this.periodos = res.data;
-        alert("O período foi desativado com sucesso !");
-        console.log(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      axios
+        .patch(urlPatch + this.itemEditado.id, {
+          id: this.itemEditado.id,
+          dataCadastro: this.itemEditado.dataCadastro,
+          ativo: this.itemEditado.ativo,
+        })
+        .then((res) => {
+          //this.periodos = res.data;
+          alert("O período foi desativado com sucesso !");
+          console.log(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
 
       this.fecharDesativar();
     },
@@ -231,26 +240,34 @@ export default {
 
     salvar() {
       if (this.editIndice > -1) {
-
-        axios.put(url, {
-        id : this.itemEditado.id,periodo : this.itemEditado.periodo,dataCadastro : this.itemEditado.dataCadastro, ativo: this.itemEditado.ativo})
-        .then(res => {
-				//this.periodos = res.data
-        alert("Os dados foram atualizados com sucesso !");
-				console.log(res.data)
-			})
+        axios
+          .put(url, {
+            id: this.itemEditado.id,
+            periodo: this.itemEditado.periodo,
+            dataCadastro: this.itemEditado.dataCadastro,
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            //this.periodos = res.data
+            alert("Os dados foram atualizados com sucesso !");
+            console.log(res.data);
+          });
         Object.assign(this.periodos[this.editIndice], this.itemEditado);
       } else {
-
-        axios.post(url,{periodo: this.itemEditado.periodo,dataCadastro: this.itemEditado.dataCadastro,ativo: this.itemEditado.ativo}).then(res => {
-				this.periodos = res.data
-        alert("Os dados foram adicionados com sucesso !");
-				console.log(res.data)
-			})
+        axios
+          .post(url, {
+            periodo: this.itemEditado.periodo,
+            dataCadastro: this.itemEditado.dataCadastro,
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            this.periodos = res.data;
+            alert("Os dados foram adicionados com sucesso !");
+            console.log(res.data);
+          });
         this.periodos.push(this.itemEditado);
-
       }
-  
+
       this.fechar();
     },
   },

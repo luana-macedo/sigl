@@ -228,6 +228,11 @@ export default {
         console.log(res.data);
       });
     },
+
+    reloadPage() {
+      window.location.reload();
+    },
+
     editItem(item) {
       this.editIndice = this.alunos.indexOf(item);
       this.itemEditado = Object.assign({}, item);

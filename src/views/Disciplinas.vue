@@ -1,23 +1,24 @@
 <template>
-  <v-data-table 
-  :headers="titulos" 
-  :items="disciplinas" 
-  :search="search" 
-  class="elevation-2 data-table">
+  <v-data-table
+    :headers="titulos"
+    :items="disciplinas"
+    :search="search"
+    class="elevation-2 data-table"
+  >
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Disciplina</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
-        <v-spacer></v-spacer>
+        <v-ster></v-ster>
         <v-text-field
-          v-model="pesquisa"
+          v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
           single-line
           hide-details
         ></v-text-field>
         <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="400px">
+        <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }" class="template-add">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
             <v-btn
@@ -37,7 +38,7 @@
             </v-card-title>
 
             <v-card-text>
-              <v-form v-model="valid">
+              <v-form>
                 <v-container>
                   <v-row>
                     <v-col cols="8" sm="6" md="4">
@@ -54,11 +55,10 @@
                         v-model="itemEditado.apelido"
                         label="Apelido"
                         :rules="['Campo Obrigatório']"
-                        maxlenght="30"
                         required
                       ></v-text-field>
                     </v-col>
-                     <!-- <v-col cols="8" sm="6" md="4"> 
+                    <!-- <v-col cols="8" sm="6" md="4"> 
                        </v-col>
                      <v-col cols="8" sm="6" md="4"> 
                       <v-select
@@ -71,24 +71,26 @@
                             required
                             ></v-select>
                      </v-col> -->
-                    <v-col cols="8" sm="6" md="4"> 
-                      <v-select
-                        v-model="select"
-                        :items="periodo"
+                    <v-col cols="8" sm="6" md="4">
+                      <v-label>Periodo</v-label>
+                      <vue-select
+                        v-model="periodoSelecionado"
+                        :options="periodo"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        label="Periodo"
+                        label="periodo"
                         required
-                      ></v-select>
+                      ></vue-select>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
-                      <v-select
-                        v-model="select1"
-                        :items="professor"
-                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        label="Professor"
+                      <!-- :rules="[(v) => !!v || '*Campo Obrigatório*']" -->
+                      <v-label>Professor</v-label>
+                      <vue-select
+                        v-model="profSelecionado"
+                        :options="professor"
+                        label="professor"
                         required
-                      ></v-select>
-                    </v-col>  
+                      ></vue-select>
+                    </v-col>
                   </v-row>
                 </v-container>
               </v-form>
@@ -125,7 +127,7 @@
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
-    </v-data-table>
+  </v-data-table>
 </template>
 
 <style>
@@ -146,8 +148,8 @@
   text-align: center;
 }
 
-.barraPesquisa{
-    padding-right:930px;
+.barraPesquisa {
+  padding-right: 930px;
 }
 </style>
 <script>
@@ -159,8 +161,8 @@ Vue.use(VueAxios, axios);
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
 var urlPeriodo = "http://api-sig-itpac-84633.herokuapp.com/api/periodo";
 var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
-var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/desativar/";
-
+var urlPatch =
+  "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/desativar/";
 
 export default {
   data: () => ({
@@ -174,19 +176,23 @@ export default {
         align: "start",
         value: "apelido",
       },
-      { text: "Professor", value: "professor.pessoa.nome" },
+      { text: "Professor", value: "pessoa.nome" },
       { text: "Período", value: "periodo.periodo" },
       { text: "Status", value: "ativo" },
       { text: "Ações", value: "acoes" },
     ],
     disciplinas: [],
+    periodo: [],
     periodosRaw: [],
-    profs: [],
+    professor: [],
+    profsRaw: [],
     editIndice: -1,
     itemEditado: {
       id: null,
       nome: "",
       apelido: "",
+      periodoSelecionado: null,
+      profSelecionado: null,
       ativo: true,
     },
     itemPadrao: {
@@ -195,8 +201,8 @@ export default {
       apelido: "",
       ativo: true,
     },
-    select: [],
-    select1: [],
+    profSelecionado: null,
+    periodoSelecionado: null,
   }),
 
   computed: {
@@ -214,51 +220,58 @@ export default {
     },
   },
 
-  created() {
+  mounted() {
     this.inicializar();
-    this.getPeriodos();
     this.getProfessores();
+    this.getPeriodos();
   },
 
   methods: {
     inicializar() {
-      this.axios.get(url, this.disciplinas).then((res) => {
-        this.disciplinas = res.data;
-        console.log(res.data);
-      });
+      this.axios
+        .get(url, this.disciplinas)
+        .then((res) => {
+          console.log(res.data);
+          this.disciplinas = res.data;
+        })
+        .catch((error) => {
+          console.warn(error);
+        });
     },
 
-    async getPeriodos(){
-      const  {
-       data 
-      } = await this.axios.get(urlPeriodo)
-     this.periodosRaw = data
-     this.periodo = data.map(d => d.periodo).filter(Boolean)
-     console.log("periodo",data,data.map(d => d.periodo))
-   },
+    reloadPage() {
+      window.location.reload();
+    },
 
-   achaidperiodo(){
-      const [selectedPeriodo] = this.periodosRaw.filter(d => d.periodo ===  this.select[0])
-      console.log(selectedPeriodo)
-   },
+    async getPeriodos() {
+      const { data } = await this.axios.get(urlPeriodo);
+      this.periodosRaw = data;
+      this.periodo = data
+        .filter((d) => d.periodo)
+        .map((d) => ({ ...d, idperiodo: d.id }))
+        .filter(Boolean);
+      //  console.log("periodo",data,data.map(d => d.periodo))
+    },
 
-   async getProfessores() {
+    //  achaidperiodo(){
+    //     const [selectedPeriodo] = this.periodosRaw.filter(d => d.periodo ===  this.select[0])
+    //     console.log(selectedPeriodo)
+    //  },
+
+    async getProfessores() {
       const { data } = await this.axios.get(urlProfessor);
-      this.profs = data;
-      this.professor = data.map((d) => d.professor.pessoa.nome).filter(Boolean);
-      console.log(
-        "professor",
-        data,
-        data.map((d) => d.professor)
-      );
+      this.profsRaw = data;
+      this.professor = data
+        .filter((d) => d.pessoa.nome)
+        .map((d) => ({ ...d.pessoa, idprofessor: d.id }));
     },
 
-    achaidprofessor() {
-      const [selectedProfessor] = this.profs.filter(
-        (d) => d.professor === this.select1[0]
-      );
-      console.log(selectedProfessor);
-    },
+    // achaidprofessor() {
+    //   const [selectedProfessor] = this.profs.filter(
+    //     (d) => d.professor === this.select1[0]
+    //   );
+    //   console.log(selectedProfessor);
+    // },
 
     editItem(item) {
       this.editIndice = this.disciplinas.indexOf(item);
@@ -274,19 +287,19 @@ export default {
 
     desativeItemConfirm() {
       // this.disciplinas.splice(this.editIndice, 1);
-       axios
-          .patch(urlPatch + this.itemEditado.id, {
-            id: this.itemEditado.id,
-            ativo: this.itemEditado.ativo,
-          })
-          .then((res) => {
-            // this.disciplinas = res.data;
-            console.log(res.data);
-            alert("A disciplina foi desativada com sucesso !");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+      axios
+        .patch(urlPatch + this.itemEditado.id, {
+          id: this.itemEditado.id,
+          ativo: this.itemEditado.ativo,
+        })
+        .then((res) => {
+          // this.disciplinas = res.data;
+          console.log(res.data);
+          alert("A disciplina foi desativada com sucesso !");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       this.fecharDesativar();
     },
 
@@ -308,31 +321,51 @@ export default {
 
     salvar() {
       if (this.editIndice > -1) {
-
         axios
           .put(url, {
             id: this.itemEditado.id,
             nome: this.itemEditado.nome,
             apelido: this.itemEditado.apelido,
+            // professor: {
+            //   id: this.profSelecionado.idprofessor,
+            // },
+            periodo: {
+              id: this.periodoSelecionado.idperiodo,
+            },
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
             //this.disciplinas = res.data;
             alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
+          })
+          .catch((error) => {
+            console.log(error);
           });
         Object.assign(this.disciplinas[this.editIndice], this.itemEditado);
-        
       } else {
-        axios.post(url, {nome: this.itemEditado.nome,ativo: this.itemEditado.ativo, apelido: this.itemEditado.apelido})
+        axios
+          .post(url, {
+            nome: this.itemEditado.nome,
+            ativo: this.itemEditado.ativo,
+            apelido: this.itemEditado.apelido,
+            // professor: [{
+            //   id: this.profSelecionado.idprofessor,
+            // }],
+            periodo: {
+              id: this.periodoSelecionado.idperiodo,
+            },
+          })
           .then((res) => {
             this.disciplinas = res.data;
-             alert("Os dados foram adicionados com sucesso !");
+            alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
+          })
+          .catch((error) => {
+            console.log(error);
           });
 
         this.disciplinas.push(this.itemEditado);
-       
       }
 
       this.fechar();

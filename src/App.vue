@@ -67,11 +67,6 @@ export default {
           { title: 'CALENDÁRIO', icon: 'mdi-calendar', to:'/calendario'}, */
     ],
   }),
-  methods: {
-    reloadPage() {
-      window.location.reload();
-    },
-  },
 };
 </script>
 

@@ -1,14 +1,15 @@
 <template>
-  <v-data-table 
-  :headers="titulos" 
-  :items="salas" 
-  :search="search" 
-  class="elevation-2">
+  <v-data-table
+    :headers="titulos"
+    :items="salas"
+    :search="search"
+    class="elevation-2 data-table"
+  >
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Sala</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
-        <v-spacer></v-spacer>
+        <v-ster></v-ster>
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
@@ -18,7 +19,7 @@
         ></v-text-field>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
-          <template v-slot:activator="{ on, attrs }">
+          <template v-slot:activator="{ on, attrs }" class="template-add">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
             <v-btn
               small
@@ -28,7 +29,8 @@
               color="green"
               v-bind="attrs"
               v-on="on"
-              ><v-icon dark> mdi-plus</v-icon></v-btn>
+              ><v-icon dark> mdi-plus</v-icon></v-btn
+            >
           </template>
           <v-card>
             <v-card-title>
@@ -84,18 +86,24 @@
         </v-dialog>
         <v-dialog v-model="dialogDesativar" max-width="500px">
           <v-card>
-            <v-card-title class="text-h5">Deseja desativar esta sala?</v-card-title>
+            <v-card-title class="text-h5"
+              >Deseja desativar esta sala?</v-card-title
+            >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small color="warning" dark @click="fecharDesativar"> Não</v-btn>
-              <v-btn small color="primary" dark @click="desativeItemConfirm">Sim</v-btn>
+              <v-btn small color="warning" dark @click="fecharDesativar">
+                Não</v-btn
+              >
+              <v-btn small color="primary" dark @click="desativeItemConfirm"
+                >Sim</v-btn
+              >
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:[`item.acoes`]="{ item }"> 
+    <template v-slot:[`item.acoes`]="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
@@ -104,13 +112,15 @@
 
 <style>
 .add {
-  width: 5%;
-  height: 5%;
+  width: 40px;
+  height: 40px;
 }
-body {
-  padding: 2%;
+.template-add {
+  padding-top: 1%;
 }
-
+.data-table {
+  padding: 3%;
+}
 </style>
 
 <script>
@@ -181,6 +191,11 @@ export default {
         console.log(res.data);
       });
     },
+
+    reloadPage() {
+      window.location.reload();
+    },
+
     editItem(item) {
       this.editIndice = this.salas.indexOf(item);
       this.itemEditado = Object.assign({}, item);
@@ -196,14 +211,17 @@ export default {
     desativeItemConfirm() {
       // this.salas.splice(this.editIndice, 1);
 
-      axios.patch(urlPatch + this.itemEditado.id, {
-       ativo: this.itemEditado.ativo}).then((res) => {
-        this.salas = res.data;
-        console.log(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      axios
+        .patch(urlPatch + this.itemEditado.id, {
+          ativo: this.itemEditado.ativo,
+        })
+        .then((res) => {
+          this.salas = res.data;
+          console.log(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
 
       this.fecharDesativar();
     },
@@ -225,7 +243,6 @@ export default {
     },
 
     salvar() {
-    
       if (this.editIndice > -1) {
         axios
           .put(url, {
@@ -243,7 +260,6 @@ export default {
           });
 
         Object.assign(this.salas[this.editIndice], this.itemEditado);
-  
       } else {
         axios
           .post(url, {
