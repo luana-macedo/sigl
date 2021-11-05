@@ -372,6 +372,7 @@ export default {
             professor : this.profSelecionado.idprofessor,
           })
           .then((res) => {
+            this.fetchItems()
             this.subgrupos = res.data;
             console.log(res.data);
           })
