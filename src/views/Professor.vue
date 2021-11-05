@@ -301,7 +301,7 @@ export default {
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            this.professores = res.data;
+            //this.professores = res.data;
             alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
           })

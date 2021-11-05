@@ -356,7 +356,7 @@ export default {
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            this.subgrupos = res.data;
+            //this.subgrupos = res.data;
             console.log(res.data);
           })
           .catch((error) => {
@@ -369,10 +369,11 @@ export default {
           .post(url, {
             nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo,
-            professor : this.profSelecionado.idprofessor,
+            professor :{
+              id: this.profSelecionado.idprofessor,
+            } 
           })
           .then((res) => {
-            this.fetchItems()
             this.subgrupos = res.data;
             console.log(res.data);
           })

@@ -239,7 +239,7 @@ export default {
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            this.salas = res.data;
+            //this.salas = res.data;
             alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
           });
