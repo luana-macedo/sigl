@@ -42,12 +42,14 @@
                       <v-text-field
                         v-model="itemEditado.periodo"
                         label="Periodo"
+                        v-mask="'####/##'"
                         :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
                       <v-text-field
                         v-model="itemEditado.dataCadastro"
                         label="Data de Cadastro"
+                        v-mask="'####-##-##'"
                         :rules="[v => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
