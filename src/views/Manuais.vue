@@ -11,7 +11,6 @@
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-text-field
-          class="barraPesquisa2"
           v-model="search"
           append-icon="mdi-magnify"
           label="Pesquisar"
@@ -71,10 +70,10 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogDesativar" max-width="350px">
+        <v-dialog v-model="dialogDesativar" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
-              >Deseja desativar este manual(is)?</v-card-title
+              >Deseja desativar este manual ?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -114,10 +113,9 @@
 .card-modal {
   text-align: center;
 }
-.barraPesquisa2 {
-  padding-right: 860px;
-}
+
 </style>
+
 <script>
 import Vue from "vue";
 import axios from "axios";
