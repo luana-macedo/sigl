@@ -67,7 +67,7 @@
                         v-model="itemEditado.pessoa.email"
                         label="E-mail"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        required
+                        required 
                       ></v-text-field>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
