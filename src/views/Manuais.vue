@@ -9,7 +9,7 @@
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Manuais</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
-        <v-spacer></v-spacer>
+        <v-ster></v-ster>
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
@@ -50,7 +50,7 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="4" md="8">
-                      {{itemEditado.fileName}}
+                      {{ itemEditado.fileName }}
                       <v-file-input
                         truncate-length="18"
                         v-model="itemEditado.fileName"
@@ -114,7 +114,6 @@
 .card-modal {
   text-align: center;
 }
-
 </style>
 
 <script>
@@ -183,6 +182,11 @@ export default {
         console.log(res.data);
       });
     },
+
+    reloadPage() {
+      window.location.reload();
+    },
+
     editItem(item) {
       this.editIndice = this.manuais.indexOf(item);
       this.itemEditado = Object.assign({}, item);

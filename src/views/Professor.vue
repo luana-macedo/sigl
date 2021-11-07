@@ -80,13 +80,12 @@
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
-                     <!--   <v-text-field
+                      <!--   <v-text-field
                         v-model="itemEditado.ativo"
                         label="Status"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field> -->
-
                     </v-col>
                     <v-col cols="8" sm="6" md="4"> </v-col>
                     <v-col cols="8" sm="6" md="4"> </v-col>
@@ -143,14 +142,14 @@
 </style>
 
 <script>
-
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
-var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/professores/desativar/"; 
+var urlPatch =
+  "http://api-sig-itpac-84633.herokuapp.com/api/professores/desativar/";
 
 export default {
   data: () => ({
@@ -230,22 +229,27 @@ export default {
         console.log(res.data);
       });
     },
+
+    reloadPage() {
+      window.location.reload();
+    },
+
     editItem(item) {
       this.editIndice = this.professores.indexOf(item);
       this.itemEditado = Object.assign({}, item);
-      this.dialog = true ;
+      this.dialog = true;
     },
 
     desativeItem(item) {
       this.editIndice = this.professores.indexOf(item);
       this.itemEditado = Object.assign({}, item);
-      this.dialogDesativar = true ;
+      this.dialogDesativar = true;
     },
 
-   desativeItemConfirm() {
+    desativeItemConfirm() {
       //this.professores.splice(this.editIndice, 1);
       if (this.editIndice > -1) {
-       axios
+        axios
           .patch(urlPatch + this.itemEditado.id, {
             //   pessoa: {
             //   nome: this.itemEditado.nome,
@@ -253,7 +257,7 @@ export default {
             //   email: this.itemEditado.email,
             //   telefone: this.itemEditado.telefone,
             // },
-            // matricula: this.itemEditado.matricula, 
+            // matricula: this.itemEditado.matricula,
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
@@ -268,9 +272,9 @@ export default {
         this.fecharDesativar();
       }
     },
-  
+
     fechar() {
-      this.dialog = false ;
+      this.dialog = false;
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
@@ -278,7 +282,7 @@ export default {
     },
 
     fecharDesativar() {
-      this.dialogDesativar = false ;
+      this.dialogDesativar = false;
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;

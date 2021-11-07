@@ -9,7 +9,7 @@
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Subgrupo</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
-        <v-spacer></v-spacer>
+        <v-ster></v-ster>
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
@@ -50,6 +50,7 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
+                      <v-label>Alunos</v-label>
                       <vue-select
                         v-model="selectAluno"
                         :options="alunos"
@@ -59,6 +60,7 @@
                       ></vue-select>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
+                      <v-label>Professor</v-label>
                       <vue-select
                         v-model="profSelecionado"
                         :options="professor"
@@ -68,13 +70,14 @@
                       ></vue-select>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
-                      <v-select
+                      <v-label>Disciplina</v-label>
+                      <vue-select
                         v-model="select1"
                         :items="disciplinas"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         label="Disciplina"
                         required
-                      ></v-select>
+                      ></vue-select>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -111,18 +114,11 @@
     <template v-slot:[`item.acoes`]="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
-     </template> 
+    </template>
   </v-data-table>
 </template>
 
 <style>
-.add {
-  width: 5%;
-  height: 5%;
-}
-body {
-  padding: 2%;
-}
 .add {
   width: 40px;
   height: 40px;
@@ -133,13 +129,9 @@ body {
 .data-table {
   padding: 3%;
 }
-#card-actions {
-  padding-left: 18%;
-}
 .card-modal {
   text-align: center;
 }
-
 </style>
 
 <script>
@@ -152,7 +144,8 @@ var url = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo";
 var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
 var urlALuno = "http://api-sig-itpac-84633.herokuapp.com/api/aluno";
 var urlDisciplina = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
-var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
+var urlPatch =
+  "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
 
 export default {
   data() {
@@ -197,20 +190,14 @@ export default {
       itemEditado: {
         id: null,
         nome: "",
-        ativo: "",
         profSelecionado: null,
-        /*   professor: "",
-      disciplina:"", */
+        ativo: "",
       },
       itemPadrao: {
         id: null,
         nome: "",
         ativo: true,
-        /*    professor: "",
-      disciplina:"", */
       },
-      //  select2: null,
-      //  status: ["ativo", "inativo"],
       selectAluno: [],
       profSelecionado: null,
       select1: [],
@@ -257,6 +244,10 @@ export default {
       ]);
     },
 
+    reloadPage() {
+      window.location.reload();
+    },
+
     async getProfessores() {
       const { data } = await this.axios.get(urlProfessor);
       this.profsRaw = data;
@@ -271,12 +262,12 @@ export default {
       this.disciplina = data.map((d) => d.disciplina).filter(Boolean);
     },
 
-    achaiddisciplina() {
-      const [selectedDisciplina] = this.disciplinas.filter(
-        (d) => d.disciplina === this.select1[0]
-      );
-      console.log(selectedDisciplina);
-    },
+    // achaiddisciplina() {
+    //   const [selectedDisciplina] = this.disciplinas.filter(
+    //     (d) => d.disciplina === this.select1[0]
+    //   );
+    //   console.log(selectedDisciplina);
+    // },
 
     async getAlunos() {
       const { data } = await this.axios.get(urlALuno);
@@ -290,7 +281,7 @@ export default {
     },
 
     achaidaluno() {
-      const [selectedAluno] = this.profsRaw.filter(
+      const [selectedAluno] = this.alunos.filter(
         (d) => d.aluno === this.selectAluno[0]
       );
       console.log(selectedAluno);
@@ -365,9 +356,9 @@ export default {
           .post(url, {
             nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo,
-            professor :{
+            professor: {
               id: this.profSelecionado.idprofessor,
-            } 
+            },
           })
           .then((res) => {
             this.subgrupos = res.data;
