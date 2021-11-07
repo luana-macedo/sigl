@@ -93,7 +93,7 @@
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)" color="blue"> mdi-pencil </v-icon>
-      <v-icon small @click="desativeItem(item)" color="red"> mdi-power-standby </v-icon>
+      <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -260,8 +260,9 @@ export default {
 
       if (this.editIndice > -1) {
         axios.put(url + "\\", formData).then((res) => {
-          // this.manuais = res.data;
+          this.itemEditado.descricao
           console.log(res.data);
+          this.reloadPage();
         });
         alert("A descrição do manual foi alterada com sucesso !");
         Object.assign(this.manuais[this.editIndice], this.itemEditado);

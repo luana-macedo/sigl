@@ -16,7 +16,7 @@
           hide-details
         ></v-text-field>
         <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="400px">
+        <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }" class="template-add">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
             <v-btn
@@ -122,7 +122,7 @@
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)" color="blue"> mdi-pencil </v-icon>
-      <v-icon small @click="desativeItem(item)" color="red"> mdi-power-standby </v-icon>
+      <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -274,6 +274,7 @@ export default {
           .then((res) => {
             console.log(res.data);
             alert("O acadêmico foi ativado com sucesso !");
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);

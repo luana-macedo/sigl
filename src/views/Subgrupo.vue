@@ -300,14 +300,6 @@ export default {
     //   console.log(selectedAluno);
     // },
 
-    valorStatus() {
-      if (this.itemEditado.ativo) {
-        color = "green";
-      } else {
-        color = "red";
-      }
-    },
-
     editItem(item) {
       this.editIndice = this.subgrupos.indexOf(item);
       this.itemEditado = Object.assign({}, item);
