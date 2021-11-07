@@ -95,7 +95,7 @@
         <v-dialog v-model="dialogDesativar" max-width="500px">
           <v-card>
             <v-card-title class="text-h5"
-              >Deseja desativar este Subgrupo?</v-card-title
+              >Deseja {{mudarStatus}} este Subgrupo?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -111,11 +111,10 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:[`item.acoes`]="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon small @click="desativeItem(item)">
-        mdi-power-standby
-      </v-icon>
+    <template v-slot:[`item.acoes`]="{ item }">   
+      <v-icon small class="mr-2" @click="editItem(item)" color="blue"> mdi-pencil </v-icon>
+      <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
+
     </template>
   </v-data-table>
 </template>
@@ -148,6 +147,7 @@ var urlALuno = "http://api-sig-itpac-84633.herokuapp.com/api/aluno";
 var urlDisciplina = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
 var urlPatch =
   "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
+var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/Ativar/";
 
 export default {
   data() {
@@ -211,6 +211,9 @@ export default {
   computed: {
     tituloForm() {
       return this.editIndice === -1 ? "Cadastrar Subgrupo" : "Editar Subgrupo";
+    },
+    mudarStatus() {
+      return this.itemEditado.ativo == true ? "Desativar " : "Ativar Subgrupo";
     },
   },
 
@@ -319,7 +322,7 @@ export default {
 
     desativeItemConfirm() {
       // this.subgrupos.splice(this.editIndice, 1);
-      if (this.editIndice > -1) {
+      if (this.itemEditado.ativo == true) {
         axios
           .patch(urlPatch + this.itemEditado.id, {
             ativo: this.itemEditado.ativo,
@@ -333,8 +336,21 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-        this.fecharDesativar();
       }
+       else {
+       axios
+          .patch(urlDispatch + this.itemEditado.id, {
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            console.log(res.data);
+            alert("O subgrupo foi ativado com sucesso !");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+          }
+          this.fecharDesativar();
     },
 
     fechar() {

@@ -107,7 +107,7 @@
         <v-dialog v-model="dialogDesativar" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
-              >Deseja desativar esta disciplina?</v-card-title
+              >Deseja {{mudarStatus}} esta disciplina?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -124,7 +124,7 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+      <v-icon small class="mr-2" @click="editItem(item)" color="blue"> mdi-pencil </v-icon>
       <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
@@ -163,6 +163,7 @@ var urlPeriodo = "http://api-sig-itpac-84633.herokuapp.com/api/periodo";
 var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
 var urlPatch =
   "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/desativar/";
+var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/ativar/";
 
 export default {
   data: () => ({
@@ -208,6 +209,9 @@ export default {
   computed: {
     tituloForm() {
       return this.editIndice === -1 ? "Cadastrar disciplina" : "Editar Dados";
+    },
+    mudarStatus() {
+      return this.itemEditado.ativo == true ? "Desativar " : "Ativar ";
     },
   },
 
@@ -286,21 +290,34 @@ export default {
     },
 
     desativeItemConfirm() {
-      // this.disciplinas.splice(this.editIndice, 1);
+       if (this.itemEditado.ativo == true) {
       axios
         .patch(urlPatch + this.itemEditado.id, {
           ativo: this.itemEditado.ativo,
         })
         .then((res) => {
-          // this.disciplinas = res.data;
           console.log(res.data);
           alert("A disciplina foi desativada com sucesso !");    
         })
         .catch((error) => {
           console.log(error);
         });
-      this.fecharDesativar();
-      // this.reloadPage();    
+       }
+       else {
+       axios
+          .patch(urlDispatch + this.itemEditado.id, {
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            console.log(res.data);
+            alert("A disciplina foi ativado com sucesso !");
+            this.reloadPage();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+          }
+          this.fecharDesativar();
     },
 
     fechar() {
@@ -309,6 +326,7 @@ export default {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
       });
+    
     },
 
     fecharDesativar() {

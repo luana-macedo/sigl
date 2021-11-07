@@ -87,7 +87,7 @@
         <v-dialog v-model="dialogDesativar" max-width="500px">
           <v-card>
             <v-card-title class="text-h5"
-              >Deseja desativar esta sala?</v-card-title
+              >Deseja {{mudarStatus}} esta sala?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -104,7 +104,7 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+      <v-icon small class="mr-2" @click="editItem(item)" color="blue"> mdi-pencil </v-icon>
       <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
@@ -131,6 +131,7 @@ Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/sala";
 var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/sala/desativar/";
+var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/sala/ativar/";
 
 export default {
   data: () => ({
@@ -168,6 +169,9 @@ export default {
   computed: {
     tituloForm() {
       return this.editIndice === -1 ? "Cadastrar Sala" : "Editar Sala";
+    },
+    mudarStatus() {
+      return this.itemEditado.ativo == true ? "Desativar " : "Ativar Sala ";
     },
   },
 
@@ -209,22 +213,34 @@ export default {
     },
 
     desativeItemConfirm() {
-      // this.salas.splice(this.editIndice, 1);
-
+      if (this.itemEditado.ativo == true) {
       axios
         .patch(urlPatch + this.itemEditado.id, {
           ativo: this.itemEditado.ativo,
         })
         .then((res) => {
-          this.salas = res.data;
           console.log(res.data);
+          alert("Esta sala  foi desativada com sucesso !");
           this.reloadPage();
         })
         .catch((error) => {
           console.log(error);
         });
-
-      this.fecharDesativar();
+    }
+    else {
+       axios
+          .patch(urlDispatch + this.itemEditado.id, {
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            console.log(res.data);
+            alert("Esta sala foi ativada com sucesso !");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+          }
+          this.fecharDesativar();
     },
 
     fechar() {
