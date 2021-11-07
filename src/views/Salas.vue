@@ -218,6 +218,7 @@ export default {
         .then((res) => {
           this.salas = res.data;
           console.log(res.data);
+          this.reloadPage();
         })
         .catch((error) => {
           console.log(error);
@@ -257,6 +258,7 @@ export default {
             //this.salas = res.data;
             alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
+            this.reloadPage();
           });
 
         Object.assign(this.salas[this.editIndice], this.itemEditado);
@@ -273,6 +275,7 @@ export default {
             this.salas = res.data;
             alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
+             this.reloadPage();
           });
 
         this.salas.push(this.itemEditado);

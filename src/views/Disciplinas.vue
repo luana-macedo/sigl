@@ -45,7 +45,7 @@
                       <v-text-field
                         v-model="itemEditado.nome"
                         label="Nome"
-                        :rules="['Campo Obrigatório']"
+                        :rules="[(v) => !!v ||'Campo Obrigatório']"
                         maxlenght="100"
                         required
                       ></v-text-field>
@@ -54,7 +54,7 @@
                       <v-text-field
                         v-model="itemEditado.apelido"
                         label="Apelido"
-                        :rules="['Campo Obrigatório']"
+                        :rules="[(v) => !!v || 'Campo Obrigatório']"
                         required
                       ></v-text-field>
                     </v-col>
@@ -176,7 +176,7 @@ export default {
         align: "start",
         value: "apelido",
       },
-      { text: "Professor", value: "pessoa.nome" },
+      { text: "Professor", value: "professor.pessoa.nome" },
       { text: "Período", value: "periodo.periodo" },
       { text: "Status", value: "ativo" },
       { text: "Ações", value: "acoes" },
@@ -289,18 +289,18 @@ export default {
       // this.disciplinas.splice(this.editIndice, 1);
       axios
         .patch(urlPatch + this.itemEditado.id, {
-          id: this.itemEditado.id,
           ativo: this.itemEditado.ativo,
         })
         .then((res) => {
           // this.disciplinas = res.data;
           console.log(res.data);
-          alert("A disciplina foi desativada com sucesso !");
+          alert("A disciplina foi desativada com sucesso !");    
         })
         .catch((error) => {
           console.log(error);
         });
       this.fecharDesativar();
+      // this.reloadPage();    
     },
 
     fechar() {
@@ -329,13 +329,12 @@ export default {
             // professor: {
             //   id: this.profSelecionado.idprofessor,
             // },
+            ativo: this.itemEditado.ativo,
             periodo: {
               id: this.periodoSelecionado.idperiodo,
             },
-            ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            //this.disciplinas = res.data;
             alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
           })
@@ -364,11 +363,10 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-
         this.disciplinas.push(this.itemEditado);
       }
-
       this.fechar();
+      // this.reloadPage();
     },
   },
 };

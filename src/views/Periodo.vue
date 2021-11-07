@@ -211,9 +211,9 @@ export default {
           ativo: this.itemEditado.ativo,
         })
         .then((res) => {
-          //this.periodos = res.data;
           alert("O período foi desativado com sucesso !");
           console.log(res.data);
+          this.reloadPage();
         })
         .catch((error) => {
           console.log(error);
@@ -251,6 +251,7 @@ export default {
             //this.periodos = res.data
             alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
+            this.reloadPage();
           });
         Object.assign(this.periodos[this.editIndice], this.itemEditado);
       } else {
@@ -264,6 +265,7 @@ export default {
             this.periodos = res.data;
             alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
+            this.reloadPage();
           });
         this.periodos.push(this.itemEditado);
       }

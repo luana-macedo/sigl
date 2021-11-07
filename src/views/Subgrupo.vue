@@ -3,7 +3,7 @@
     :headers="titulos"
     :items="subgrupos"
     :search="search"
-    class="elevation-2"
+    class="elevation-2 data-table"
   >
     <template v-slot:top>
       <v-toolbar flat>
@@ -72,8 +72,8 @@
                     <v-col cols="8" sm="6" md="4">
                       <v-label>Disciplina</v-label>
                       <vue-select
-                        v-model="select1"
-                        :items="disciplinas"
+                        v-model="discSelecionada"
+                        :options="disciplina"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         label="Disciplina"
                         required
@@ -113,7 +113,9 @@
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
+      <v-icon small @click="desativeItem(item)">
+        mdi-power-standby
+      </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -185,12 +187,14 @@ export default {
       professor: [],
       profsRaw: [],
       alunos: [],
-      disciplinas: [],
+      disciplina: [],
+      disciplinasRaw: [],
       editIndice: -1,
       itemEditado: {
         id: null,
         nome: "",
         profSelecionado: null,
+        discSelecionada: null,
         ativo: "",
       },
       itemPadrao: {
@@ -200,7 +204,7 @@ export default {
       },
       selectAluno: [],
       profSelecionado: null,
-      select1: [],
+      discSelecionada: null,
     };
   },
 
@@ -258,8 +262,14 @@ export default {
 
     async getDisciplinas() {
       const { data } = await this.axios.get(urlDisciplina);
-      this.disciplinas = data;
-      this.disciplina = data.map((d) => d.disciplina).filter(Boolean);
+      this.disciplinasRaw = data;
+      this.disciplina = data.map((d) => ({
+        ...d,
+        disciplina: d.disciplina.map((a) => a.nome).filter(Boolean),
+      }));
+
+      // .filter((d) => d.nome)
+      // .map((d) => ({ ...d, iddisciplina: d.id }));
     },
 
     // achaiddisciplina() {
@@ -280,11 +290,19 @@ export default {
       this.alunos = alunos;
     },
 
-    achaidaluno() {
-      const [selectedAluno] = this.alunos.filter(
-        (d) => d.aluno === this.selectAluno[0]
-      );
-      console.log(selectedAluno);
+    // achaidaluno() {
+    //   const [selectedAluno] = this.alunos.filter(
+    //     (d) => d.aluno === this.selectAluno[0]
+    //   );
+    //   console.log(selectedAluno);
+    // },
+
+    valorStatus() {
+      if (this.itemEditado.ativo) {
+        color = "green";
+      } else {
+        color = "red";
+      }
     },
 
     editItem(item) {
@@ -310,6 +328,7 @@ export default {
             //this.subgrupos = res.data;
             alert("O subgrupo foi desativado com sucesso !");
             console.log(res.data);
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
@@ -345,6 +364,7 @@ export default {
           .then((res) => {
             //this.subgrupos = res.data;
             console.log(res.data);
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
@@ -359,10 +379,14 @@ export default {
             professor: {
               id: this.profSelecionado.idprofessor,
             },
+            disciplina: {
+              id: this.discSelecionada.iddisciplina,
+            },
           })
           .then((res) => {
             this.subgrupos = res.data;
             console.log(res.data);
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);

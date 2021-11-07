@@ -18,7 +18,7 @@
           hide-details
         ></v-text-field>
         <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="400px">
+        <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }" class="template-add">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
             <v-btn
@@ -80,12 +80,6 @@
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
-                      <!--   <v-text-field
-                        v-model="itemEditado.ativo"
-                        label="Status"
-                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        required
-                      ></v-text-field> -->
                     </v-col>
                     <v-col cols="8" sm="6" md="4"> </v-col>
                     <v-col cols="8" sm="6" md="4"> </v-col>
@@ -157,13 +151,13 @@ export default {
     dialog: false,
     dialogDesativar: false,
     titulos: [
-      { text: "Nome", value: "pessoa.nome" },
-      { text: "CPF", value: "pessoa.cpf" },
-      { text: "Telefone", value: "pessoa.telefone" },
-      { text: "Email", value: "pessoa.email" },
-      { text: "Matricula", value: "matricula" },
-      { text: "Status", value: "ativo" },
-      { text: "Ações", value: "acoes" },
+      { text: "Nome", align: "center", value: "pessoa.nome" },
+      { text: "CPF", align: "center", value: "pessoa.cpf" },
+      { text: "Telefone", align: "center", value: "pessoa.telefone" },
+      { text: "Email", align: "center", value: "pessoa.email" },
+      { text: "Matricula", align: "center",value: "matricula" },
+      { text: "Status", align: "center", value: "ativo" },
+      { text: "Ações", align: "center", value: "acoes" },
     ],
     professores: [],
     editIndice: -1,
@@ -251,20 +245,12 @@ export default {
       if (this.editIndice > -1) {
         axios
           .patch(urlPatch + this.itemEditado.id, {
-            //   pessoa: {
-            //   nome: this.itemEditado.nome,
-            //   cpf: this.itemEditado.cpf,
-            //   email: this.itemEditado.email,
-            //   telefone: this.itemEditado.telefone,
-            // },
-            // matricula: this.itemEditado.matricula,
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            //this.professores = res.data;
-            console.log("res:");
             console.log(res.data);
             alert("O acadêmico foi desativado com sucesso !");
+             this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
@@ -308,6 +294,7 @@ export default {
             //this.professores = res.data;
             alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
+             this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
@@ -328,14 +315,16 @@ export default {
           })
           .then((res) => {
             this.professores = res.data;
+            alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
+             this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
           });
 
         this.professores.push(this.itemEditado);
-        alert("Os dados foram adicionados com sucesso !");
+     
       }
 
       this.fechar();

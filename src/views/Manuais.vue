@@ -71,6 +71,7 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        
         <v-dialog v-model="dialogDesativar" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
@@ -133,12 +134,12 @@ export default {
     titulos: [
       {
         text: "Descrição",
-        align: "start",
+        align: "center",
         value: "descricao",
       },
-      { text: "Arquivo", value: "fileName" },
-      { text: "Status", value: "ativo" },
-      { text: "Ações", value: "acoes" },
+      { text: "Arquivo", align: "center", value: "fileName" },
+      { text: "Status", align: "center", value: "ativo" },
+      { text: "Ações", align: "center", value: "acoes" },
     ],
     manuais: [],
     editIndice: -1,

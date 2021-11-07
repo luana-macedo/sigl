@@ -250,20 +250,12 @@ export default {
       if (this.editIndice > -1) {
        axios
           .patch(urlPatch + this.itemEditado.id, {
-            //   pessoa: {
-            //   nome: this.itemEditado.nome,
-            //   cpf: this.itemEditado.cpf,
-            //   email: this.itemEditado.email,
-            //   telefone: this.itemEditado.telefone,
-            // },
-            // matricula: this.itemEditado.matricula, 
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            //this.alunos = res.data;
-            console.log("res:");
             console.log(res.data);
             alert("O acadêmico foi desativado com sucesso !");
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
@@ -304,9 +296,9 @@ export default {
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            //this.alunos = res.data;
             alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
@@ -329,6 +321,7 @@ export default {
             this.alunos = res.data;
             alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
