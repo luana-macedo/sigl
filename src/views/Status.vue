@@ -74,8 +74,8 @@
       </v-toolbar>
     </template>
     <template v-slot:item.acoes="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon small @click="deleteItem(item)"> mdi-power-standby </v-icon>
+      <v-icon small class="mr-2" @click="editItem(item)" color="blue"> mdi-pencil </v-icon>
+      <v-icon small @click="deleteItem(item)" color="red"> mdi-power-standby </v-icon>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="inicializar"> Reset </v-btn>

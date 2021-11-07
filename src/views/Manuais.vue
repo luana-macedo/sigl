@@ -91,8 +91,8 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
+      <v-icon small class="mr-2" @click="editItem(item)" color="blue"> mdi-pencil </v-icon>
+      <v-icon small @click="desativeItem(item)" color="red"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -108,6 +108,7 @@
 .data-table {
   padding: 3%;
 }
+
 #card-actions {
   padding-left: 18%;
 }
@@ -209,7 +210,7 @@ export default {
           .then((res) => {
             // this.manuais = res.data;
             console.log(res.data);
-            alert("O período foi desativado com sucesso !");
+            alert("O manual foi desativado com sucesso !");
           })
           .catch((error) => {
             console.log(error);
@@ -240,7 +241,7 @@ export default {
       formData.set("descricao", this.itemEditado.descricao);
 
       if (this.editIndice > -1) {
-        axios.patch(url + "\\", formData).then((res) => {
+        axios.put(url + "\\", formData).then((res) => {
           // this.manuais = res.data;
           console.log(res.data);
         });
