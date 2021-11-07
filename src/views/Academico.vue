@@ -149,7 +149,7 @@ Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/aluno";
 var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/aluno/desativar/"; 
-var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/manual/ativar/";
+var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/aluno/Ativar/";
 
 export default {
   data: () => ({
@@ -195,7 +195,7 @@ export default {
       return this.editIndice === -1 ? "Cadastrar Academico" : "Editar Dados";
     },
     mudarStatus() {
-      return this.itemEditado.ativo == true ? "Desativar Academico" : "Ativar Academico";
+      return this.itemEditado.ativo == true ? "Desativar " : "Ativar Academico";
     },
   },
   props: {

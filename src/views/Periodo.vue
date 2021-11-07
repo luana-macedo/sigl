@@ -73,7 +73,7 @@
         <v-dialog v-model="dialogDesativar" max-width="400px">
           <v-card>
             <v-card-title class="text-h5"
-              >Deseja desativar este período?</v-card-title
+              >Deseja {{mudarStatus}} este período?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -119,6 +119,7 @@ Vue.use(VueAxios, axios);
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/periodo";
 var urlPatch =
   "http://api-sig-itpac-84633.herokuapp.com/api/periodo/desativar/";
+var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/periodo/ativar/";
 
 export default {
   data: () => ({
@@ -163,6 +164,9 @@ export default {
     tituloForm() {
       return this.editIndice === -1 ? "Cadastrar Periodo" : "Editar Dados";
     },
+    mudarStatus() {
+      return this.itemEditado.ativo == true ? "Desativar " : "Ativar Periodo";
+    },
   },
 
   watch: {
@@ -203,7 +207,7 @@ export default {
     },
 
     desativeItemConfirm() {
-      // this.periodos.splice(this.editIndice, 1);
+      if (this.itemEditado.ativo == true) {
       axios
         .patch(urlPatch + this.itemEditado.id, {
           id: this.itemEditado.id,
@@ -218,8 +222,21 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-
-      this.fecharDesativar();
+    }
+         else {
+       axios
+          .patch(urlDispatch + this.itemEditado.id, {
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            console.log(res.data);
+            alert("O acadêmico foi ativado com sucesso !");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+          }
+          this.fecharDesativar();
     },
 
     fechar() {

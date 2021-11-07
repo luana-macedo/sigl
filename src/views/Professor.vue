@@ -105,7 +105,7 @@
         <v-dialog v-model="dialogDesativar" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
-              >Deseja desativar este aluno ?</v-card-title
+              >Deseja {{mudarStatus}} este aluno ?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -150,6 +150,7 @@ Vue.use(VueAxios, axios);
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
 var urlPatch =
   "http://api-sig-itpac-84633.herokuapp.com/api/professores/desativar/";
+  var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/professores/ativar/";
 
 export default {
   data: () => ({
@@ -193,6 +194,9 @@ export default {
   computed: {
     tituloForm() {
       return this.editIndice === -1 ? "Cadastrar Professor" : "Editar Dados";
+    },
+    mudarStatus() {
+      return this.itemEditado.ativo == true ? "Desativar " : "Ativar Prodessor";
     },
   },
   props: {
@@ -248,7 +252,7 @@ export default {
 
     desativeItemConfirm() {
       //this.professores.splice(this.editIndice, 1);
-      if (this.editIndice > -1) {
+      if (this.itemEditado.ativo == true) {
         axios
           .patch(urlPatch + this.itemEditado.id, {
             //   pessoa: {
@@ -264,13 +268,26 @@ export default {
             //this.professores = res.data;
             console.log("res:");
             console.log(res.data);
-            alert("O acadêmico foi desativado com sucesso !");
+            alert("O professor foi desativado com sucesso !");
           })
           .catch((error) => {
             console.log(error);
           });
-        this.fecharDesativar();
       }
+      else {
+       axios
+          .patch(urlDispatch + this.itemEditado.id, {
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            console.log(res.data);
+            alert("O professor foi ativado com sucesso !");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+          }
+          this.fecharDesativar();
     },
 
     fechar() {
