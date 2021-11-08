@@ -298,6 +298,7 @@ export default {
         .then((res) => {
           console.log(res.data);
           alert("A disciplina foi desativada com sucesso !");    
+           this.reloadPage();
         })
         .catch((error) => {
           console.log(error);
@@ -355,6 +356,7 @@ export default {
           .then((res) => {
             alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
+             this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
@@ -377,6 +379,7 @@ export default {
             this.disciplinas = res.data;
             alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
+             this.reloadPage();
           })
           .catch((error) => {
             console.log(error);

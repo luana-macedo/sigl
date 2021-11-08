@@ -262,6 +262,7 @@ export default {
             console.log("res:");
             console.log(res.data);
             alert("O acadêmico foi desativado com sucesso !");
+             this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
@@ -305,6 +306,7 @@ export default {
             //this.professores = res.data;
             alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
+             this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
@@ -333,6 +335,7 @@ export default {
 
         this.professores.push(this.itemEditado);
         alert("Os dados foram adicionados com sucesso !");
+         this.reloadPage();
       }
 
       this.fechar();
