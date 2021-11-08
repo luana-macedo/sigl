@@ -193,7 +193,7 @@ export default {
       return this.editIndice === -1 ? "Cadastrar Professor" : "Editar Dados";
     },
     mudarStatus() {
-      return this.itemEditado.ativo == true ? "desativar " : "ativar ";
+      return this.itemEditado.ativo === "ativo" ? " desativar " : " ativar ";
     },
   },
   props: {

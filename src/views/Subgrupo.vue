@@ -195,7 +195,7 @@ export default {
       return this.editIndice === -1 ? "Cadastrar Subgrupo" : "Editar Subgrupo";
     },
     mudarStatus() {
-      return this.itemEditado.ativo == true ? "desativar " : "ativar ";
+      return this.itemEditado.ativo == "ativo" ? "desativar " : "ativar ";
     },
   },
 
@@ -221,7 +221,12 @@ export default {
           this.subgrupos = res.data.map((d) => ({
             ...d,
             alunos: d.alunos.map((a) => a.pessoa.nome).filter(Boolean),
-          }));
+          })
+          ).map(p => {
+            p.ativo = (p.ativo?"ativo":"desativo")
+            return p; 
+          });
+
         })
         .catch((error) => {
           console.warn(error);
@@ -325,7 +330,7 @@ export default {
           .put(url, {
             id: this.itemEditado.id,
             nome: this.itemEditado.nome,
-            ativo: this.itemEditado.ativo,
+            ativo: this.itemEditado.ativo === "ativo",
             /* professor: {
               id: this.profSelecionado.idprofessor,
             }, */
