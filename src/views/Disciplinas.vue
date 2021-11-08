@@ -9,7 +9,7 @@
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Disciplina</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
-        <v-ster></v-ster>
+        <!-- <v-ster></v-ster> -->
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
@@ -128,7 +128,7 @@
         mdi-pencil
       </v-icon>
       <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
-    </template>
+    </template> 
   </v-data-table>
 </template>
 
@@ -142,16 +142,6 @@
 }
 .data-table {
   padding: 3%;
-}
-#card-actions {
-  padding-left: 18%;
-}
-.card-modal {
-  text-align: center;
-}
-
-.barraPesquisa {
-  padding-right: 930px;
 }
 </style>
 <script>
@@ -180,7 +170,7 @@ export default {
         align: "start",
         value: "apelido",
       },
-      { text: "Professor", value: "professor.pessoa.nome" },
+      { text: "Professor", value: "professor" },
       { text: "Período", value: "periodo.periodo" },
       { text: "Status", value: "ativo" },
       { text: "Ações", value: "acoes" },
@@ -196,7 +186,7 @@ export default {
       nome: "",
       apelido: "",
       periodoSelecionado: null,
-      profSelecionado: null,
+      profSelecionado: [],
       ativo: true,
     },
     itemPadrao: {
@@ -205,7 +195,7 @@ export default {
       apelido: "",
       ativo: true,
     },
-    profSelecionado: null,
+    profSelecionado: [],
     periodoSelecionado: null,
   }),
 
@@ -229,12 +219,10 @@ export default {
 
   mounted() {
     this.inicializar();
-    this.getProfessores();
-    this.getPeriodos();
   },
 
   methods: {
-    inicializar() {
+    async inicializar() {
       this.axios
         .get(url, this.disciplinas)
         .then((res) => {
@@ -244,6 +232,7 @@ export default {
         .catch((error) => {
           console.warn(error);
         });
+      await Promise.all([this.getProfessores(), this.getPeriodos()]);
     },
 
     reloadPage() {
@@ -269,16 +258,16 @@ export default {
       const { data } = await this.axios.get(urlProfessor);
       this.profsRaw = data;
       this.professor = data
-        .filter((d) => d.pessoa.nome)
-        .map((d) => ({ ...d.pessoa, idprofessor: d.id }));
+        .filter((d) => d.pessoa.nome).map((d) => ({ ...d, idprofessor: d.id }));
+      console.log("lista de profs", this.professor);
     },
 
-    // achaidprofessor() {
-    //   const [selectedProfessor] = this.profs.filter(
-    //     (d) => d.professor === this.select1[0]
-    //   );
-    //   console.log(selectedProfessor);
-    // },
+    achaidprofessor() {
+       const [selectedProfessor] = this.profsRaw.filter(
+         (d) => d.professor === this.profSelecionado[0]
+       );
+       console.log("professor selecionado",selectedProfessor);
+     },
 
     editItem(item) {
       this.editIndice = this.disciplinas.indexOf(item);

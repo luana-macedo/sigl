@@ -50,16 +50,6 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
-                      <v-label>Alunos</v-label>
-                      <vue-select
-                        v-model="selectAluno"
-                        :options="alunos"
-                        label="nome"
-                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        required
-                      ></vue-select>
-                    </v-col>
-                    <v-col cols="8" sm="6" md="4">
                       <v-label>Professor</v-label>
                       <vue-select
                         v-model="profSelecionado"
@@ -70,12 +60,12 @@
                       ></vue-select>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
-                      <v-label>Disciplina</v-label>
+                      <v-label>Alunos</v-label>
                       <vue-select
-                        v-model="discSelecionada"
-                        :options="disciplina"
+                        v-model="alunoSelecionado"
+                        :options="alunos"
+                        label="nome"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        label="Disciplina"
                         required
                       ></vue-select>
                     </v-col>
@@ -145,11 +135,8 @@ Vue.use(VueAxios, axios);
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo";
 var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
 var urlALuno = "http://api-sig-itpac-84633.herokuapp.com/api/aluno";
-var urlDisciplina = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
-var urlPatch =
-  "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
-var urlDispatch =
-  "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/Ativar/";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
+var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/Ativar/";
 
 export default {
   data() {
@@ -169,11 +156,6 @@ export default {
           value: "professor.pessoa.nome",
         },
         {
-          text: "Disciplina",
-          align: "center",
-          value: "disciplina.nome",
-        },
-        {
           text: "Alunos",
           align: "center",
           value: "alunos",
@@ -189,24 +171,22 @@ export default {
       professor: [],
       profsRaw: [],
       alunos: [],
-      disciplina: [],
-      disciplinasRaw: [],
+      alunosRaw: [],
       editIndice: -1,
       itemEditado: {
         id: null,
         nome: "",
         profSelecionado: null,
-        discSelecionada: null,
-        ativo: "",
+        alunoSelecionado: [],
+        ativo: null,
       },
       itemPadrao: {
         id: null,
         nome: "",
         ativo: true,
       },
-      selectAluno: [],
+      alunoSelecionado: [],
       profSelecionado: null,
-      discSelecionada: null,
     };
   },
 
@@ -246,11 +226,7 @@ export default {
         .catch((error) => {
           console.warn(error);
         });
-      await Promise.all([
-        this.getProfessores(),
-        this.getDisciplinas(),
-        this.getAlunos(),
-      ]);
+      await Promise.all([this.getProfessores(), this.getAlunos()]);
     },
 
     reloadPage() {
@@ -265,29 +241,9 @@ export default {
         .map((d) => ({ ...d.pessoa, idprofessor: d.id }));
     },
 
-    async getDisciplinas() {
-      const { data } = await this.axios.get(urlDisciplina);
-      this.disciplinasRaw = data;
-      this.disciplina = data.map((d) => ({
-        ...d,
-        disciplina: d.disciplina.map((a) => a.nome).filter(Boolean),
-      }));
-
-      // .filter((d) => d.nome)
-      // .map((d) => ({ ...d, iddisciplina: d.id }));
-    },
-
-    // achaiddisciplina() {
-    //   const [selectedDisciplina] = this.disciplinas.filter(
-    //     (d) => d.disciplina === this.select1[0]
-    //   );
-    //   console.log(selectedDisciplina);
-    // },
-
     async getAlunos() {
       const { data } = await this.axios.get(urlALuno);
-      console.log(data);
-      this.aluno = data;
+      this.alunosRaw = data;
       const alunos = data
         .filter((d) => d.pessoa.nome)
         .map((d) => ({ ...d.pessoa, idaluno: d.id }));
@@ -295,12 +251,12 @@ export default {
       this.alunos = alunos;
     },
 
-    // achaidaluno() {
-    //   const [selectedAluno] = this.alunos.filter(
-    //     (d) => d.aluno === this.selectAluno[0]
-    //   );
-    //   console.log(selectedAluno);
-    // },
+    /* achaidaluno() {
+      const [selectedAluno] = this.alunos.filter(
+       (d) => d.aluno === this.selectAluno[0]
+     );
+    console.log(selectedAluno);
+    },*/
 
     editItem(item) {
       this.editIndice = this.subgrupos.indexOf(item);
@@ -370,11 +326,14 @@ export default {
             id: this.itemEditado.id,
             nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo,
+            professor: {
+              id: this.profSelecionado.idprofessor,
+            },
           })
           .then((res) => {
-            //this.subgrupos = res.data;
             console.log(res.data);
             alert("Os dados foram atualizados com sucesso !");
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
@@ -387,9 +346,6 @@ export default {
             ativo: this.itemEditado.ativo,
             professor: {
               id: this.profSelecionado.idprofessor,
-            },
-            disciplina: {
-              id: this.discSelecionada.iddisciplina,
             },
           })
           .then((res) => {
