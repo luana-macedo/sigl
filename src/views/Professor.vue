@@ -18,7 +18,7 @@
           hide-details
         ></v-text-field>
         <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="500px">
+        <v-dialog v-model="dialog" max-width="400px">
           <template v-slot:activator="{ on, attrs }" class="template-add">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
             <v-btn
@@ -80,6 +80,7 @@
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
+                      
                     </v-col>
                     <v-col cols="8" sm="6" md="4"> </v-col>
                     <v-col cols="8" sm="6" md="4"> </v-col>
@@ -99,7 +100,7 @@
         <v-dialog v-model="dialogDesativar" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
-              >Deseja {{mudarStatus}} este Professor ?</v-card-title
+              >Deseja {{ mudarStatus }} este professor ?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -120,6 +121,7 @@
       <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
+
 </template>
 
 <style>
@@ -142,9 +144,9 @@ import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
-var urlPatch =
-  "http://api-sig-itpac-84633.herokuapp.com/api/professores/desativar/";
-  var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/professores/ativar/";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/professores/desativar/";
+var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/professores/ativar/";
+
 
 export default {
   data: () => ({
@@ -152,13 +154,13 @@ export default {
     dialog: false,
     dialogDesativar: false,
     titulos: [
-      { text: "Nome", align: "center", value: "pessoa.nome" },
-      { text: "CPF", align: "center", value: "pessoa.cpf" },
-      { text: "Telefone", align: "center", value: "pessoa.telefone" },
-      { text: "Email", align: "center", value: "pessoa.email" },
-      { text: "Matricula", align: "center",value: "matricula" },
-      { text: "Status", align: "center", value: "ativo" },
-      { text: "Ações", align: "center", value: "acoes" },
+      { text: "Nome", value: "pessoa.nome" },
+      { text: "CPF", value: "pessoa.cpf" },
+      { text: "Telefone", value: "pessoa.telefone" },
+      { text: "Email", value: "pessoa.email" },
+      { text: "Matricula", value: "matricula" },
+      { text: "Status", value: "ativo" },
+      { text: "Ações", value: "acoes" },
     ],
     professores: [],
     editIndice: -1,
@@ -184,13 +186,14 @@ export default {
       matricula: "",
       ativo: true,
     },
+    esta_ativo: true,
   }),
   computed: {
     tituloForm() {
       return this.editIndice === -1 ? "Cadastrar Professor" : "Editar Dados";
     },
     mudarStatus() {
-      return this.itemEditado.ativo == true ? "Desativar " : "Ativar";
+      return this.itemEditado.ativo == true ? "desativar " : "ativar ";
     },
   },
   props: {
@@ -223,8 +226,15 @@ export default {
   methods: {
     inicializar() {
       axios.get(url, this.professores).then((res) => {
-        this.professores = res.data;
-        console.log(res.data);
+        this.professores = res.data.map(p => {
+          p.ativo = (p.ativo?"ativo":"desativo")
+          return p; 
+        });
+        
+        console.log("res.data");
+        console.table(res.data);
+        console.log("this.professores");
+        console.log(this.professores);
       });
     },
 
@@ -253,15 +263,14 @@ export default {
           })
           .then((res) => {
             console.log(res.data);
-            alert("O acadêmico foi desativado com sucesso !");
+            alert("O professor foi desativado com sucesso !");
             this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
           });
-      }
-      else {
-       axios
+      } else {
+        axios
           .patch(urlDispatch + this.itemEditado.id, {
             ativo: this.itemEditado.ativo,
           })
@@ -273,8 +282,8 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-          }
-          this.fecharDesativar();
+      }
+      this.fecharDesativar();
     },
 
     fechar() {
@@ -306,12 +315,13 @@ export default {
               telefone: this.itemEditado.pessoa.telefone,
             },
             matricula: this.itemEditado.matricula,
-            ativo: this.itemEditado.ativo,
+            ativo: this.itemEditado.ativo === "ativo",
           })
           .then((res) => {
+            //this.professores = res.data;
             alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
-            this.reloadPage();
+             this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
@@ -332,8 +342,8 @@ export default {
           })
           .then((res) => {
             this.professores = res.data;
-            alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
+            alert("Os dados foram adicionados com sucesso !");
             this.reloadPage();
           })
           .catch((error) => {
@@ -341,7 +351,6 @@ export default {
           });
 
         this.professores.push(this.itemEditado);
-     
       }
 
       this.fechar();

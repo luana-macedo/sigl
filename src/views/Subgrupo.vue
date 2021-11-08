@@ -50,16 +50,6 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
-                      <v-label>Alunos</v-label>
-                      <vue-select
-                        v-model="selectAluno"
-                        :options="alunos"
-                        label="nome"
-                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        required
-                      ></vue-select>
-                    </v-col>
-                    <v-col cols="8" sm="6" md="4">
                       <v-label>Professor</v-label>
                       <vue-select
                         v-model="profSelecionado"
@@ -70,12 +60,12 @@
                       ></vue-select>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
-                      <v-label>Disciplina</v-label>
+                      <v-label>Alunos</v-label>
                       <vue-select
-                        v-model="discSelecionada"
-                        :options="disciplina"
+                        v-model="alunoSelecionado"
+                        :options="alunos"
+                        label="nome"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        label="Disciplina"
                         required
                       ></vue-select>
                     </v-col>
@@ -95,7 +85,7 @@
         <v-dialog v-model="dialogDesativar" max-width="500px">
           <v-card>
             <v-card-title class="text-h5"
-              >Deseja {{mudarStatus}} este Subgrupo?</v-card-title
+              >Deseja {{ mudarStatus }} este Subgrupo?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -111,10 +101,11 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:[`item.acoes`]="{ item }">   
-      <v-icon small class="mr-2" @click="editItem(item)" color="blue"> mdi-pencil </v-icon>
+    <template v-slot:[`item.acoes`]="{ item }">
+      <v-icon small class="mr-2" @click="editItem(item)" color="blue">
+        mdi-pencil
+      </v-icon>
       <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
-
     </template>
   </v-data-table>
 </template>
@@ -144,9 +135,7 @@ Vue.use(VueAxios, axios);
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo";
 var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
 var urlALuno = "http://api-sig-itpac-84633.herokuapp.com/api/aluno";
-var urlDisciplina = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
-var urlPatch =
-  "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
 var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/Ativar/";
 
 export default {
@@ -167,11 +156,6 @@ export default {
           value: "professor.pessoa.nome",
         },
         {
-          text: "Disciplina",
-          align: "center",
-          value: "disciplina.nome",
-        },
-        {
           text: "Alunos",
           align: "center",
           value: "alunos",
@@ -187,24 +171,22 @@ export default {
       professor: [],
       profsRaw: [],
       alunos: [],
-      disciplina: [],
-      disciplinasRaw: [],
+      alunosRaw: [],
       editIndice: -1,
       itemEditado: {
         id: null,
         nome: "",
         profSelecionado: null,
-        discSelecionada: null,
-        ativo: "",
+        alunoSelecionado: [],
+        ativo: null,
       },
       itemPadrao: {
         id: null,
         nome: "",
         ativo: true,
       },
-      selectAluno: [],
+      alunoSelecionado: [],
       profSelecionado: null,
-      discSelecionada: null,
     };
   },
 
@@ -213,7 +195,7 @@ export default {
       return this.editIndice === -1 ? "Cadastrar Subgrupo" : "Editar Subgrupo";
     },
     mudarStatus() {
-      return this.itemEditado.ativo == true ? "Desativar " : "Ativar Subgrupo";
+      return this.itemEditado.ativo == true ? "desativar " : "ativar ";
     },
   },
 
@@ -244,11 +226,7 @@ export default {
         .catch((error) => {
           console.warn(error);
         });
-      await Promise.all([
-        this.getProfessores(),
-        this.getDisciplinas(),
-        this.getAlunos(),
-      ]);
+      await Promise.all([this.getProfessores(), this.getAlunos()]);
     },
 
     reloadPage() {
@@ -263,29 +241,9 @@ export default {
         .map((d) => ({ ...d.pessoa, idprofessor: d.id }));
     },
 
-    async getDisciplinas() {
-      const { data } = await this.axios.get(urlDisciplina);
-      this.disciplinasRaw = data;
-      this.disciplina = data.map((d) => ({
-        ...d,
-        disciplina: d.disciplina.map((a) => a.nome).filter(Boolean),
-      }));
-
-      // .filter((d) => d.nome)
-      // .map((d) => ({ ...d, iddisciplina: d.id }));
-    },
-
-    // achaiddisciplina() {
-    //   const [selectedDisciplina] = this.disciplinas.filter(
-    //     (d) => d.disciplina === this.select1[0]
-    //   );
-    //   console.log(selectedDisciplina);
-    // },
-
     async getAlunos() {
       const { data } = await this.axios.get(urlALuno);
-      console.log(data);
-      this.aluno = data;
+      this.alunosRaw = data;
       const alunos = data
         .filter((d) => d.pessoa.nome)
         .map((d) => ({ ...d.pessoa, idaluno: d.id }));
@@ -293,12 +251,12 @@ export default {
       this.alunos = alunos;
     },
 
-    // achaidaluno() {
-    //   const [selectedAluno] = this.alunos.filter(
-    //     (d) => d.aluno === this.selectAluno[0]
-    //   );
-    //   console.log(selectedAluno);
-    // },
+    /* achaidaluno() {
+      const [selectedAluno] = this.alunos.filter(
+       (d) => d.aluno === this.selectAluno[0]
+     );
+    console.log(selectedAluno);
+    },*/
 
     editItem(item) {
       this.editIndice = this.subgrupos.indexOf(item);
@@ -321,28 +279,28 @@ export default {
           })
           .then((res) => {
             //this.subgrupos = res.data;
-            alert("O subgrupo foi desativado com sucesso !");
             console.log(res.data);
+            alert("O subgrupo foi desativado com sucesso !");
             this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
           });
-      }
-       else {
-       axios
+      } else {
+        axios
           .patch(urlDispatch + this.itemEditado.id, {
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
             console.log(res.data);
             alert("O subgrupo foi ativado com sucesso !");
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
           });
-          }
-          this.fecharDesativar();
+      }
+      this.fecharDesativar();
     },
 
     fechar() {
@@ -368,39 +326,38 @@ export default {
             id: this.itemEditado.id,
             nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo,
+            /* professor: {
+              id: this.profSelecionado.idprofessor,
+            }, */
           })
           .then((res) => {
-            //this.subgrupos = res.data;
             console.log(res.data);
-            this.reloadPage();
+            alert("Os dados foram atualizados com sucesso !");
           })
           .catch((error) => {
             console.log(error);
           });
+
         Object.assign(this.subgrupos[this.editIndice], this.itemEditado);
-        alert("Os dados foram atualizados com sucesso !");
+
       } else {
         axios
           .post(url, {
             nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo,
-            professor: {
+            /* professor: {
               id: this.profSelecionado.idprofessor,
-            },
-            disciplina: {
-              id: this.discSelecionada.iddisciplina,
-            },
+            }, */
           })
           .then((res) => {
             this.subgrupos = res.data;
             console.log(res.data);
-            this.reloadPage();
+            alert("Os dados foram adicionados com sucesso !");
           })
           .catch((error) => {
             console.log(error);
           });
         this.subgrupos.push(this.itemEditado);
-        alert("Os dados foram adicionados com sucesso !");
       }
       this.fechar();
     },

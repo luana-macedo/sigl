@@ -171,7 +171,7 @@ export default {
       return this.editIndice === -1 ? "Cadastrar Sala" : "Editar Sala";
     },
     mudarStatus() {
-      return this.itemEditado.ativo == true ? "Desativar " : "Ativar Sala ";
+      return this.itemEditado.ativo == true ? "desativar " : "ativar ";
     },
   },
 
@@ -219,9 +219,10 @@ export default {
           ativo: this.itemEditado.ativo,
         })
         .then((res) => {
+          this.salas = res.data;
           console.log(res.data);
-          alert("Esta sala  foi desativada com sucesso !");
-          this.reloadPage();
+          alert("Esta sala foi desativada com sucesso !");
+           this.reloadPage();
         })
         .catch((error) => {
           console.log(error);
@@ -235,6 +236,7 @@ export default {
           .then((res) => {
             console.log(res.data);
             alert("Esta sala foi ativada com sucesso !");
+             this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
@@ -274,10 +276,10 @@ export default {
             //this.salas = res.data;
             alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
-            this.reloadPage();
           });
 
         Object.assign(this.salas[this.editIndice], this.itemEditado);
+        
       } else {
         axios
           .post(url, {
