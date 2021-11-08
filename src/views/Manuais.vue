@@ -188,14 +188,13 @@ export default {
       ativo: true,
     },
   }),
-  
+
    computed: {
       mudarStatus() {
       return this.itemEditado.ativo == true ? "desativar " : "ativar manual";
     },
    },
  
-
   watch: {
     dialog(val) {
       val || this.fechar();
