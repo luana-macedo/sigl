@@ -163,6 +163,7 @@ export default {
       { text: "Ações", value: "acoes" },
     ],
     professores: [],
+    professoresMap: [],
     editIndice: -1,
     itemEditado: {
       id: null,
@@ -256,10 +257,10 @@ export default {
 
     desativeItemConfirm() {
       //this.professores.splice(this.editIndice, 1);
-      if (this.itemEditado.ativo == true) {
+      if (this.itemEditado.ativo === "ativo") {
         axios
           .patch(urlPatch + this.itemEditado.id, {
-            ativo: this.itemEditado.ativo,
+            ativo: false,
           })
           .then((res) => {
             console.log(res.data);
@@ -272,7 +273,7 @@ export default {
       } else {
         axios
           .patch(urlDispatch + this.itemEditado.id, {
-            ativo: this.itemEditado.ativo,
+            ativo: true,
           })
           .then((res) => {
             console.log(res.data);
