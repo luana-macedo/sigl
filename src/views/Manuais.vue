@@ -104,7 +104,7 @@
         <v-dialog v-model="dialogDesativar" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
-              >Deseja {{mudarStatus}} este manual ?</v-card-title
+              >Deseja {{ mudarStatus }} este manual ?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -121,7 +121,7 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)" color="blue"> mdi-pencil </v-icon>
+      <v-icon small class="mr-2" @click="editDescricao(item)" color="blue">mdi-pencil</v-icon>
       <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
@@ -243,7 +243,7 @@ export default {
 
     desativeItemConfirm() {
       // this.manuais.splice(this.editIndice, 1);
-      if (this.itemEditado.ativo == true)  {
+      if (this.itemEditado.ativo == true) {
         axios
           .patch(urlPatch + this.itemEditado.id, {
             ativo: this.itemEditado.ativo,
@@ -256,9 +256,8 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-      }
-      else {
-       axios
+      } else {
+        axios
           .patch(urlDispatch + this.itemEditado.id, {
             ativo: this.itemEditado.ativo,
           })
@@ -269,8 +268,8 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-          }
-          this.fecharDesativar();
+      }
+      this.fecharDesativar();
     },
 
     fechar() {
@@ -303,15 +302,14 @@ export default {
       formData.set("descricao", this.itemEditado.descricao);
 
       if (this.editIndice > -1) {
-        axios.put(url + "\\", formData).then((res) => {
-          this.itemEditado.descricao
+        axios.patch(url + "\\", formData).then((res) => {
+          this.itemEditado.descricao;
           console.log(res.data);
           this.reloadPage();
         });
         alert("A descrição do manual foi alterada com sucesso !");
 
         Object.assign(this.manuais[this.editIndice], this.itemEditado);
-
       } else {
         formData.append("file", this.itemEditado.fileName);
 
