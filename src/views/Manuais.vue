@@ -188,10 +188,13 @@ export default {
       ativo: true,
     },
   }),
-
-  mudarStatus() {
-    return this.itemEditado.ativo == true ? "Desativar " : "Ativar Manual";
-  },
+  
+   computed: {
+      mudarStatus() {
+      return this.itemEditado.ativo == true ? "desativar " : "ativar manual";
+    },
+   },
+ 
 
   watch: {
     dialog(val) {
@@ -252,6 +255,7 @@ export default {
             // this.manuais = res.data;
             console.log(res.data);
             alert("O manual foi desativado com sucesso !");
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
@@ -264,6 +268,7 @@ export default {
           .then((res) => {
             console.log(res.data);
             alert("O manual foi ativado com sucesso !");
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
@@ -273,7 +278,7 @@ export default {
     },
 
     fechar() {
-      this.dialog = false;
+      this.dialogEditar = false;
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
@@ -302,11 +307,14 @@ export default {
       formData.set("descricao", this.itemEditado.descricao);
 
       if (this.editIndice > -1) {
-        axios.patch(url + "\\", formData).then((res) => {
+        axios.patch(url + "/updateDescricao/"+this.itemEditado.id, formData)
+        
+        .then((res) => {
           this.itemEditado.descricao;
           console.log(res.data);
           this.reloadPage();
         });
+        
         alert("A descrição do manual foi alterada com sucesso !");
 
         Object.assign(this.manuais[this.editIndice], this.itemEditado);
