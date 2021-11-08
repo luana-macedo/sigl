@@ -147,22 +147,18 @@ export default {
       titulos: [
         {
           text: "Subgrupo",
-          align: "center",
           value: "nome",
         },
         {
-          text: "Professor",
-          align: "center",
+          text: "Professor", 
           value: "professor.pessoa.nome",
         },
         {
           text: "Alunos",
-          align: "center",
           value: "alunos",
         },
         {
           text: "Status",
-          align: "center",
           value: "ativo",
         },
         { text: "Ações", align: "center", value: "acoes", sortable: false },
