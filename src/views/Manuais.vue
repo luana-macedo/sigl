@@ -189,6 +189,8 @@ export default {
     },
   }),
 
+
+
   mudarStatus() {
     return this.itemEditado.ativo == true ? "Desativar " : "Ativar Manual";
   },
