@@ -105,7 +105,7 @@
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)" color="blue"> mdi-pencil </v-icon>
-      <v-icon small @click="desativeItem(item)" color="red"> mdi-power-standby </v-icon>
+      <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -171,7 +171,7 @@ export default {
       return this.editIndice === -1 ? "Cadastrar Sala" : "Editar Sala";
     },
     mudarStatus() {
-      return this.itemEditado.ativo == true ? "Desativar " : "Ativar Sala ";
+      return this.itemEditado.ativo == true ? "desativar " : "ativar ";
     },
   },
 
@@ -221,7 +221,7 @@ export default {
         .then((res) => {
           this.salas = res.data;
           console.log(res.data);
-          alert("Esta sala  foi desativada com sucesso !");
+          alert("Esta sala foi desativada com sucesso !");
            this.reloadPage();
         })
         .catch((error) => {
@@ -276,7 +276,6 @@ export default {
             //this.salas = res.data;
             alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
-             this.reloadPage();
           });
 
         Object.assign(this.salas[this.editIndice], this.itemEditado);

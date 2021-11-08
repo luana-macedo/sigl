@@ -191,7 +191,7 @@ export default {
 
    computed: {
       mudarStatus() {
-      return this.itemEditado.ativo == true ? "desativar " : "ativar manual";
+      return this.itemEditado.ativo == true ? "desativar " : "ativar";
     },
    },
  
@@ -324,6 +324,7 @@ export default {
           this.manuais = res.data;
           console.log(res.data);
           alert("O manual foi adicionado com sucesso !");
+          this.reloadPage();
         });
         this.manuais.push(this.itemEditado);
         

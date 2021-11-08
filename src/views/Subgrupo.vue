@@ -95,7 +95,7 @@
         <v-dialog v-model="dialogDesativar" max-width="500px">
           <v-card>
             <v-card-title class="text-h5"
-              >Deseja {{mudarStatus}} este Subgrupo?</v-card-title
+              >Deseja {{ mudarStatus }} este Subgrupo?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -111,10 +111,11 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:[`item.acoes`]="{ item }">   
-      <v-icon small class="mr-2" @click="editItem(item)" color="blue"> mdi-pencil </v-icon>
+    <template v-slot:[`item.acoes`]="{ item }">
+      <v-icon small class="mr-2" @click="editItem(item)" color="blue">
+        mdi-pencil
+      </v-icon>
       <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
-
     </template>
   </v-data-table>
 </template>
@@ -147,7 +148,8 @@ var urlALuno = "http://api-sig-itpac-84633.herokuapp.com/api/aluno";
 var urlDisciplina = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
 var urlPatch =
   "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
-var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/Ativar/";
+var urlDispatch =
+  "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/Ativar/";
 
 export default {
   data() {
@@ -213,7 +215,7 @@ export default {
       return this.editIndice === -1 ? "Cadastrar Subgrupo" : "Editar Subgrupo";
     },
     mudarStatus() {
-      return this.itemEditado.ativo == true ? "Desativar " : "Ativar Subgrupo";
+      return this.itemEditado.ativo == true ? "desativar " : "ativar ";
     },
   },
 
@@ -321,28 +323,28 @@ export default {
           })
           .then((res) => {
             //this.subgrupos = res.data;
-            alert("O subgrupo foi desativado com sucesso !");
             console.log(res.data);
+            alert("O subgrupo foi desativado com sucesso !");
             this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
           });
-      }
-       else {
-       axios
+      } else {
+        axios
           .patch(urlDispatch + this.itemEditado.id, {
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
             console.log(res.data);
             alert("O subgrupo foi ativado com sucesso !");
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
           });
-          }
-          this.fecharDesativar();
+      }
+      this.fecharDesativar();
     },
 
     fechar() {
@@ -372,13 +374,12 @@ export default {
           .then((res) => {
             //this.subgrupos = res.data;
             console.log(res.data);
-            this.reloadPage();
+            alert("Os dados foram atualizados com sucesso !");
           })
           .catch((error) => {
             console.log(error);
           });
         Object.assign(this.subgrupos[this.editIndice], this.itemEditado);
-        alert("Os dados foram atualizados com sucesso !");
       } else {
         axios
           .post(url, {
@@ -394,13 +395,12 @@ export default {
           .then((res) => {
             this.subgrupos = res.data;
             console.log(res.data);
-            this.reloadPage();
+            alert("Os dados foram adicionados com sucesso !");
           })
           .catch((error) => {
             console.log(error);
           });
         this.subgrupos.push(this.itemEditado);
-        alert("Os dados foram adicionados com sucesso !");
       }
       this.fechar();
     },
