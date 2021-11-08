@@ -326,27 +326,28 @@ export default {
             id: this.itemEditado.id,
             nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo,
-            professor: {
+            /* professor: {
               id: this.profSelecionado.idprofessor,
-            },
+            }, */
           })
           .then((res) => {
             console.log(res.data);
             alert("Os dados foram atualizados com sucesso !");
-            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
           });
+
         Object.assign(this.subgrupos[this.editIndice], this.itemEditado);
+
       } else {
         axios
           .post(url, {
             nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo,
-            professor: {
+            /* professor: {
               id: this.profSelecionado.idprofessor,
-            },
+            }, */
           })
           .then((res) => {
             this.subgrupos = res.data;

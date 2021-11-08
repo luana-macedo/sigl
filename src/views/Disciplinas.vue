@@ -377,7 +377,7 @@ export default {
         this.disciplinas.push(this.itemEditado);
       }
       this.fechar();
-      // this.reloadPage();
+
     },
   },
 };

@@ -279,6 +279,7 @@ export default {
           });
 
         Object.assign(this.salas[this.editIndice], this.itemEditado);
+        
       } else {
         axios
           .post(url, {
