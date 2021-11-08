@@ -100,7 +100,7 @@
         <v-dialog v-model="dialogDesativar" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
-              >Deseja desativar este professor?</v-card-title
+              >Deseja {{ mudarStatus }} este professor ?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -144,8 +144,9 @@ import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
-var urlPatch =
-  "http://api-sig-itpac-84633.herokuapp.com/api/professores/desativar/";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/professores/desativar/";
+var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/professores/ativar/";
+
 
 export default {
   data: () => ({
@@ -190,6 +191,9 @@ export default {
   computed: {
     tituloForm() {
       return this.editIndice === -1 ? "Cadastrar Professor" : "Editar Dados";
+    },
+    mudarStatus() {
+      return this.itemEditado.ativo == true ? "desativar " : "ativar ";
     },
   },
   props: {
@@ -252,30 +256,34 @@ export default {
 
     desativeItemConfirm() {
       //this.professores.splice(this.editIndice, 1);
-      if (this.editIndice > -1) {
+      if (this.itemEditado.ativo == true) {
         axios
           .patch(urlPatch + this.itemEditado.id, {
-            //   pessoa: {
-            //   nome: this.itemEditado.nome,
-            //   cpf: this.itemEditado.cpf,
-            //   email: this.itemEditado.email,
-            //   telefone: this.itemEditado.telefone,
-            // },
-            // matricula: this.itemEditado.matricula,
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            //this.professores = res.data;
-            console.log("res:");
             console.log(res.data);
-            alert("O acadêmico foi desativado com sucesso !");
-             this.reloadPage();
+            alert("O professor foi desativado com sucesso !");
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
           });
-        this.fecharDesativar();
+      } else {
+        axios
+          .patch(urlDispatch + this.itemEditado.id, {
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            console.log(res.data);
+            alert("O professor foi ativado com sucesso !");
+            this.reloadPage();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
+      this.fecharDesativar();
     },
 
     fechar() {
@@ -335,14 +343,14 @@ export default {
           .then((res) => {
             this.professores = res.data;
             console.log(res.data);
+            alert("Os dados foram adicionados com sucesso !");
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
           });
 
         this.professores.push(this.itemEditado);
-        alert("Os dados foram adicionados com sucesso !");
-         this.reloadPage();
       }
 
       this.fechar();

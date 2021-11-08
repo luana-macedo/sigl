@@ -3,7 +3,8 @@
     :headers="titulos"
     :items="alunos"
     :search="search"
-    class="elevation-2 data-table">
+    class="elevation-2 data-table"
+  >
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Aluno</v-toolbar-title>
@@ -67,7 +68,7 @@
                         v-model="itemEditado.pessoa.email"
                         label="E-mail"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        required 
+                        required
                       ></v-text-field>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
@@ -78,13 +79,12 @@
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
-                     <!--   <v-text-field
+                      <!--   <v-text-field
                         v-model="itemEditado.ativo"
                         label="Status"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field> -->
-
                     </v-col>
                     <v-col cols="8" sm="6" md="4"> </v-col>
                     <v-col cols="8" sm="6" md="4"> </v-col>
@@ -104,7 +104,7 @@
         <v-dialog v-model="dialogDesativar" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
-              >Deseja {{mudarStatus}} este aluno ?</v-card-title
+              >Deseja {{ mudarStatus }} este aluno ?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -121,7 +121,9 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)" color="blue"> mdi-pencil </v-icon>
+      <v-icon small class="mr-2" @click="editItem(item)" color="blue">
+        mdi-pencil
+      </v-icon>
       <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
@@ -141,14 +143,13 @@
 </style>
 
 <script>
-
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/aluno";
-var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/aluno/desativar/"; 
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/aluno/desativar/";
 var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/aluno/Ativar/";
 
 export default {
@@ -187,7 +188,7 @@ export default {
         email: "",
       },
       matricula: "",
-      ativo: true ,
+      ativo: true,
     },
   }),
   computed: {
@@ -195,7 +196,7 @@ export default {
       return this.editIndice === -1 ? "Cadastrar Academico" : "Editar Dados";
     },
     mudarStatus() {
-      return this.itemEditado.ativo == true ? "Desativar " : "Ativar Academico";
+      return this.itemEditado.ativo == true ? "desativar " : "ativar ";
     },
   },
   props: {
@@ -240,19 +241,19 @@ export default {
     editItem(item) {
       this.editIndice = this.alunos.indexOf(item);
       this.itemEditado = Object.assign({}, item);
-      this.dialog = true ;
+      this.dialog = true;
     },
 
     desativeItem(item) {
       this.editIndice = this.alunos.indexOf(item);
       this.itemEditado = Object.assign({}, item);
-      this.dialogDesativar = true ;
+      this.dialogDesativar = true;
     },
 
-   desativeItemConfirm() {
+    desativeItemConfirm() {
       //this.alunos.splice(this.editIndice, 1);
       if (this.itemEditado.ativo == true) {
-       axios
+        axios
           .patch(urlPatch + this.itemEditado.id, {
             ativo: this.itemEditado.ativo,
           })
@@ -264,10 +265,8 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-          
-      }
-      else {
-       axios
+      } else {
+        axios
           .patch(urlDispatch + this.itemEditado.id, {
             ativo: this.itemEditado.ativo,
           })
@@ -279,12 +278,12 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-          }
-          this.fecharDesativar();
+      }
+      this.fecharDesativar();
     },
-  
+
     fechar() {
-      this.dialog = false ;
+      this.dialog = false;
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
@@ -292,7 +291,7 @@ export default {
     },
 
     fecharDesativar() {
-      this.dialogDesativar = false ;
+      this.dialogDesativar = false;
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
@@ -338,8 +337,8 @@ export default {
           })
           .then((res) => {
             this.alunos = res.data;
-            alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
+            alert("Os dados foram adicionados com sucesso !");
             this.reloadPage();
           })
           .catch((error) => {
@@ -347,7 +346,6 @@ export default {
           });
 
         this.alunos.push(this.itemEditado);
-       
       }
 
       this.fechar();

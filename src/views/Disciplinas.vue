@@ -204,7 +204,7 @@ export default {
       return this.editIndice === -1 ? "Cadastrar disciplina" : "Editar Dados";
     },
     mudarStatus() {
-      return this.itemEditado.ativo == true ? "Desativar " : "Ativar ";
+      return this.itemEditado.ativo == true ? "desativar " : "ativar ";
     },
   },
 
@@ -377,7 +377,7 @@ export default {
         this.disciplinas.push(this.itemEditado);
       }
       this.fechar();
-      // this.reloadPage();
+
     },
   },
 };

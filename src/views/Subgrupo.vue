@@ -135,10 +135,8 @@ Vue.use(VueAxios, axios);
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo";
 var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
 var urlALuno = "http://api-sig-itpac-84633.herokuapp.com/api/aluno";
-var urlPatch =
-  "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
-var urlDispatch =
-  "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/Ativar/";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
+var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/Ativar/";
 
 export default {
   data() {
@@ -197,7 +195,7 @@ export default {
       return this.editIndice === -1 ? "Cadastrar Subgrupo" : "Editar Subgrupo";
     },
     mudarStatus() {
-      return this.itemEditado.ativo == true ? "Desativar " : "Ativar Subgrupo";
+      return this.itemEditado.ativo == true ? "desativar " : "ativar ";
     },
   },
 
@@ -281,8 +279,8 @@ export default {
           })
           .then((res) => {
             //this.subgrupos = res.data;
-            alert("O subgrupo foi desativado com sucesso !");
             console.log(res.data);
+            alert("O subgrupo foi desativado com sucesso !");
             this.reloadPage();
           })
           .catch((error) => {
@@ -296,6 +294,7 @@ export default {
           .then((res) => {
             console.log(res.data);
             alert("O subgrupo foi ativado com sucesso !");
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
@@ -327,33 +326,33 @@ export default {
             id: this.itemEditado.id,
             nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo,
-            professor: {
+            /* professor: {
               id: this.profSelecionado.idprofessor,
-            },
+            }, */
           })
           .then((res) => {
             console.log(res.data);
             alert("Os dados foram atualizados com sucesso !");
-            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
           });
+
         Object.assign(this.subgrupos[this.editIndice], this.itemEditado);
+
       } else {
         axios
           .post(url, {
             nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo,
-            professor: {
+            /* professor: {
               id: this.profSelecionado.idprofessor,
-            },
+            }, */
           })
           .then((res) => {
             this.subgrupos = res.data;
-            alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
-            this.reloadPage();
+            alert("Os dados foram adicionados com sucesso !");
           })
           .catch((error) => {
             console.log(error);

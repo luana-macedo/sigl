@@ -70,7 +70,7 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogDesativar" max-width="400px">
+        <v-dialog v-model="dialogDesativar" max-width="450px">
           <v-card>
             <v-card-title class="text-h5"
               >Deseja {{mudarStatus}} este período?</v-card-title
@@ -165,7 +165,7 @@ export default {
       return this.editIndice === -1 ? "Cadastrar Periodo" : "Editar Dados";
     },
     mudarStatus() {
-      return this.itemEditado.ativo == true ? "Desativar " : "Ativar Periodo";
+      return this.itemEditado.ativo == true ? "desativar " : "ativar";
     },
   },
 
@@ -269,7 +269,6 @@ export default {
             //this.periodos = res.data
             alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
-            this.reloadPage();
           });
         Object.assign(this.periodos[this.editIndice], this.itemEditado);
       } else {
