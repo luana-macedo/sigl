@@ -222,8 +222,15 @@ export default {
   methods: {
     inicializar() {
       axios.get(url, this.professores).then((res) => {
-        this.professores = res.data;
-        console.log(res.data);
+        this.professores = res.data.map(p => {
+          p.ativo = (p.ativo?"ativo":"desativo")
+          return p; 
+        });
+        
+        console.log("res.data");
+        console.table(res.data);
+        console.log("this.professores");
+        console.log(this.professores);
       });
     },
 
@@ -300,7 +307,7 @@ export default {
               telefone: this.itemEditado.pessoa.telefone,
             },
             matricula: this.itemEditado.matricula,
-            ativo: this.itemEditado.ativo,
+            ativo: this.itemEditado.ativo === "ativo",
           })
           .then((res) => {
             //this.professores = res.data;
