@@ -231,6 +231,7 @@ export default {
           .then((res) => {
             console.log(res.data);
             alert("O acadêmico foi ativado com sucesso !");
+             this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
