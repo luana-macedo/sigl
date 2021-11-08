@@ -142,9 +142,7 @@
 #card-actions {
   padding-left: 18%;
 }
-.card-modal {
-  text-align: center;
-}
+
 </style>
 
 <script>
@@ -169,8 +167,8 @@ export default {
         align: "center",
         value: "descricao",
       },
-      { text: "Arquivo", align: "center", value: "fileName" },
-      { text: "Status", align: "center", value: "ativo" },
+      { text: "Arquivo", value: "fileName" },
+      { text: "Status", value: "ativo" },
       { text: "Ações", align: "center", value: "acoes" },
     ],
     manuais: [],
