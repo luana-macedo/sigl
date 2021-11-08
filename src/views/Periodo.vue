@@ -165,7 +165,7 @@ export default {
       return this.editIndice === -1 ? "Cadastrar Periodo" : "Editar Dados";
     },
     mudarStatus() {
-      return this.itemEditado.ativo == true ? "desativar " : "ativar";
+      return this.itemEditado.ativo == "Ativado" ? "desativar " : "ativar";
     },
   },
 
@@ -185,7 +185,10 @@ export default {
   methods: {
     inicializar() {
       axios.get(url, this.periodos).then((res) => {
-        this.periodos = res.data;
+        this.periodos = res.data.map(p => {
+          p.ativo = (p.ativo?"Ativado":"Desativado")
+          return p;
+        });
         console.log(res.data);
       });
     },
@@ -207,12 +210,12 @@ export default {
     },
 
     desativeItemConfirm() {
-      if (this.itemEditado.ativo == true) {
+      if (this.itemEditado.ativo == "Ativado") {
       axios
         .patch(urlPatch + this.itemEditado.id, {
           id: this.itemEditado.id,
           dataCadastro: this.itemEditado.dataCadastro,
-          ativo: this.itemEditado.ativo,
+          ativo: false,
         })
         .then((res) => {
           alert("O período foi desativado com sucesso !");
@@ -226,7 +229,7 @@ export default {
          else {
        axios
           .patch(urlDispatch + this.itemEditado.id, {
-            ativo: this.itemEditado.ativo,
+            ativo: true,
           })
           .then((res) => {
             console.log(res.data);
@@ -263,7 +266,7 @@ export default {
             id: this.itemEditado.id,
             periodo: this.itemEditado.periodo,
             dataCadastro: this.itemEditado.dataCadastro,
-            ativo: this.itemEditado.ativo,
+            ativo: this.itemEditado.ativo === "Ativado",
           })
           .then((res) => {
             //this.periodos = res.data

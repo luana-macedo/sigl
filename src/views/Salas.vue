@@ -171,7 +171,7 @@ export default {
       return this.editIndice === -1 ? "Cadastrar Sala" : "Editar Sala";
     },
     mudarStatus() {
-      return this.itemEditado.ativo == true ? "desativar " : "ativar ";
+      return this.itemEditado.ativo == "Ativado" ? "desativar " : "ativar ";
     },
   },
 
@@ -191,7 +191,10 @@ export default {
   methods: {
     inicializar() {
       this.axios.get(url, this.salas).then((res) => {
-        this.salas = res.data;
+        this.salas = res.data.map(p => {
+          p.ativo = (p.ativo?"Ativado":"Desativado")
+          return p;
+        });
         console.log(res.data);
       });
     },
@@ -213,10 +216,10 @@ export default {
     },
 
     desativeItemConfirm() {
-      if (this.itemEditado.ativo == true) {
+      if (this.itemEditado.ativo == "Ativado") {
       axios
         .patch(urlPatch + this.itemEditado.id, {
-          ativo: this.itemEditado.ativo,
+          ativo: false,
         })
         .then((res) => {
           this.salas = res.data;
@@ -231,7 +234,7 @@ export default {
     else {
        axios
           .patch(urlDispatch + this.itemEditado.id, {
-            ativo: this.itemEditado.ativo,
+            ativo: true,
           })
           .then((res) => {
             console.log(res.data);
@@ -287,7 +290,7 @@ export default {
             local: this.itemEditado.local,
             capacidade: this.itemEditado.capacidade,
             descricao: this.itemEditado.descricao,
-            ativo: this.itemEditado.ativo,
+            ativo: this.itemEditado.ativo === "Ativado",
           })
           .then((res) => {
             this.salas = res.data;

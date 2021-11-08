@@ -194,7 +194,7 @@ export default {
       return this.editIndice === -1 ? "Cadastrar Professor" : "Editar Dados";
     },
     mudarStatus() {
-      return this.itemEditado.ativo === "ativo" ? " desativar " : " ativar ";
+      return this.itemEditado.ativo === "Ativado" ? " desativar " : " ativar ";
     },
   },
   props: {
@@ -228,7 +228,7 @@ export default {
     inicializar() {
       axios.get(url, this.professores).then((res) => {
         this.professores = res.data.map(p => {
-          p.ativo = (p.ativo?"ativo":"desativo")
+          p.ativo = (p.ativo?"Ativado":"Desativado")
           return p; 
         });
         
@@ -257,7 +257,7 @@ export default {
 
     desativeItemConfirm() {
       //this.professores.splice(this.editIndice, 1);
-      if (this.itemEditado.ativo === "ativo") {
+      if (this.itemEditado.ativo === "Ativado") {
         axios
           .patch(urlPatch + this.itemEditado.id, {
             ativo: false,

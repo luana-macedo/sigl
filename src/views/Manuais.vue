@@ -191,7 +191,7 @@ export default {
 
    computed: {
       mudarStatus() {
-      return this.itemEditado.ativo == true ? "desativar " : "ativar";
+      return this.itemEditado.ativo == "Ativado" ? "desativar " : "ativar";
     },
    },
  
@@ -216,7 +216,10 @@ export default {
   methods: {
     inicializar() {
       axios.get(url, this.manuais).then((res) => {
-        this.manuais = res.data;
+        this.manuais = res.data.map(p => {
+          p.ativo = (p.ativo?"Ativado":"Desativado")
+          return p;
+        });
         console.log(res.data);
       });
     },
@@ -245,10 +248,10 @@ export default {
 
     desativeItemConfirm() {
       // this.manuais.splice(this.editIndice, 1);
-      if (this.itemEditado.ativo == true) {
+      if (this.itemEditado.ativo == "Ativado") {
         axios
           .patch(urlPatch + this.itemEditado.id, {
-            ativo: this.itemEditado.ativo,
+            ativo: false,
           })
           .then((res) => {
             // this.manuais = res.data;
@@ -262,7 +265,7 @@ export default {
       } else {
         axios
           .patch(urlDispatch + this.itemEditado.id, {
-            ativo: this.itemEditado.ativo,
+            ativo: true,
           })
           .then((res) => {
             console.log(res.data);

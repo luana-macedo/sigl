@@ -153,10 +153,8 @@ Vue.use(VueAxios, axios);
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
 var urlPeriodo = "http://api-sig-itpac-84633.herokuapp.com/api/periodo";
 var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
-var urlPatch =
-  "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/desativar/";
-var urlDispatch =
-  "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/ativar/";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/desativar/";
+var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/ativar/";
 
 export default {
   data: () => ({
@@ -204,7 +202,7 @@ export default {
       return this.editIndice === -1 ? "Cadastrar disciplina" : "Editar Dados";
     },
     mudarStatus() {
-      return this.itemEditado.ativo == true ? "desativar " : "ativar ";
+      return this.itemEditado.ativo == "Ativado" ? "desativar " : "ativar ";
     },
   },
 
@@ -227,7 +225,10 @@ export default {
         .get(url, this.disciplinas)
         .then((res) => {
           console.log(res.data);
-          this.disciplinas = res.data;
+          this.disciplinas = res.data.map(p => {
+            p.ativo = (p.ativo?"Ativado":"Desativado")
+            return p;
+          });
         })
         .catch((error) => {
           console.warn(error);
@@ -282,10 +283,10 @@ export default {
     },
 
     desativeItemConfirm() {
-      if (this.itemEditado.ativo == true) {
+      if (this.itemEditado.ativo == "Ativado") {
         axios
           .patch(urlPatch + this.itemEditado.id, {
-            ativo: this.itemEditado.ativo,
+            ativo: false,
           })
           .then((res) => {
             console.log(res.data);
@@ -298,7 +299,7 @@ export default {
       } else {
         axios
           .patch(urlDispatch + this.itemEditado.id, {
-            ativo: this.itemEditado.ativo,
+            ativo: true,
           })
           .then((res) => {
             console.log(res.data);
@@ -338,7 +339,7 @@ export default {
             // professor: {
             //   id: this.profSelecionado.idprofessor,
             // },
-            ativo: this.itemEditado.ativo,
+            ativo: this.itemEditado.ativo === "Ativado",
             periodo: {
               id: this.periodoSelecionado.idperiodo,
             },

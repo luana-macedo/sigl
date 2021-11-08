@@ -195,7 +195,7 @@ export default {
       return this.editIndice === -1 ? "Cadastrar Subgrupo" : "Editar Subgrupo";
     },
     mudarStatus() {
-      return this.itemEditado.ativo == "ativo" ? "desativar " : "ativar ";
+      return this.itemEditado.ativo == "Ativado" ? "desativar " : "ativar ";
     },
   },
 
@@ -223,7 +223,7 @@ export default {
             alunos: d.alunos.map((a) => a.pessoa.nome).filter(Boolean),
           })
           ).map(p => {
-            p.ativo = (p.ativo?"ativo":"desativo")
+            p.ativo = (p.ativo?"Ativado":"Desativado")
             return p; 
           });
 
@@ -277,10 +277,10 @@ export default {
 
     desativeItemConfirm() {
       // this.subgrupos.splice(this.editIndice, 1);
-      if (this.itemEditado.ativo == true) {
+      if (this.itemEditado.ativo == "Ativado") {
         axios
           .patch(urlPatch + this.itemEditado.id, {
-            ativo: this.itemEditado.ativo,
+            ativo: false,
           })
           .then((res) => {
             //this.subgrupos = res.data;
@@ -294,7 +294,7 @@ export default {
       } else {
         axios
           .patch(urlDispatch + this.itemEditado.id, {
-            ativo: this.itemEditado.ativo,
+            ativo: true,
           })
           .then((res) => {
             console.log(res.data);
@@ -330,7 +330,7 @@ export default {
           .put(url, {
             id: this.itemEditado.id,
             nome: this.itemEditado.nome,
-            ativo: this.itemEditado.ativo === "ativo",
+            ativo: this.itemEditado.ativo === "Ativado",
             /* professor: {
               id: this.profSelecionado.idprofessor,
             }, */

@@ -196,7 +196,7 @@ export default {
       return this.editIndice === -1 ? "Cadastrar Academico" : "Editar Dados";
     },
     mudarStatus() {
-      return this.itemEditado.ativo == true ? "desativar " : "ativar ";
+      return this.itemEditado.ativo == "Ativado" ? "desativar " : "ativar ";
     },
   },
   props: {
@@ -229,7 +229,10 @@ export default {
   methods: {
     inicializar() {
       axios.get(url, this.alunos).then((res) => {
-        this.alunos = res.data;
+        this.alunos = res.data.map(p => {
+          p.ativo = (p.ativo?"Ativado":"Desativado")
+          return p;
+        });
         console.log(res.data);
       });
     },
@@ -252,10 +255,10 @@ export default {
 
     desativeItemConfirm() {
       //this.alunos.splice(this.editIndice, 1);
-      if (this.itemEditado.ativo == true) {
+      if (this.itemEditado.ativo == "Ativado") {
         axios
           .patch(urlPatch + this.itemEditado.id, {
-            ativo: this.itemEditado.ativo,
+            ativo: false,
           })
           .then((res) => {
             console.log(res.data);
@@ -268,7 +271,7 @@ export default {
       } else {
         axios
           .patch(urlDispatch + this.itemEditado.id, {
-            ativo: this.itemEditado.ativo,
+            ativo: true,
           })
           .then((res) => {
             console.log(res.data);
@@ -311,7 +314,7 @@ export default {
               telefone: this.itemEditado.pessoa.telefone,
             },
             matricula: this.itemEditado.matricula,
-            ativo: this.itemEditado.ativo,
+            ativo: this.itemEditado.ativo === "Ativado",
           })
           .then((res) => {
             alert("Os dados foram atualizados com sucesso !");
