@@ -34,7 +34,7 @@
           </template>
           <v-card>
             <v-card-title>
-              <span class="text-h6">{{ tituloForm }}</span>
+              <span class="text-h6">Adicionar Manual</span>
             </v-card-title>
 
             <v-card-text>
@@ -71,6 +71,36 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <v-dialog v-model="dialogEditar" max-width="350px">
+          <v-card>
+            <v-card-title>
+              <span class="text-h6">Editar Descrição</span>
+            </v-card-title>
+
+            <v-card-text>
+              <v-form v-model="valid">
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="4" md="8">
+                      <v-text-field
+                        v-model="itemEditado.descricao"
+                        label="Descrição"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-form>
+            </v-card-text>
+            <v-card-actions id="card-actions">
+              <v-btn small color="warning" dark @click="fecharEditar">
+                Cancelar
+              </v-btn>
+              <v-btn small color="primary" dark @click="salvar"> Salvar </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-dialog v-model="dialogDesativar" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
@@ -91,8 +121,12 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)" color="blue"> mdi-pencil </v-icon>
-      <v-icon small @click="desativeItem(item)" color="red"> mdi-power-standby </v-icon>
+      <v-icon small class="mr-2" @click="editDescricao(item)" color="blue">
+        mdi-pencil
+      </v-icon>
+      <v-icon small @click="desativeItem(item)" color="red">
+        mdi-power-standby
+      </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -130,6 +164,7 @@ export default {
   data: () => ({
     search: "",
     dialog: false,
+    dialogEditar: false,
     dialogDesativar: false,
     titulos: [
       {
@@ -147,7 +182,7 @@ export default {
       id: null,
       descricao: "",
       fileName: "",
-      ativo: "",
+      ativo: true,
     },
     itemPadrao: {
       id: null,
@@ -157,16 +192,21 @@ export default {
     },
   }),
 
-  computed: {
+  /*  computed: {
     tituloForm() {
       return this.editIndice === -1 ? "Cadastrar Manual" : "Editar Manual";
     },
-  },
+  }, */
 
   watch: {
     dialog(val) {
       val || this.fechar();
     },
+
+    dialogEditar(val) {
+      val || this.fechar();
+    },
+
     dialogDesativar(val) {
       val || this.fecharDesativar();
     },
@@ -188,10 +228,16 @@ export default {
       window.location.reload();
     },
 
-    editItem(item) {
+    /* editItem(item) {
       this.editIndice = this.manuais.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       this.dialog = true;
+    }, */
+
+    editDescricao(item) {
+      this.editIndice = this.manuais.indexOf(item);
+      this.itemEditado = Object.assign({}, item);
+      this.dialogEditar = true;
     },
 
     desativeItem(item) {
@@ -227,6 +273,14 @@ export default {
       });
     },
 
+    fecharEditar() {
+      this.dialogEditar = false;
+      this.$nextTick(() => {
+        this.itemEditado = Object.assign({}, this.itemPadrao);
+        this.editIndice = -1;
+      });
+    },
+
     fecharDesativar() {
       this.dialogDesativar = false;
       this.$nextTick(() => {
@@ -241,11 +295,22 @@ export default {
       formData.set("descricao", this.itemEditado.descricao);
 
       if (this.editIndice > -1) {
-        axios.put(url + "\\", formData).then((res) => {
-          // this.manuais = res.data;
-          console.log(res.data);
-        });
-        alert("A descrição do manual foi alterada com sucesso !");
+        axios
+          .put(url, {
+            id: this.itemEditado.id,
+            descricao: this.itemEditado.descricao,
+            ativo: this.itemEditado.ativo,
+          })
+
+          .then((res) => {
+            // this.manuais = res.data;
+            alert("A descrição foi alterada com sucesso !");
+            console.log(res.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
         Object.assign(this.manuais[this.editIndice], this.itemEditado);
       } else {
         formData.append("file", this.itemEditado.fileName);
