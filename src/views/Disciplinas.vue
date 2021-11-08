@@ -141,16 +141,6 @@
 .data-table {
   padding: 3%;
 }
-#card-actions {
-  padding-left: 18%;
-}
-.card-modal {
-  text-align: center;
-}
-
-.barraPesquisa {
-  padding-right: 930px;
-}
 </style>
 <script>
 import Vue from "vue";
@@ -161,8 +151,7 @@ Vue.use(VueAxios, axios);
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
 var urlPeriodo = "http://api-sig-itpac-84633.herokuapp.com/api/periodo";
 var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
-var urlPatch =
-  "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/desativar/";
+var urlPatch ="http://api-sig-itpac-84633.herokuapp.com/api/disciplina/desativar/";
 var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/ativar/";
 
 export default {
@@ -193,7 +182,7 @@ export default {
       nome: "",
       apelido: "",
       periodoSelecionado: null,
-      profSelecionado: null,
+      profSelecionado: [],
       ativo: true,
     },
     itemPadrao: {
@@ -202,7 +191,7 @@ export default {
       apelido: "",
       ativo: true,
     },
-    profSelecionado: null,
+    profSelecionado:[],
     periodoSelecionado: null,
   }),
 
