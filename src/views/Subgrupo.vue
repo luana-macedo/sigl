@@ -72,8 +72,8 @@
                     <v-col cols="8" sm="6" md="4">
                       <v-label>Disciplina</v-label>
                       <vue-select
-                        v-model="select1"
-                        :items="disciplinas"
+                        v-model="discSelecionada"
+                        :options="disciplina"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         label="Disciplina"
                         required
@@ -95,7 +95,7 @@
         <v-dialog v-model="dialogDesativar" max-width="500px">
           <v-card>
             <v-card-title class="text-h5"
-              >Deseja desativar este Subgrupo?</v-card-title
+              >Deseja {{mudarStatus}} este Subgrupo?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -111,9 +111,10 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:[`item.acoes`]="{ item }">
+    <template v-slot:[`item.acoes`]="{ item }">   
       <v-icon small class="mr-2" @click="editItem(item)" color="blue"> mdi-pencil </v-icon>
-      <v-icon small @click="desativeItem(item)" color="red"> mdi-power-standby </v-icon>
+      <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
+
     </template>
   </v-data-table>
 </template>
@@ -146,6 +147,7 @@ var urlALuno = "http://api-sig-itpac-84633.herokuapp.com/api/aluno";
 var urlDisciplina = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
 var urlPatch =
   "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
+var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/Ativar/";
 
 export default {
   data() {
@@ -185,12 +187,14 @@ export default {
       professor: [],
       profsRaw: [],
       alunos: [],
-      disciplinas: [],
+      disciplina: [],
+      disciplinasRaw: [],
       editIndice: -1,
       itemEditado: {
         id: null,
         nome: "",
         profSelecionado: null,
+        discSelecionada: null,
         ativo: "",
       },
       itemPadrao: {
@@ -200,13 +204,16 @@ export default {
       },
       selectAluno: [],
       profSelecionado: null,
-      select1: [],
+      discSelecionada: null,
     };
   },
 
   computed: {
     tituloForm() {
       return this.editIndice === -1 ? "Cadastrar Subgrupo" : "Editar Subgrupo";
+    },
+    mudarStatus() {
+      return this.itemEditado.ativo == true ? "Desativar " : "Ativar Subgrupo";
     },
   },
 
@@ -258,8 +265,14 @@ export default {
 
     async getDisciplinas() {
       const { data } = await this.axios.get(urlDisciplina);
-      this.disciplinas = data;
-      this.disciplina = data.map((d) => d.disciplina).filter(Boolean);
+      this.disciplinasRaw = data;
+      this.disciplina = data.map((d) => ({
+        ...d,
+        disciplina: d.disciplina.map((a) => a.nome).filter(Boolean),
+      }));
+
+      // .filter((d) => d.nome)
+      // .map((d) => ({ ...d, iddisciplina: d.id }));
     },
 
     // achaiddisciplina() {
@@ -280,12 +293,12 @@ export default {
       this.alunos = alunos;
     },
 
-    achaidaluno() {
-      const [selectedAluno] = this.alunos.filter(
-        (d) => d.aluno === this.selectAluno[0]
-      );
-      console.log(selectedAluno);
-    },
+    // achaidaluno() {
+    //   const [selectedAluno] = this.alunos.filter(
+    //     (d) => d.aluno === this.selectAluno[0]
+    //   );
+    //   console.log(selectedAluno);
+    // },
 
     editItem(item) {
       this.editIndice = this.subgrupos.indexOf(item);
@@ -301,7 +314,7 @@ export default {
 
     desativeItemConfirm() {
       // this.subgrupos.splice(this.editIndice, 1);
-      if (this.editIndice > -1) {
+      if (this.itemEditado.ativo == true) {
         axios
           .patch(urlPatch + this.itemEditado.id, {
             ativo: this.itemEditado.ativo,
@@ -310,12 +323,26 @@ export default {
             //this.subgrupos = res.data;
             alert("O subgrupo foi desativado com sucesso !");
             console.log(res.data);
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
           });
-        this.fecharDesativar();
       }
+       else {
+       axios
+          .patch(urlDispatch + this.itemEditado.id, {
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            console.log(res.data);
+            alert("O subgrupo foi ativado com sucesso !");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+          }
+          this.fecharDesativar();
     },
 
     fechar() {
@@ -345,6 +372,7 @@ export default {
           .then((res) => {
             //this.subgrupos = res.data;
             console.log(res.data);
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
@@ -359,10 +387,14 @@ export default {
             professor: {
               id: this.profSelecionado.idprofessor,
             },
+            disciplina: {
+              id: this.discSelecionada.iddisciplina,
+            },
           })
           .then((res) => {
             this.subgrupos = res.data;
             console.log(res.data);
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);

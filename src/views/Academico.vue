@@ -16,7 +16,7 @@
           hide-details
         ></v-text-field>
         <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="400px">
+        <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }" class="template-add">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
             <v-btn
@@ -104,7 +104,7 @@
         <v-dialog v-model="dialogDesativar" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
-              >Deseja desativar este aluno ?</v-card-title
+              >Deseja {{mudarStatus}} este aluno ?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -122,7 +122,7 @@
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)" color="blue"> mdi-pencil </v-icon>
-      <v-icon small @click="desativeItem(item)" color="red"> mdi-power-standby </v-icon>
+      <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -149,6 +149,7 @@ Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/aluno";
 var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/aluno/desativar/"; 
+var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/aluno/Ativar/";
 
 export default {
   data: () => ({
@@ -192,6 +193,9 @@ export default {
   computed: {
     tituloForm() {
       return this.editIndice === -1 ? "Cadastrar Academico" : "Editar Dados";
+    },
+    mudarStatus() {
+      return this.itemEditado.ativo == true ? "Desativar " : "Ativar Academico";
     },
   },
   props: {
@@ -247,29 +251,36 @@ export default {
 
    desativeItemConfirm() {
       //this.alunos.splice(this.editIndice, 1);
-      if (this.editIndice > -1) {
+      if (this.itemEditado.ativo == true) {
        axios
           .patch(urlPatch + this.itemEditado.id, {
-            //   pessoa: {
-            //   nome: this.itemEditado.nome,
-            //   cpf: this.itemEditado.cpf,
-            //   email: this.itemEditado.email,
-            //   telefone: this.itemEditado.telefone,
-            // },
-            // matricula: this.itemEditado.matricula, 
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            //this.alunos = res.data;
-            console.log("res:");
             console.log(res.data);
             alert("O acadêmico foi desativado com sucesso !");
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
           });
-        this.fecharDesativar();
+          
       }
+      else {
+       axios
+          .patch(urlDispatch + this.itemEditado.id, {
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            console.log(res.data);
+            alert("O acadêmico foi ativado com sucesso !");
+            this.reloadPage();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+          }
+          this.fecharDesativar();
     },
   
     fechar() {
@@ -304,9 +315,9 @@ export default {
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            //this.alunos = res.data;
             alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
@@ -329,6 +340,7 @@ export default {
             this.alunos = res.data;
             alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);

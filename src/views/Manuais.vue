@@ -38,7 +38,7 @@
             </v-card-title>
 
             <v-card-text>
-              <v-form v-model="valid">
+              <v-form>
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="4" md="8">
@@ -78,7 +78,7 @@
             </v-card-title>
 
             <v-card-text>
-              <v-form v-model="valid">
+              <v-form>
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="4" md="8">
@@ -104,7 +104,7 @@
         <v-dialog v-model="dialogDesativar" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
-              >Deseja desativar este manual ?</v-card-title
+              >Deseja {{mudarStatus}} este manual ?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -121,12 +121,8 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
-      <v-icon small class="mr-2" @click="editDescricao(item)" color="blue">
-        mdi-pencil
-      </v-icon>
-      <v-icon small @click="desativeItem(item)" color="red">
-        mdi-power-standby
-      </v-icon>
+      <v-icon small class="mr-2" @click="editItem(item)" color="blue"> mdi-pencil </v-icon>
+      <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -159,6 +155,7 @@ Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/manual";
 var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/manual/desativar/";
+var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/manual/ativar/";
 
 export default {
   data: () => ({
@@ -169,12 +166,12 @@ export default {
     titulos: [
       {
         text: "Descrição",
-        align: "start",
+        align: "center",
         value: "descricao",
       },
-      { text: "Arquivo", value: "fileName" },
-      { text: "Status", value: "ativo" },
-      { text: "Ações", value: "acoes" },
+      { text: "Arquivo", align: "center", value: "fileName" },
+      { text: "Status", align: "center", value: "ativo" },
+      { text: "Ações", align: "center", value: "acoes" },
     ],
     manuais: [],
     editIndice: -1,
@@ -192,11 +189,9 @@ export default {
     },
   }),
 
-  /*  computed: {
-    tituloForm() {
-      return this.editIndice === -1 ? "Cadastrar Manual" : "Editar Manual";
-    },
-  }, */
+  mudarStatus() {
+    return this.itemEditado.ativo == true ? "Desativar " : "Ativar Manual";
+  },
 
   watch: {
     dialog(val) {
@@ -248,7 +243,7 @@ export default {
 
     desativeItemConfirm() {
       // this.manuais.splice(this.editIndice, 1);
-      if (this.editIndice > -1) {
+      if (this.itemEditado.ativo == true)  {
         axios
           .patch(urlPatch + this.itemEditado.id, {
             ativo: this.itemEditado.ativo,
@@ -261,8 +256,21 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-        this.fecharDesativar();
       }
+      else {
+       axios
+          .patch(urlDispatch + this.itemEditado.id, {
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            console.log(res.data);
+            alert("O manual foi ativado com sucesso !");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+          }
+          this.fecharDesativar();
     },
 
     fechar() {
@@ -295,23 +303,15 @@ export default {
       formData.set("descricao", this.itemEditado.descricao);
 
       if (this.editIndice > -1) {
-        axios
-          .put(url, {
-            id: this.itemEditado.id,
-            descricao: this.itemEditado.descricao,
-            ativo: this.itemEditado.ativo,
-          })
-
-          .then((res) => {
-            // this.manuais = res.data;
-            alert("A descrição foi alterada com sucesso !");
-            console.log(res.data);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        axios.put(url + "\\", formData).then((res) => {
+          this.itemEditado.descricao
+          console.log(res.data);
+          this.reloadPage();
+        });
+        alert("A descrição do manual foi alterada com sucesso !");
 
         Object.assign(this.manuais[this.editIndice], this.itemEditado);
+
       } else {
         formData.append("file", this.itemEditado.fileName);
 

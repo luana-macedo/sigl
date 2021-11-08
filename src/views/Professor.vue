@@ -18,7 +18,7 @@
           hide-details
         ></v-text-field>
         <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="400px">
+        <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }" class="template-add">
             <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
             <v-btn
@@ -80,12 +80,6 @@
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
-                      <!--   <v-text-field
-                        v-model="itemEditado.ativo"
-                        label="Status"
-                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        required
-                      ></v-text-field> -->
                     </v-col>
                     <v-col cols="8" sm="6" md="4"> </v-col>
                     <v-col cols="8" sm="6" md="4"> </v-col>
@@ -105,7 +99,7 @@
         <v-dialog v-model="dialogDesativar" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
-              >Deseja desativar este aluno ?</v-card-title
+              >Deseja {{mudarStatus}} este Professor ?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -123,7 +117,7 @@
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)" color="blue"> mdi-pencil </v-icon>
-      <v-icon small @click="desativeItem(item)" color="red"> mdi-power-standby </v-icon>
+      <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -150,6 +144,7 @@ Vue.use(VueAxios, axios);
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
 var urlPatch =
   "http://api-sig-itpac-84633.herokuapp.com/api/professores/desativar/";
+  var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/professores/ativar/";
 
 export default {
   data: () => ({
@@ -157,13 +152,13 @@ export default {
     dialog: false,
     dialogDesativar: false,
     titulos: [
-      { text: "Nome", value: "pessoa.nome" },
-      { text: "CPF", value: "pessoa.cpf" },
-      { text: "Telefone", value: "pessoa.telefone" },
-      { text: "Email", value: "pessoa.email" },
-      { text: "Matricula", value: "matricula" },
-      { text: "Status", value: "ativo" },
-      { text: "Ações", value: "acoes" },
+      { text: "Nome", align: "center", value: "pessoa.nome" },
+      { text: "CPF", align: "center", value: "pessoa.cpf" },
+      { text: "Telefone", align: "center", value: "pessoa.telefone" },
+      { text: "Email", align: "center", value: "pessoa.email" },
+      { text: "Matricula", align: "center",value: "matricula" },
+      { text: "Status", align: "center", value: "ativo" },
+      { text: "Ações", align: "center", value: "acoes" },
     ],
     professores: [],
     editIndice: -1,
@@ -193,6 +188,9 @@ export default {
   computed: {
     tituloForm() {
       return this.editIndice === -1 ? "Cadastrar Professor" : "Editar Dados";
+    },
+    mudarStatus() {
+      return this.itemEditado.ativo == true ? "Desativar " : "Ativar";
     },
   },
   props: {
@@ -248,29 +246,35 @@ export default {
 
     desativeItemConfirm() {
       //this.professores.splice(this.editIndice, 1);
-      if (this.editIndice > -1) {
+      if (this.itemEditado.ativo == true) {
         axios
           .patch(urlPatch + this.itemEditado.id, {
-            //   pessoa: {
-            //   nome: this.itemEditado.nome,
-            //   cpf: this.itemEditado.cpf,
-            //   email: this.itemEditado.email,
-            //   telefone: this.itemEditado.telefone,
-            // },
-            // matricula: this.itemEditado.matricula,
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            //this.professores = res.data;
-            console.log("res:");
             console.log(res.data);
             alert("O acadêmico foi desativado com sucesso !");
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
           });
-        this.fecharDesativar();
       }
+      else {
+       axios
+          .patch(urlDispatch + this.itemEditado.id, {
+            ativo: this.itemEditado.ativo,
+          })
+          .then((res) => {
+            console.log(res.data);
+            alert("O professor foi ativado com sucesso !");
+            this.reloadPage();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+          }
+          this.fecharDesativar();
     },
 
     fechar() {
@@ -305,9 +309,9 @@ export default {
             ativo: this.itemEditado.ativo,
           })
           .then((res) => {
-            //this.professores = res.data;
             alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
@@ -328,14 +332,16 @@ export default {
           })
           .then((res) => {
             this.professores = res.data;
+            alert("Os dados foram adicionados com sucesso !");
             console.log(res.data);
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
           });
 
         this.professores.push(this.itemEditado);
-        alert("Os dados foram adicionados com sucesso !");
+     
       }
 
       this.fechar();
