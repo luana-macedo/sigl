@@ -278,7 +278,7 @@ export default {
     },
 
     fechar() {
-      this.dialogEditar = false;
+      this.dialog = false;
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
@@ -312,22 +312,24 @@ export default {
         .then((res) => {
           this.itemEditado.descricao;
           console.log(res.data);
-          this.reloadPage();
+          alert("A descrição do manual foi alterada com sucesso !");
+          this.fecharEditar();
         });
         
-        alert("A descrição do manual foi alterada com sucesso !");
-
         Object.assign(this.manuais[this.editIndice], this.itemEditado);
+
       } else {
         formData.append("file", this.itemEditado.fileName);
 
         axios.post(url, formData).then((res) => {
           this.manuais = res.data;
           console.log(res.data);
+          alert("O manual foi adicionado com sucesso !");
         });
         this.manuais.push(this.itemEditado);
-        alert("O manual foi adicionado com sucesso !");
+        
       }
+      
       this.fechar();
     },
   },
