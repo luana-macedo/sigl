@@ -6,8 +6,8 @@
 
       <v-card-text>
         <v-form>
-          <v-text-field label="Usuário" prepend-icon="mdi-account-circle" />
-          <v-text-field label="Senha" prepend-icon="mdi-lock" />
+          <v-text-field label="Usuário" prepend-icon="mdi-account-circle" color="red"/>
+          <v-text-field label="Senha" prepend-icon="mdi-lock" color="red" />
         </v-form>
       </v-card-text>
       <v-divider></v-divider>
@@ -26,6 +26,7 @@
                 <v-text-field
                   label="E-mail"
                   prepend-icon="mdi-account-circle"
+                  color="red"
                 />
               </v-form>
             </v-card-text>
