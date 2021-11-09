@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer" app>
+    <v-navigation-drawer v-model="drawer" app color="#f1f1f1">
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="text-h6"> SIGL </v-list-item-title>
@@ -24,7 +24,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar app color="#F3F3F3">
+    <v-app-bar app color="#f1f1f1">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-app-bar-title
