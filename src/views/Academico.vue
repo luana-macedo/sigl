@@ -100,8 +100,9 @@
 
               <v-btn
               :disabled="!valid"
-              color="success" 
-              class="mr-4" @click="salvar">Salvar</v-btn>
+              small color="primary" 
+              class="mr-4" 
+              @click="salvar">Salvar</v-btn>
             </v-card-actions>
 
           </v-card>

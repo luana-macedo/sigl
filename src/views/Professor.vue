@@ -101,8 +101,9 @@
 
               <v-btn
               :disabled="!valid"
-              color="success" 
-              class="mr-4" @click="salvar">Salvar</v-btn>
+              small color="primary" 
+              class="mr-4" 
+              @click="salvar">Salvar</v-btn>
             </v-card-actions>
 
           </v-card>
@@ -179,6 +180,7 @@ export default {
         v => !!v || 'E-mail é obrigatório',
         v => /.+@.+\..+/.test(v) || 'E-mail deve ser válido',
       ],
+
     professores: [],
     professoresMap: [],
     editIndice: -1,
