@@ -130,7 +130,7 @@
       <v-icon small class="mr-2" @click="editItem(item)" color="blue">
         mdi-pencil
       </v-icon>
-      <v-icon small @click="desativeItem(item)"> mdi-power-standby </v-icon>
+      <v-icon small @click="desativeItem(item)" color="red"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
 </template>
