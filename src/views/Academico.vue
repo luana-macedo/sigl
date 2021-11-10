@@ -37,7 +37,7 @@
             </v-card-title>
 
             <v-card-text>
-              <v-form>
+              <v-form v-model="valid">
                 <v-container>
                   <v-row>
                     <v-col cols="8" sm="6" md="4">
@@ -65,9 +65,9 @@
                       ></v-text-field>
 
                       <v-text-field
-                        v-model="itemEditado.pessoa.email"
+                       v-model="itemEditado.pessoa.email"
                         label="E-mail"
-                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
+                        :rules="emailRules"
                         required
                       ></v-text-field>
                     </v-col>
@@ -97,8 +97,13 @@
               <v-btn small color="warning" dark @click="fechar">
                 Cancelar
               </v-btn>
-              <v-btn small color="primary" dark @click="salvar"> Salvar </v-btn>
+
+              <v-btn
+              :disabled="!valid"
+              color="success" 
+              class="mr-4" @click="salvar">Salvar</v-btn>
             </v-card-actions>
+
           </v-card>
         </v-dialog>
         <v-dialog v-model="dialogDesativar" max-width="400px">
@@ -166,6 +171,14 @@ export default {
       { text: "Status", value: "ativo" },
       { text: "Ações", value: "acoes" },
     ],
+
+     email: '',
+    valid: true,
+      emailRules: [
+        v => !!v || 'E-mail é obrigatório',
+        v => /.+@.+\..+/.test(v) || 'E-mail deve ser válido',
+      ],
+
     alunos: [],
     editIndice: -1,
     itemEditado: {
@@ -240,6 +253,10 @@ export default {
     reloadPage() {
       window.location.reload();
     },
+
+    validate () {
+        this.$refs.form.validate()
+      },
 
     editItem(item) {
       this.editIndice = this.alunos.indexOf(item);
