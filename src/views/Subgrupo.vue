@@ -9,7 +9,7 @@
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Subgrupo</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
-        <v-ster></v-ster>
+        <!-- <v-ster></v-ster> -->
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
@@ -18,9 +18,8 @@
           hide-details
         ></v-text-field>
         <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="500px">
+        <v-dialog v-model="dialog" max-width="600px">
           <template v-slot:activator="{ on, attrs }">
-            <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
             <v-btn
               small
               class="mx-2 add"
@@ -36,7 +35,6 @@
             <v-card-title>
               <span class="text-h5">{{ tituloForm }}</span>
             </v-card-title>
-
             <v-card-text>
               <v-form>
                 <v-container>
@@ -62,14 +60,30 @@
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-label>Alunos</v-label>
-                      <vue-select
-                        v-model="alunoSelecionado"
+                      <multiselect
+                        class="select-aluno"
+                        v-model="alunosSelecionados"
+                        :options="alunos"
+                        label="nome"
+                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
+                        :search='search'
+                        :multiple='true'
+                        required
+                      ></multiselect>
+                      <!-- <multiselect
+                        v-model="alunosSelecionados"
                         :options="alunos"
                         label="nome"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         :search="search"
+                        :clear-on-select="true"
+                        :hide-selected="true"
+                        :preserve-search="true"
+                        placeholder="aluno"
+                        :preselect-first="false"
+                        :multiple="true"
                         required
-                      ></vue-select>
+                      ></multiselect> -->
                     </v-col>
                   </v-row>
                 </v-container>
@@ -107,7 +121,9 @@
       <v-icon small class="mr-2" @click="editItem(item)" color="blue">
         mdi-pencil
       </v-icon>
-      <v-icon small @click="desativeItem(item)" color="red"> mdi-power-standby </v-icon>
+      <v-icon small @click="desativeItem(item)" color="red">
+        mdi-power-standby
+      </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -123,8 +139,12 @@
 .data-table {
   padding: 3%;
 }
-.card-modal {
-  text-align: center;
+.select-aluno {
+  display: inline-flex;
+  font-size: 1em;
+  color: black;
+  width: 100px;
+  height: 100px;
 }
 </style>
 
@@ -132,17 +152,23 @@
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
+import Multiselect from "vue-multiselect";
+Vue.component("multiselect", Multiselect);
 Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo";
 var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
 var urlALuno = "http://api-sig-itpac-84633.herokuapp.com/api/aluno";
-var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
-var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/Ativar/";
+var urlPatch =
+  "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
+var urlDispatch =
+  "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/Ativar/";
 
 export default {
+  // components: { },
   data() {
     return {
+      Multiselect,
       search: "",
       dialog: false,
       dialogDesativar: false,
@@ -152,7 +178,7 @@ export default {
           value: "nome",
         },
         {
-          text: "Professor", 
+          text: "Professor",
           value: "professor.pessoa.nome",
         },
         {
@@ -175,7 +201,7 @@ export default {
         id: null,
         nome: "",
         profSelecionado: null,
-        alunoSelecionado: [],
+        alunosSelecionados: [],
         ativo: null,
       },
       itemPadrao: {
@@ -183,7 +209,7 @@ export default {
         nome: "",
         ativo: true,
       },
-      alunoSelecionado: [],
+      alunosSelecionados: [],
       profSelecionado: null,
     };
   },
@@ -216,15 +242,15 @@ export default {
         .get(url, this.subgrupos)
         .then((res) => {
           console.log(res);
-          this.subgrupos = res.data.map((d) => ({
-            ...d,
-            alunos: d.alunos.map((a) => a.pessoa.nome).filter(Boolean),
-          })
-          ).map(p => {
-            p.ativo = (p.ativo?"Ativado":"Desativado")
-            return p; 
-          });
-
+          this.subgrupos = res.data
+            .map((d) => ({
+              ...d,
+              alunos: d.alunos.map((a) => a.pessoa.nome).filter(Boolean),
+            }))
+            .map((p) => {
+              p.ativo = p.ativo ? "Ativado" : "Desativado";
+              return p;
+            });
         })
         .catch((error) => {
           console.warn(error);
@@ -329,9 +355,12 @@ export default {
             id: this.itemEditado.id,
             nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo === "Ativado",
-            /* professor: {
+            professor: {
               id: this.profSelecionado.idprofessor,
-            }, */
+            }, 
+            alunosSelecionados : [{
+              id: this.alunosSelecionados.idaluno
+            }],
           })
           .then((res) => {
             console.log(res.data);
@@ -342,15 +371,17 @@ export default {
           });
 
         Object.assign(this.subgrupos[this.editIndice], this.itemEditado);
-
       } else {
         axios
           .post(url, {
             nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo,
-            /* professor: {
+            professor: {
               id: this.profSelecionado.idprofessor,
-            }, */
+            }, 
+            alunosSelecionados : [{
+              id: this.alunosSelecionados.idaluno
+            }],
           })
           .then((res) => {
             this.subgrupos = res.data;
