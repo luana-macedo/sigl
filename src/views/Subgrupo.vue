@@ -63,11 +63,11 @@
                     <v-col cols="8" sm="6" md="4">
                       <v-label>Alunos</v-label>
                       <vue-select
-                      :search="search"
                         v-model="alunoSelecionado"
                         :options="alunos"
                         label="nome"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
+                        :search="search"
                         required
                       ></vue-select>
                     </v-col>
