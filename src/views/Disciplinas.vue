@@ -20,6 +20,7 @@
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }" class="template-add">
+            <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Adicionar</v-btn> -->
             <v-btn
               small
               class="mx-2 add"
@@ -57,10 +58,22 @@
                         required
                       ></v-text-field>
                     </v-col>
+                    <!-- <v-col cols="8" sm="6" md="4"> 
+                       </v-col>
+                     <v-col cols="8" sm="6" md="4"> 
+                      <v-select
+                          v-model="select0"
+                           :items="status"
+                             label="Status"
+                            data-vv-name="select"
+                            :rules="[(v) => !!v ||'Campo Obrigatório']"
+                            maxlenght="20"
+                            required
+                            ></v-select>
+                     </v-col> -->
                     <v-col cols="8" sm="6" md="4">
                       <v-label>Periodo</v-label>
                       <vue-select
-                      :search="search"
                         v-model="periodoSelecionado"
                         :options="periodo"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
@@ -72,7 +85,6 @@
                       <!-- :rules="[(v) => !!v || '*Campo Obrigatório*']" -->
                       <v-label>Professor</v-label>
                       <vue-select
-                      :search="search"
                         v-model="profSelecionado"
                         :options="professor"
                         label="professor"
