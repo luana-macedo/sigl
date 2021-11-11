@@ -77,6 +77,7 @@
                         v-model="periodoSelecionado"
                         :options="periodo"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
+                        :search="search"
                         label="periodo"
                         required
                       ></vue-select>
@@ -88,6 +89,7 @@
                         v-model="profSelecionado"
                         :options="professor"
                         label="professor"
+                        :search="search"
                         required
                       ></vue-select>
                     </v-col>
