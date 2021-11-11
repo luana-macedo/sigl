@@ -56,6 +56,7 @@
                         :options="professor"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         label="nome"
+                        :search="search"
                         required
                       ></vue-select>
                     </v-col>
@@ -66,6 +67,7 @@
                         :options="alunos"
                         label="nome"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
+                        :search="search"
                         required
                       ></vue-select>
                     </v-col>
