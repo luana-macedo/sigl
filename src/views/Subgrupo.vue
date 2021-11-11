@@ -174,7 +174,7 @@ export default {
         nome: "",
         profSelecionado: null,
         alunoSelecionado: [],
-        ativo: null,
+        ativo: true,
       },
       itemPadrao: {
         id: null,
@@ -227,6 +227,7 @@ export default {
         .catch((error) => {
           console.warn(error);
         });
+
       await Promise.all([this.getProfessores(), this.getAlunos()]);
     },
 
@@ -354,6 +355,7 @@ export default {
             this.subgrupos = res.data;
             console.log(res.data);
             alert("Os dados foram adicionados com sucesso !");
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
