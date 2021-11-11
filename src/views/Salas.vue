@@ -60,7 +60,7 @@
                     <v-col cols="8" sm="6" md="4">
                       <v-text-field
                         v-model="itemEditado.capacidade"
-                        label="Capacidade"
+                        label="Capacidade" type="number"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
