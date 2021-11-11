@@ -55,6 +55,7 @@
                         v-model="profSelecionado"
                         :options="professor"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
+                        :search="search"
                         label="nome"
                         required
                       ></vue-select>
@@ -62,6 +63,7 @@
                     <v-col cols="8" sm="6" md="4">
                       <v-label>Alunos</v-label>
                       <vue-select
+                      :search="search"
                         v-model="alunoSelecionado"
                         :options="alunos"
                         label="nome"
@@ -161,7 +163,7 @@ export default {
           text: "Status",
           value: "ativo",
         },
-        { text: "Ações", align: "center", value: "acoes", sortable: false },
+        { text: "Ações", sortable: false },
       ],
       subgrupos: [],
       professor: [],
@@ -174,7 +176,7 @@ export default {
         nome: "",
         profSelecionado: null,
         alunoSelecionado: [],
-        ativo: null,
+        ativo: true,
       },
       itemPadrao: {
         id: null,
