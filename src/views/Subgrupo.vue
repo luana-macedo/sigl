@@ -159,10 +159,9 @@ Vue.use(VueAxios, axios);
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo";
 var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
 var urlALuno = "http://api-sig-itpac-84633.herokuapp.com/api/aluno";
-var urlPatch =
-  "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
-var urlDispatch =
-  "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/Ativar/";
+var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
+var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/Ativar/";
+  
 
 export default {
   // components: { },
