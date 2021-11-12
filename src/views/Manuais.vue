@@ -9,7 +9,7 @@
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Manuais</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
-        <v-ster></v-ster>
+        <!-- <v-ster></v-ster> -->
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"

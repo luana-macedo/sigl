@@ -60,16 +60,15 @@
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-label>Alunos</v-label>
-                      <multiselect
-                        class="select-aluno"
+                      <vue-select
                         v-model="alunosSelecionados"
                         :options="alunos"
                         label="nome"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        :search='search'
-                        :multiple='true'
+                        :search="search"
+                        :multiple="true"
                         required
-                      ></multiselect>
+                      ></vue-select>
                       <!-- <multiselect
                         v-model="alunosSelecionados"
                         :options="alunos"
@@ -139,21 +138,12 @@
 .data-table {
   padding: 3%;
 }
-.select-aluno {
-  display: inline-flex;
-  font-size: 1em;
-  color: black;
-  width: 100px;
-  height: 100px;
-}
 </style>
 
 <script>
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
-import Multiselect from "vue-multiselect";
-Vue.component("multiselect", Multiselect);
 Vue.use(VueAxios, axios);
 
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo";
@@ -168,10 +158,13 @@ export default {
   // components: { },
   data() {
     return {
-      Multiselect,
       search: "",
       dialog: false,
       dialogDesativar: false,
+      multiple: {
+        type: Boolean,
+        default: false,
+      },
       titulos: [
         {
           text: "Subgrupo",
@@ -358,10 +351,8 @@ export default {
             ativo: this.itemEditado.ativo === "Ativado",
             professor: {
               id: this.profSelecionado.idprofessor,
-            }, 
-            alunosSelecionados : [{
-              id: this.alunosSelecionados.idaluno
-            }],
+            },
+            alunosSelecionados: {id: this.alunosSelecionados.idaluno},
           })
           .then((res) => {
             console.log(res.data);
@@ -379,10 +370,10 @@ export default {
             ativo: this.itemEditado.ativo,
             professor: {
               id: this.profSelecionado.idprofessor,
-            }, 
-            alunosSelecionados : [{
-              id: this.alunosSelecionados.idaluno
-            }],
+            },
+            alunos: {
+              id: this.alunosSelecionados.idaluno,
+            },
           })
           .then((res) => {
             this.subgrupos = res.data;
