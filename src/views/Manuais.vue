@@ -121,8 +121,15 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
-      <v-icon small class="mr-2" @click="editDescricao(item)" color="blue">mdi-pencil</v-icon>
-      <v-icon small @click="desativeItem(item)" color="red"> mdi-power-standby </v-icon>
+      <v-icon small class="mr-2" @click="onClick(item)" color="brown"
+        >mdi-download</v-icon
+      >
+      <v-icon small class="mr-2" @click="editDescricao(item)" color="blue"
+        >mdi-pencil</v-icon
+      >
+      <v-icon small @click="desativeItem(item)" color="red">
+        mdi-power-standby
+      </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -142,7 +149,6 @@
 #card-actions {
   padding-left: 18%;
 }
-
 </style>
 
 <script>
@@ -187,12 +193,12 @@ export default {
     },
   }),
 
-   computed: {
-      mudarStatus() {
+  computed: {
+    mudarStatus() {
       return this.itemEditado.ativo == "Ativado" ? "desativar " : "ativar";
     },
-   },
- 
+  },
+
   watch: {
     dialog(val) {
       val || this.fechar();
@@ -214,8 +220,8 @@ export default {
   methods: {
     inicializar() {
       axios.get(url, this.manuais).then((res) => {
-        this.manuais = res.data.map(p => {
-          p.ativo = (p.ativo?"Ativado":"Desativado")
+        this.manuais = res.data.map((p) => {
+          p.ativo = p.ativo ? "Ativado" : "Desativado";
           return p;
         });
         console.log(res.data);
@@ -307,17 +313,17 @@ export default {
       formData.set("descricao", this.itemEditado.descricao);
 
       if (this.editIndice > -1) {
-        axios.patch(url + "/updateDescricao/"+this.itemEditado.id, formData)
-        
-        .then((res) => {
-          this.itemEditado.descricao;
-          console.log(res.data);
-          alert("A descrição do manual foi alterada com sucesso !");
-          this.fecharEditar();
-        });
-        
-        Object.assign(this.manuais[this.editIndice], this.itemEditado);
+        axios
+          .patch(url + "/updateDescricao/" + this.itemEditado.id, formData)
 
+          .then((res) => {
+            this.itemEditado.descricao;
+            console.log(res.data);
+            alert("A descrição do manual foi alterada com sucesso !");
+            this.fecharEditar();
+          });
+
+        Object.assign(this.manuais[this.editIndice], this.itemEditado);
       } else {
         formData.append("file", this.itemEditado.fileName);
 
@@ -328,9 +334,8 @@ export default {
           this.reloadPage();
         });
         this.manuais.push(this.itemEditado);
-        
       }
-      
+
       this.fechar();
     },
   },
