@@ -58,19 +58,6 @@
                         required
                       ></v-text-field>
                     </v-col>
-                    <!-- <v-col cols="8" sm="6" md="4"> 
-                       </v-col>
-                     <v-col cols="8" sm="6" md="4"> 
-                      <v-select
-                          v-model="select0"
-                           :items="status"
-                             label="Status"
-                            data-vv-name="select"
-                            :rules="[(v) => !!v ||'Campo Obrigatório']"
-                            maxlenght="20"
-                            required
-                            ></v-select>
-                     </v-col> -->
                     <v-col cols="8" sm="6" md="4">
                       <v-label>Periodo</v-label>
                       <vue-select
@@ -83,13 +70,13 @@
                       ></vue-select>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
-                      <!-- :rules="[(v) => !!v || '*Campo Obrigatório*']" -->
                       <v-label>Professor</v-label>
                       <vue-select
-                        v-model="profSelecionado"
+                        v-model="profsSelecionados"
                         :options="professor"
                         label="professor"
                         :search="search"
+                        :multiple='true'
                         required
                       ></vue-select>
                     </v-col>
@@ -129,8 +116,10 @@
       <v-icon small class="mr-2" @click="editItem(item)" color="blue">
         mdi-pencil
       </v-icon>
-      <v-icon small @click="desativeItem(item)" color="red"> mdi-power-standby </v-icon>
-    </template> 
+      <v-icon small @click="desativeItem(item)" color="red">
+        mdi-power-standby
+      </v-icon>
+    </template>
   </v-data-table>
 </template>
 
@@ -155,14 +144,20 @@ Vue.use(VueAxios, axios);
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
 var urlPeriodo = "http://api-sig-itpac-84633.herokuapp.com/api/periodo";
 var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
-var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/desativar/";
-var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/ativar/";
+var urlPatch =
+  "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/desativar/";
+var urlDispatch =
+  "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/ativar/";
 
 export default {
   data: () => ({
     search: "",
     dialog: false,
     dialogDesativar: false,
+    multiple: {
+      type: Boolean,
+      default: false,
+    },
     titulos: [
       { text: "Disciplina", value: "nome" },
       {
@@ -170,7 +165,7 @@ export default {
         align: "start",
         value: "apelido",
       },
-      { text: "Professor", value: "professor" },
+      { text: "Professor", value: "professores" },
       { text: "Período", value: "periodo.periodo" },
       { text: "Status", value: "ativo" },
       { text: "Ações", value: "acoes" },
@@ -186,7 +181,7 @@ export default {
       nome: "",
       apelido: "",
       periodoSelecionado: null,
-      profSelecionado: [],
+      profsSelecionados: [],
       ativo: true,
     },
     itemPadrao: {
@@ -195,7 +190,7 @@ export default {
       apelido: "",
       ativo: true,
     },
-    profSelecionado: [],
+    profsSelecionados: [],
     periodoSelecionado: null,
   }),
 
@@ -227,10 +222,14 @@ export default {
         .get(url, this.disciplinas)
         .then((res) => {
           console.log(res.data);
-          this.disciplinas = res.data.map(p => {
-            p.ativo = (p.ativo?"Ativado":"Desativado")
-            return p;
-          });
+          this.disciplinas = res.data.map((p) => ({
+              ...p,
+              ativo: p.ativo ? "Ativado" : "Desativado",
+              professores: p.professores
+                .map((p) => p.pessoa.nome)
+                .filter(Boolean),
+            })
+          )
         })
         .catch((error) => {
           console.warn(error);
@@ -260,17 +259,18 @@ export default {
     async getProfessores() {
       const { data } = await this.axios.get(urlProfessor);
       this.profsRaw = data;
-      this.professor = data
-        .filter((d) => d.pessoa.nome).map((d) => ({ ...d, idprofessor: d.id }));
-      console.log("lista de profs", this.professor);
+      this.professor = data;
+      //   .filter((d) => d.pessoa.nome)
+      //   .map((d) => ({ ...d, idprofessor: d.id }));
+      // console.log("lista de profs", this.professor);
     },
 
-    achaidprofessor() {
-       const [selectedProfessor] = this.profsRaw.filter(
-         (d) => d.professor === this.profSelecionado[0]
-       );
-       console.log("professor selecionado",selectedProfessor);
-     },
+    // achaidprofessor() {
+    //   const [selectedProfessor] = this.profsRaw.filter(
+    //     (d) => d.professor === this.profsSelecionados[0]
+    //   );
+    //   console.log("professor selecionado", selectedProfessor);
+    // },
 
     editItem(item) {
       this.editIndice = this.disciplinas.indexOf(item);
@@ -339,7 +339,7 @@ export default {
             nome: this.itemEditado.nome,
             apelido: this.itemEditado.apelido,
             // professor: {
-            //   id: this.profSelecionado.idprofessor,
+            //   id: this.profsSelecionados.idprofessor,
             // },
             ativo: this.itemEditado.ativo === "Ativado",
             periodo: {
@@ -361,9 +361,7 @@ export default {
             nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo,
             apelido: this.itemEditado.apelido,
-            // professor: [{
-            //   id: this.profSelecionado.idprofessor,
-            // }],
+            professores: this.profsSelecionados,
             periodo: {
               id: this.periodoSelecionado.idperiodo,
             },
@@ -380,7 +378,6 @@ export default {
         this.disciplinas.push(this.itemEditado);
       }
       this.fechar();
-
     },
   },
 };
