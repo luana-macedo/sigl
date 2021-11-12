@@ -9,7 +9,7 @@
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Manuais</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
-        <v-ster></v-ster>
+        <!-- <v-ster></v-ster> -->
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
@@ -121,7 +121,7 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
-      <v-icon small class="mr-2" @click="onClick(item)" color="brown"
+      <v-icon small class="mr-2" @click="downloadArquivo(item)" color="brown"
         >mdi-download</v-icon
       >
       <v-icon small class="mr-2" @click="editDescricao(item)" color="blue"
@@ -160,6 +160,7 @@ Vue.use(VueAxios, axios);
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/manual";
 var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/manual/desativar/";
 var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/manual/ativar/";
+// var urlDownload = "http://api-sig-itpac-84633.herokuapp.com/api/manual/doc/";
 
 export default {
   data: () => ({
@@ -248,6 +249,25 @@ export default {
       this.editIndice = this.manuais.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       this.dialogDesativar = true;
+    },
+
+    downloadArquivo() {
+      axios({
+        url: "http://api-sig-itpac-84633.herokuapp.com/api/manual/doc/", // File URL Goes Here
+        method: "GET",
+        responseType: "blob",
+      }).then((res) => {
+        var FILE = window.URL.createObjectURL(new Blob([res.data]));
+        var docUrl = document.createElement("x");
+
+        docUrl.href = FILE;
+        docUrl.setAttribute("download", "file.pdf");
+        document.body.appendChild(docUrl);
+        docUrl.click();
+      })
+      .catch((error) => {
+          console.warn(error);
+      });
     },
 
     desativeItemConfirm() {
