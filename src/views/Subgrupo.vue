@@ -61,6 +61,7 @@
                     <v-col cols="8" sm="6" md="4">
                       <v-label>Alunos</v-label>
                       <vue-select
+                        :v-for="(aluno, index) in alunos"
                         v-model="alunosSelecionados"
                         :options="alunos"
                         label="nome"
@@ -149,9 +150,10 @@ Vue.use(VueAxios, axios);
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo";
 var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
 var urlALuno = "http://api-sig-itpac-84633.herokuapp.com/api/aluno";
-var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
-var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/Ativar/";
-  
+var urlPatch =
+  "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/desativar/";
+var urlDispatch =
+  "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/Ativar/";
 
 export default {
   // components: { },
@@ -351,7 +353,7 @@ export default {
             professor: {
               id: this.profSelecionado.idprofessor,
             },
-            alunosSelecionados: {id: this.alunosSelecionados.idaluno},
+            alunosSelecionados: { id: this.alunosSelecionados.idaluno },
           })
           .then((res) => {
             console.log(res.data);
