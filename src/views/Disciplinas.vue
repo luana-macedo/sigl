@@ -70,11 +70,12 @@
                       ></vue-select>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
-                      <v-label>Professor</v-label>
+                      <v-label>Professores</v-label>
                       <vue-select
+                        :getOptionLabel="professores  =>  professores.pessoa.nome"
                         v-model="profsSelecionados"
-                        :options="professor"
-                        label="professor"
+                        :options="professores"
+                        label="professores"
                         :search="search"
                         :multiple='true'
                         required
@@ -121,6 +122,7 @@
       </v-icon>
     </template>
   </v-data-table>
+ 
 </template>
 
 <style>
@@ -144,10 +146,8 @@ Vue.use(VueAxios, axios);
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
 var urlPeriodo = "http://api-sig-itpac-84633.herokuapp.com/api/periodo";
 var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
-var urlPatch =
-  "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/desativar/";
-var urlDispatch =
-  "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/ativar/";
+var urlPatch ="http://api-sig-itpac-84633.herokuapp.com/api/disciplina/desativar/";
+var urlDispatch ="http://api-sig-itpac-84633.herokuapp.com/api/disciplina/ativar/";
 
 export default {
   data: () => ({
@@ -173,7 +173,7 @@ export default {
     disciplinas: [],
     periodo: [],
     periodosRaw: [],
-    professor: [],
+    professores: [],
     profsRaw: [],
     editIndice: -1,
     itemEditado: {
@@ -259,10 +259,8 @@ export default {
     async getProfessores() {
       const { data } = await this.axios.get(urlProfessor);
       this.profsRaw = data;
-      this.professor = data;
-      //   .filter((d) => d.pessoa.nome)
-      //   .map((d) => ({ ...d, idprofessor: d.id }));
-      // console.log("lista de profs", this.professor);
+      this.professores = data
+      .filter((d) => d.pessoa.nome).filter(Boolean);
     },
 
     // achaidprofessor() {

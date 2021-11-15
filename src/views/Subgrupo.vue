@@ -61,7 +61,6 @@
                     <v-col cols="8" sm="6" md="4">
                       <v-label>Alunos</v-label>
                       <vue-select
-                        :v-for="(aluno, index) in alunos"
                         v-model="alunosSelecionados"
                         :options="alunos"
                         label="nome"
@@ -70,20 +69,6 @@
                         :multiple="true"
                         required
                       ></vue-select>
-                      <!-- <multiselect
-                        v-model="alunosSelecionados"
-                        :options="alunos"
-                        label="nome"
-                        :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        :search="search"
-                        :clear-on-select="true"
-                        :hide-selected="true"
-                        :preserve-search="true"
-                        placeholder="aluno"
-                        :preselect-first="false"
-                        :multiple="true"
-                        required
-                      ></multiselect> -->
                     </v-col>
                   </v-row>
                 </v-container>
@@ -156,7 +141,6 @@ var urlDispatch =
   "http://api-sig-itpac-84633.herokuapp.com/api/subgrupo/Ativar/";
 
 export default {
-  // components: { },
   data() {
     return {
       search: "",
@@ -353,7 +337,7 @@ export default {
             professor: {
               id: this.profSelecionado.idprofessor,
             },
-            alunosSelecionados: { id: this.alunosSelecionados.idaluno },
+            // alunosSelecionados: { id: this.alunosSelecionados.idaluno },
           })
           .then((res) => {
             console.log(res.data);
@@ -372,9 +356,12 @@ export default {
             professor: {
               id: this.profSelecionado.idprofessor,
             },
-            alunos: {
-              id: this.alunosSelecionados.idaluno,
-            },
+            // alunos: {
+            //   id: this.alunosSelecionados.idaluno,
+            // },
+            // alunos: JSON.stringify({
+            //   object: "alunosSelecionados",
+            // }),
           })
           .then((res) => {
             this.subgrupos = res.data;
