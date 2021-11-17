@@ -339,7 +339,7 @@ export default {
               telefone: this.itemEditado.pessoa.telefone,
             },
             matricula: this.itemEditado.matricula,
-            ativo: this.itemEditado.ativo === "ativo",
+            ativo: this.itemEditado.ativo === "Ativado",
           })
           .then((res) => {
             //this.professores = res.data;

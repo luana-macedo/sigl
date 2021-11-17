@@ -274,12 +274,16 @@ export default {
             local: this.itemEditado.local,
             capacidade: this.itemEditado.capacidade,
             descricao: this.itemEditado.descricao,
-            ativo: this.itemEditado.ativo,
+            ativo: this.itemEditado.ativo === "Ativado",
           })
           .then((res) => {
             //this.salas = res.data;
             alert("Os dados foram atualizados com sucesso !");
             console.log(res.data);
+            this.reloadPage();
+          })
+          .catch((error) => {
+            console.log(error);
           });
 
         Object.assign(this.salas[this.editIndice], this.itemEditado);

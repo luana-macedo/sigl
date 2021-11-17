@@ -340,14 +340,16 @@ export default {
             this.itemEditado.descricao;
             console.log(res.data);
             alert("A descrição do manual foi alterada com sucesso !");
-            this.fecharEditar();
+            this.reloadPage();
           });
 
         Object.assign(this.manuais[this.editIndice], this.itemEditado);
       } else {
         formData.append("file", this.itemEditado.fileName);
 
-        axios.post(url, formData).then((res) => {
+        axios.post(url, formData)
+        
+        .then((res) => {
           this.manuais = res.data;
           console.log(res.data);
           alert("O manual foi adicionado com sucesso !");
