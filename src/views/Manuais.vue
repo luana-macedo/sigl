@@ -160,7 +160,7 @@ Vue.use(VueAxios, axios);
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/manual";
 var urlPatch = "http://api-sig-itpac-84633.herokuapp.com/api/manual/desativar/";
 var urlDispatch = "http://api-sig-itpac-84633.herokuapp.com/api/manual/ativar/";
-// var urlDownload = "http://api-sig-itpac-84633.herokuapp.com/api/manual/doc/";
+var urlDownload = "http://api-sig-itpac-84633.herokuapp.com/api/manual/doc/";
 
 export default {
   data: () => ({
@@ -190,7 +190,7 @@ export default {
       id: null,
       descricao: "",
       fileName: "",
-      ativo: true,
+      ativo: null,
     },
   }),
 
@@ -251,23 +251,27 @@ export default {
       this.dialogDesativar = true;
     },
 
-    downloadArquivo() {
-      axios({
-        url: "http://api-sig-itpac-84633.herokuapp.com/api/manual/doc/", // File URL Goes Here
-        method: "GET",
-        responseType: "blob",
-      }).then((res) => {
-        var FILE = window.URL.createObjectURL(new Blob([res.data]));
-        var docUrl = document.createElement("x");
-
-        docUrl.href = FILE;
-        docUrl.setAttribute("download", "file.pdf");
-        document.body.appendChild(docUrl);
-        docUrl.click();
-      })
-      .catch((error) => {
+    downloadArquivo(item) {
+      this.editIndice = this.manuais.indexOf(item);
+      this.itemEditado = Object.assign({}, item);
+      var index = this.itemEditado.id;
+      axios
+        .get(urlDownload + index, {
+          responseType: "blob",
+        })
+        .then((response) => {
+          var headers = response.headers;
+          var blob = new Blob([response.data], {
+            type: headers["content-type"],
+          });
+          var link = document.createElement("a");
+          link.href = window.URL.createObjectURL(blob);
+          link.download = "file";
+          link.click();
+        })
+        .catch((error) => {
           console.warn(error);
-      });
+        });
     },
 
     desativeItemConfirm() {
@@ -347,14 +351,15 @@ export default {
       } else {
         formData.append("file", this.itemEditado.fileName);
 
-        axios.post(url, formData)
-        
-        .then((res) => {
-          this.manuais = res.data;
-          console.log(res.data);
-          alert("O manual foi adicionado com sucesso !");
-          this.reloadPage();
-        });
+        axios
+          .post(url, formData)
+
+          .then((res) => {
+            this.manuais = res.data;
+            console.log(res.data);
+            alert("O manual foi adicionado com sucesso !");
+            this.reloadPage();
+          });
         this.manuais.push(this.itemEditado);
       }
 
