@@ -337,7 +337,7 @@ export default {
             professor: {
               id: this.profSelecionado.idprofessor,
             },
-            // alunosSelecionados: { id: this.alunosSelecionados.idaluno },
+            alunos: this.alunosSelecionados,
           })
           .then((res) => {
             console.log(res.data);
@@ -356,12 +356,7 @@ export default {
             professor: {
               id: this.profSelecionado.idprofessor,
             },
-            // alunos: {
-            //   id: this.alunosSelecionados.idaluno,
-            // },
-            // alunos: JSON.stringify({
-            //   object: "alunosSelecionados",
-            // }),
+            alunos: this.alunosSelecionados,
           })
           .then((res) => {
             this.subgrupos = res.data;
