@@ -259,13 +259,6 @@ export default {
       this.alunos = alunos;
     },
 
-    /* achaidaluno() {
-      const [selectedAluno] = this.alunos.filter(
-       (d) => d.aluno === this.selectAluno[0]
-     );
-    console.log(selectedAluno);
-    },*/
-
     editItem(item) {
       this.editIndice = this.subgrupos.indexOf(item);
       this.itemEditado = Object.assign({}, item);

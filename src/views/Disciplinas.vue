@@ -251,24 +251,12 @@ export default {
       //  console.log("periodo",data,data.map(d => d.periodo))
     },
 
-    //  achaidperiodo(){
-    //     const [selectedPeriodo] = this.periodosRaw.filter(d => d.periodo ===  this.select[0])
-    //     console.log(selectedPeriodo)
-    //  },
-
     async getProfessores() {
       const { data } = await this.axios.get(urlProfessor);
       this.profsRaw = data;
       this.professores = data
       .filter((d) => d.pessoa.nome).filter(Boolean);
     },
-
-    // achaidprofessor() {
-    //   const [selectedProfessor] = this.profsRaw.filter(
-    //     (d) => d.professor === this.profsSelecionados[0]
-    //   );
-    //   console.log("professor selecionado", selectedProfessor);
-    // },
 
     editItem(item) {
       this.editIndice = this.disciplinas.indexOf(item);
