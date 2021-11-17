@@ -336,13 +336,11 @@ export default {
             id: this.itemEditado.id,
             nome: this.itemEditado.nome,
             apelido: this.itemEditado.apelido,
-            // professor: {
-            //   id: this.profsSelecionados.idprofessor,
-            // },
             ativo: this.itemEditado.ativo === "Ativado",
             periodo: {
               id: this.periodoSelecionado.idperiodo,
             },
+            professores: this.profsSelecionados,
           })
           .then((res) => {
             alert("Os dados foram atualizados com sucesso !");
