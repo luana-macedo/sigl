@@ -342,6 +342,7 @@ export default {
           .then((res) => {
             console.log(res.data);
             alert("Os dados foram atualizados com sucesso !");
+            this.reloadPage();
           })
           .catch((error) => {
             console.log(error);
