@@ -66,7 +66,8 @@
               <v-btn small color="warning" dark @click="fechar">
                 Cancelar
               </v-btn>
-              <v-btn small color="primary" 
+              <v-btn 
+              small color="primary" 
               :disabled="!valid"
               class="mr-4"
               @click="salvar">Salvar</v-btn>
