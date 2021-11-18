@@ -326,7 +326,7 @@ export default {
           .put(url, {
             id: this.itemEditado.id,
             nome: this.itemEditado.nome,
-            ativo: this.itemEditado.ativo === "Ativado",
+            ativo: this.itemEditado.ativo,
             professor: {
               id: this.profSelecionado.idprofessor,
             },

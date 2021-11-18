@@ -274,7 +274,7 @@ export default {
             local: this.itemEditado.local,
             capacidade: this.itemEditado.capacidade,
             descricao: this.itemEditado.descricao,
-            ativo: this.itemEditado.ativo === "Ativado",
+            ativo: this.itemEditado.ativo,
           })
           .then((res) => {
             //this.salas = res.data;
@@ -295,7 +295,7 @@ export default {
             local: this.itemEditado.local,
             capacidade: this.itemEditado.capacidade,
             descricao: this.itemEditado.descricao,
-            ativo: this.itemEditado.ativo === "Ativado",
+            ativo: this.itemEditado.ativo,
           })
           .then((res) => {
             this.salas = res.data;

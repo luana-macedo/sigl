@@ -132,7 +132,6 @@
       <v-icon small @click="desativeItem(item)" color="red"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
-
 </template>
 
 <style>
@@ -339,7 +338,7 @@ export default {
               telefone: this.itemEditado.pessoa.telefone,
             },
             matricula: this.itemEditado.matricula,
-            ativo: this.itemEditado.ativo === "Ativado",
+            ativo: this.itemEditado.ativo,
           })
           .then((res) => {
             //this.professores = res.data;
