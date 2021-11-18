@@ -188,7 +188,7 @@ export default {
       id: null,
       nome: "",
       apelido: "",
-      ativo: true,
+      ativo: null,
     },
     profsSelecionados: [],
     periodoSelecionado: null,
