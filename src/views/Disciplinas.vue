@@ -72,12 +72,14 @@
                     <v-col cols="8" sm="6" md="4">
                       <v-label>Professores</v-label>
                       <vue-select
-                        :getOptionLabel="professores  =>  professores.pessoa.nome"
+                        :getOptionLabel="
+                          (professores) => professores.pessoa.nome
+                        "
                         v-model="profsSelecionados"
                         :options="professores"
                         label="professores"
                         :search="search"
-                        :multiple='true'
+                        :multiple="true"
                         required
                       ></vue-select>
                     </v-col>
@@ -126,7 +128,6 @@
       </v-icon>
     </template>
   </v-data-table>
- 
 </template>
 
 <style>
@@ -150,8 +151,10 @@ Vue.use(VueAxios, axios);
 var url = "http://api-sig-itpac-84633.herokuapp.com/api/disciplina";
 var urlPeriodo = "http://api-sig-itpac-84633.herokuapp.com/api/periodo";
 var urlProfessor = "http://api-sig-itpac-84633.herokuapp.com/api/professores";
-var urlPatch ="http://api-sig-itpac-84633.herokuapp.com/api/disciplina/desativar/";
-var urlDispatch ="http://api-sig-itpac-84633.herokuapp.com/api/disciplina/ativar/";
+var urlPatch =
+  "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/desativar/";
+var urlDispatch =
+  "http://api-sig-itpac-84633.herokuapp.com/api/disciplina/ativar/";
 
 export default {
   data: () => ({
@@ -230,13 +233,12 @@ export default {
         .then((res) => {
           console.log(res.data);
           this.disciplinas = res.data.map((p) => ({
-              ...p,
-              ativo: p.ativo ? "Ativado" : "Desativado",
-              professores: p.professores
-                .map((p) => p.pessoa.nome)
-                .filter(Boolean),
-            })
-          )
+            ...p,
+            ativo: p.ativo ? "Ativado" : "Desativado",
+            professores: p.professores
+              .map((p) => p.pessoa.nome)
+              .filter(Boolean),
+          }));
         })
         .catch((error) => {
           console.warn(error);
@@ -261,13 +263,21 @@ export default {
     async getProfessores() {
       const { data } = await this.axios.get(urlProfessor);
       this.profsRaw = data;
-      this.professores = data
-      .filter((d) => d.pessoa.nome).filter(Boolean);
+      this.professores = data.filter((d) => d.pessoa.nome).filter(Boolean);
     },
 
     editItem(item) {
       this.editIndice = this.disciplinas.indexOf(item);
-      this.itemEditado = Object.assign({}, item);
+      const disciplina = { 
+            id: this.itemEditado.id,
+            nome: this.itemEditado.nome,
+            apelido: this.itemEditado.apelido,
+            ativo: this.itemEditado.ativo,
+            periodo: this.periodoSelecionado,
+            professores: this.profsSelecionados,
+      };
+      this.itemEditado = Object.assign({disciplina},item);
+      console.log(this.itemEditado);
       this.dialog = true;
     },
 
