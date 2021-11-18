@@ -38,7 +38,7 @@
             </v-card-title>
 
             <v-card-text>
-              <v-form>
+              <v-form v-model="valid">
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="4" md="8">
@@ -97,7 +97,11 @@
               <v-btn small color="warning" dark @click="fecharEditar">
                 Cancelar
               </v-btn>
-              <v-btn small color="primary" dark @click="salvar"> Salvar </v-btn>
+              
+              <v-btn small color="primary" 
+              :disabled="!valid"
+              class="mr-4"
+              @click="salvar">Salvar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -178,6 +182,7 @@ export default {
       { text: "Status", value: "ativo" },
       { text: "Ações", align: "center", value: "acoes" },
     ],
+    valid: true,
     manuais: [],
     editIndice: -1,
     itemEditado: {

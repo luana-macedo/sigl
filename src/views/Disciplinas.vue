@@ -90,7 +90,11 @@
               <v-btn small color="warning" dark @click="fechar">
                 Cancelar
               </v-btn>
-              <v-btn small color="primary" dark @click="salvar"> Salvar </v-btn>
+              
+              <v-btn small color="primary" 
+              :disabled="!valid"
+              class="mr-4"
+              @click="salvar">Salvar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -170,12 +174,14 @@ export default {
       { text: "Status", value: "ativo" },
       { text: "Ações", value: "acoes" },
     ],
+    
     disciplinas: [],
     periodo: [],
     periodosRaw: [],
     professores: [],
     profsRaw: [],
     editIndice: -1,
+    valid: true,
     itemEditado: {
       id: null,
       nome: "",
@@ -192,6 +198,7 @@ export default {
     },
     profsSelecionados: [],
     periodoSelecionado: null,
+    
   }),
 
   computed: {

@@ -36,7 +36,7 @@
               <span class="text-h5">{{ tituloForm }}</span>
             </v-card-title>
             <v-card-text>
-              <v-form>
+              <v-form v-model="valid">
                 <v-container>
                   <v-row>
                     <v-col cols="8" sm="6" md="4">
@@ -79,7 +79,11 @@
               <v-btn small color="warning" dark @click="fechar">
                 Cancelar
               </v-btn>
-              <v-btn small color="primary" dark @click="salvar"> Salvar </v-btn>
+              
+              <v-btn small color="primary" 
+              :disabled="!valid"
+              class="mr-4"
+              @click="salvar">Salvar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -175,6 +179,7 @@ export default {
       alunos: [],
       alunosRaw: [],
       editIndice: -1,
+      valid: true,
       itemEditado: {
         id: null,
         nome: "",
