@@ -332,7 +332,7 @@ export default {
               telefone: this.itemEditado.pessoa.telefone,
             },
             matricula: this.itemEditado.matricula,
-            ativo: this.itemEditado.ativo === "Ativado",
+            ativo: this.itemEditado.ativo,
           })
           .then((res) => {
             alert("Os dados foram atualizados com sucesso !");

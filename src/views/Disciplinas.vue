@@ -194,7 +194,7 @@ export default {
       id: null,
       nome: "",
       apelido: "",
-      ativo: true,
+      ativo: null,
     },
     profsSelecionados: [],
     periodoSelecionado: null,
@@ -331,7 +331,7 @@ export default {
             id: this.itemEditado.id,
             nome: this.itemEditado.nome,
             apelido: this.itemEditado.apelido,
-            ativo: this.itemEditado.ativo === "Ativado",
+            ativo: this.itemEditado.ativo,
             periodo: {
               id: this.periodoSelecionado.idperiodo,
             },

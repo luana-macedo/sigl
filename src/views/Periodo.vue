@@ -273,7 +273,7 @@ export default {
             id: this.itemEditado.id,
             periodo: this.itemEditado.periodo,
             dataCadastro: this.itemEditado.dataCadastro,
-            ativo: this.itemEditado.ativo === "Ativado",
+            ativo: this.itemEditado.ativo,
           })
           .then((res) => {
             //this.periodos = res.data
