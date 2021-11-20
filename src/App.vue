@@ -66,7 +66,7 @@ export default {
       { title: 'AGENDAMENTO-PROFESSOR', icon: 'mdi-notebook-edit', to:'/agendamentoprof'},
       { title: 'EVIDÊNCIAS', icon: 'mdi-page-next', to:'/evidencias'},
       { title: 'STATUS', icon: 'mdi-list-status', to:'/status'},
-      { title: 'USUÁRIO', icon: 'mdi-list-status', to:'/usuario'},
+      { title: 'USUÁRIO', icon: 'mdi-account-cog', to:'/usuario'},
       { title: 'CALENDÁRIO', icon: 'mdi-calendar', to:'/calendario'}, 
     ],
   }),
