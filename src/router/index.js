@@ -45,9 +45,14 @@ const routes = [
     component: () => import('../views/Manuais.vue')
   },
   {
-    path: '/agendamento',
-    name: 'Agendamento',
-    component: () => import('../views/Agendamento.vue')
+    path: '/agendamentoaluno',
+    name: 'AgendamentoAluno',
+    component: () => import('../views/Agendamentoaluno.vue')
+  },
+  {
+    path: '/agendamentoprof',
+    name: 'AgendamentoProf',
+    component: () => import('../views/Agendamentoprof.vue')
   },
   {
     path: '/evidencias',
@@ -68,6 +73,16 @@ const routes = [
     path: '/calendario',
     name: 'Calendario',
     component: () => import('../views/Calendario.vue')
+  },
+  {
+    path: '/usuario',
+    name: 'usuario',
+    component: () => import('../views/Usuario.vue')
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: () => import('../views/Dashboard.vue')
   },
   {
     path: '/Login',

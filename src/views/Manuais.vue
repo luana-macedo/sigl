@@ -150,10 +150,6 @@
 .data-table {
   padding: 3%;
 }
-
-#card-actions {
-  padding-left: 18%;
-}
 </style>
 
 <script>

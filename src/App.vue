@@ -61,10 +61,13 @@ export default {
       { title: "SUBGRUPO", icon: "mdi-account-group", to: "/subgrupo" },
       { title: "MANUAL", icon: "mdi-folder-cog", to: "/manuais" },
       { title: "SALA", icon: "mdi-google-classroom", to: "/salas" },
-      /* { title: 'AGENDAMENTO', icon: 'mdi-notebook-edit', to:'/agendamento'},
-          { title: 'EVIDÊNCIAS', icon: 'mdi-page-next', to:'/evidencias'},
-          { title: 'STATUS', icon: 'mdi-list-status', to:'/status'},
-          { title: 'CALENDÁRIO', icon: 'mdi-calendar', to:'/calendario'}, */
+      { title: 'AGENDAMENTO-TECNICO', icon: 'mdi-notebook-edit', to:'/agendamento'},
+      { title: 'AGENDAMENTO-ALUNO', icon: 'mdi-notebook-edit', to:'/agendamentoaluno'},
+      { title: 'AGENDAMENTO-PROFESSOR', icon: 'mdi-notebook-edit', to:'/agendamentoprof'},
+      { title: 'EVIDÊNCIAS', icon: 'mdi-page-next', to:'/evidencias'},
+      { title: 'STATUS', icon: 'mdi-list-status', to:'/status'},
+      { title: 'USUÁRIO', icon: 'mdi-list-status', to:'/usuario'},
+      { title: 'CALENDÁRIO', icon: 'mdi-calendar', to:'/calendario'}, 
     ],
   }),
 };
