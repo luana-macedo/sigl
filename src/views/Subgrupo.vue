@@ -50,20 +50,27 @@
                     <v-col cols="8" sm="6" md="4">
                       <v-label>Professor</v-label>
                       <vue-select
+                       :getOptionLabel="
+                          (professor) => professor.pessoa.nome
+                        "
                         v-model="profSelecionado"
                         :options="professor"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        label="nome"
+                        label="id"
                         :search="search"
                         required
                       ></vue-select>
+                     
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-label>Alunos</v-label>
                       <vue-select
+                      :getOptionLabel="
+                          (alunos) => alunos.pessoa.nome
+                        "
                         v-model="alunosSelecionados"
                         :options="alunos"
-                        label="nome"
+                        label="matricula"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         :search="search"
                         :multiple="true"
@@ -250,8 +257,7 @@ export default {
       const { data } = await this.axios.get(urlProfessor);
       this.profsRaw = data;
       this.professor = data
-        .filter((d) => d.pessoa.nome)
-        .map((d) => ({ ...d.pessoa, idprofessor: d.id }));
+        .filter((d) => d.pessoa.nome).map((d) => ({ ...d.pessoa, idprofessor: d.id }));
     },
 
     async getAlunos() {
@@ -272,9 +278,11 @@ export default {
       // console.log(id,"elementoo");
       axios.get(url + "/" + id).then((res) => {
         this.itemEditado = res.data;
-        this.profsSelecionados = this.itemEditado.professores;
-        console.log("prof", this.profsSelecionados);
-        this.alunosSelecionados = this.itemEditado.aluno;
+       
+        this.profSelecionado = this.itemEditado.professor;
+        console.log("prof", this.profSelecionado);
+        this.alunosSelecionados = this.itemEditado.alunos;
+      
         console.log("alunos", this.alunosSelecionados);
       });
 
