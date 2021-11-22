@@ -48,24 +48,25 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
-                      <v-label >Professor</v-label>
+                      <v-label>Professor</v-label>
                       <vue-select
+                        :getOptionLabel="(professor) => professor.pessoa.nome"
                         v-model="profSelecionado"
                         :options="professor"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         :search="search"
-                        label="nome"
+                        label="professor"
                         required
-                      >
-                      </vue-select>
+                      ></vue-select>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-label>Alunos</v-label>
                       <!-- :getOptionLabel="(alunos) => alunos.pessoa.nome" -->
                       <vue-select
+                        :getOptionLabel="(alunos) => alunos.pessoa.nome"
                         v-model="alunosSelecionados"
                         :options="alunos"
-                        label="nome"
+                        label="aluno"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         :multiple="true"
                         required
@@ -91,6 +92,27 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+
+<v-dialog v-model="dialogDetalhar" max-width="400px">
+<v-card class="mx-auto"
+   >
+    <v-list-item>
+      <v-list-item-content>
+        <v-list-item-title>{{itemEditado.nome}}</v-list-item-title> 
+          <v-list-item-title>{{profSelecionado}}</v-list-item-title> 
+          <v-list-item-title v-for="(aluno,id) in alunosDetalhe" :key="id">{{aluno}}</v-list-item-title> 
+      </v-list-item-content>
+    </v-list-item>
+    <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn small color="warning" dark @click="dialogDetalhar=false"
+                >fechar</v-btn>
+              <v-spacer></v-spacer>
+            </v-card-actions>
+  </v-card>
+  </v-dialog>
+
+
         <v-dialog v-model="dialogDesativar" max-width="500px">
           <v-card>
             <v-card-title class="text-h5"
@@ -111,6 +133,9 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
+      <v-icon small class="mr-2" @click="detalharItem(item)" color="brown">
+        mdi-eye
+      </v-icon>
       <v-icon small class="mr-2" @click="editItem(item)" color="blue">
         mdi-pencil
       </v-icon>
@@ -154,6 +179,7 @@ export default {
       search: "",
       dialog: false,
       dialogDesativar: false,
+      dialogDetalhar: false,
       multiple: {
         type: Boolean,
         default: false,
@@ -182,6 +208,7 @@ export default {
       profsRaw: [],
       alunos: [],
       alunosRaw: [],
+      alunosDetalhe: [],
       editIndice: -1,
       valid: true,
       itemEditado: {
@@ -217,6 +244,9 @@ export default {
     dialogDesativar(val) {
       val || this.fecharDesativar();
     },
+    // dialogDetalhar(val) {
+    //   val || this.fecharDetalhar();
+    // },
   },
 
   mounted() {
@@ -253,47 +283,44 @@ export default {
     async getProfessores() {
       const { data } = await this.axios.get(urlProfessor);
       this.profsRaw = data;
-      this.professor = data
-        .filter((d) => d.pessoa.nome)
-        .map((d) => ({ ...d.pessoa, idprofessor: d.id }));
+      this.professor = data.filter((d) => d.pessoa.nome).filter(Boolean);
     },
 
     async getAlunos() {
       const { data } = await this.axios.get(urlALuno);
       this.alunosRaw = data;
-      const alunos = data
-        .filter((d) => d.pessoa.nome)
-        .map((d) => ({ ...d.pessoa, idaluno: d.id }));
-      console.log(alunos);
-      this.alunos = alunos;
+      this.alunos = data.filter((d) => d.pessoa.nome).filter(Boolean);
+    },
+
+    detalharItem(item) {
+      this.editIndice = this.subgrupos.indexOf(item);
+      this.itemEditado = Object.assign({}, item);
+      var id = this.itemEditado.id;
+      // console.log(id,"elementoo");
+      axios.get(url + "/" + id).then((res) => {
+        this.itemEditado = res.data;
+        this.profSelecionado = this.itemEditado.professor.pessoa.nome;
+        this.alunosDetalhe = this.itemEditado.alunos.map((d) => d.pessoa.nome);
+      });
+
+      this.dialogDetalhar = true;
     },
 
     editItem(item) {
       this.editIndice = this.subgrupos.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       var id = this.itemEditado.id;
-<<<<<<< Updated upstream
 
       // console.log(id,"elementoo");
       axios.get(url + "/" + id).then((res) => {
         this.itemEditado = res.data;
-        this.profsSelecionados = this.itemEditado.professores;
-        console.log("prof", this.profsSelecionados);
-        this.alunosSelecionados = this.itemEditado.aluno;
-        console.log("alunos", this.alunosSelecionados);
-      });
-
-=======
-      axios.get(url + "/" + id).then((res) => {
-        this.itemEditado = res.data;
-        console.log(this.itemEditado);
         this.profSelecionado = this.itemEditado.professor;
         console.log("prof", this.profSelecionado);
         this.alunosSelecionados = this.itemEditado.alunos;
-        console.log("alunosss", this.alunosSelecionados);
+
+        console.log("alunos", this.alunosSelecionados);
       });
-      
->>>>>>> Stashed changes
+
       this.dialog = true;
     },
 
@@ -343,6 +370,14 @@ export default {
         this.editIndice = -1;
       });
     },
+
+    //  fecharDetalhar() {
+    //   this.dialogDetalhar = false;
+    //   this.$nextTick(() => {
+    //     this.itemEditado = Object.assign({}, this.itemPadrao);
+    //     this.editIndice = -1;
+    //   });
+    // },
 
     fecharDesativar() {
       this.dialogDesativar = false;
