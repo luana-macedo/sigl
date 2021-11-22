@@ -272,18 +272,6 @@ export default {
       this.editIndice = this.subgrupos.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       var id = this.itemEditado.id;
-<<<<<<< Updated upstream
-
-      // console.log(id,"elementoo");
-      axios.get(url + "/" + id).then((res) => {
-        this.itemEditado = res.data;
-        this.profsSelecionados = this.itemEditado.professores;
-        console.log("prof", this.profsSelecionados);
-        this.alunosSelecionados = this.itemEditado.aluno;
-        console.log("alunos", this.alunosSelecionados);
-      });
-
-=======
       axios.get(url + "/" + id).then((res) => {
         this.itemEditado = res.data;
         console.log(this.itemEditado);
@@ -292,8 +280,6 @@ export default {
         this.alunosSelecionados = this.itemEditado.alunos;
         console.log("alunosss", this.alunosSelecionados);
       });
-      
->>>>>>> Stashed changes
       this.dialog = true;
     },
 
