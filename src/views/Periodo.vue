@@ -48,13 +48,13 @@
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
                       ></v-text-field>
-                      <v-text-field
+                      <!-- <v-text-field
                         v-model="itemEditado.dataCadastro"
                         label="Data de Cadastro"
                         v-mask="'####-##-##'"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
                         required
-                      ></v-text-field>
+                      ></v-text-field> -->
                     </v-col>
                     <v-col cols="8" sm="6" md="4"> </v-col>
                   </v-row>
@@ -222,7 +222,7 @@ export default {
       axios
         .patch(urlPatch + this.itemEditado.id, {
           id: this.itemEditado.id,
-          dataCadastro: this.itemEditado.dataCadastro,
+          // dataCadastro: this.itemEditado.dataCadastro,
           ativo: false,
         })
         .then((res) => {
@@ -273,7 +273,6 @@ export default {
           .put(url, {
             id: this.itemEditado.id,
             periodo: this.itemEditado.periodo,
-            dataCadastro: this.itemEditado.dataCadastro,
             ativo: this.itemEditado.ativo === "Ativado",
           })
           .then((res) => {
@@ -286,7 +285,6 @@ export default {
         axios
           .post(url, {
             periodo: this.itemEditado.periodo,
-            dataCadastro: this.itemEditado.dataCadastro,
             ativo: true,
           })
           .then((res) => {
