@@ -48,24 +48,25 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
-                      <v-label>Professor</v-label>
+                      <v-label >Professor</v-label>
                       <vue-select
                         v-model="profSelecionado"
                         :options="professor"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        label="nome"
                         :search="search"
+                        label="nome"
                         required
-                      ></vue-select>
+                      >
+                      </vue-select>
                     </v-col>
                     <v-col cols="8" sm="6" md="4">
                       <v-label>Alunos</v-label>
+                      <!-- :getOptionLabel="(alunos) => alunos.pessoa.nome" -->
                       <vue-select
                         v-model="alunosSelecionados"
                         :options="alunos"
                         label="nome"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
-                        :search="search"
                         :multiple="true"
                         required
                       ></vue-select>
@@ -79,11 +80,14 @@
               <v-btn small color="warning" dark @click="fechar">
                 Cancelar
               </v-btn>
-              <v-btn 
-              small color="primary" 
-              :disabled="!valid"
-              class="mr-4"
-              @click="salvar">Salvar</v-btn>
+              <v-btn
+                small
+                color="primary"
+                :disabled="!valid"
+                class="mr-4"
+                @click="salvar"
+                >Salvar</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -268,6 +272,7 @@ export default {
       this.editIndice = this.subgrupos.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       var id = this.itemEditado.id;
+<<<<<<< Updated upstream
 
       // console.log(id,"elementoo");
       axios.get(url + "/" + id).then((res) => {
@@ -278,6 +283,17 @@ export default {
         console.log("alunos", this.alunosSelecionados);
       });
 
+=======
+      axios.get(url + "/" + id).then((res) => {
+        this.itemEditado = res.data;
+        console.log(this.itemEditado);
+        this.profSelecionado = this.itemEditado.professor;
+        console.log("prof", this.profSelecionado);
+        this.alunosSelecionados = this.itemEditado.alunos;
+        console.log("alunosss", this.alunosSelecionados);
+      });
+      
+>>>>>>> Stashed changes
       this.dialog = true;
     },
 
