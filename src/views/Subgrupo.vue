@@ -94,22 +94,55 @@
         </v-dialog>
 
 <v-dialog v-model="dialogDetalhar" max-width="400px">
-<v-card class="mx-auto"
-   >
-    <v-list-item>
-      <v-list-item-content>
-        <v-list-item-title>{{itemEditado.nome}}</v-list-item-title> 
-          <v-list-item-title>{{profSelecionado}}</v-list-item-title> 
-          <v-list-item-title v-for="(aluno,id) in alunosDetalhe" :key="id">{{aluno}}</v-list-item-title> 
-      </v-list-item-content>
-    </v-list-item>
-    <v-card-actions>
+<!-- <v-card class="mx-auto"
+   > -->
+   <v-simple-table dense>
+    <template v-slot:default>
+      <thead>
+        <tr>
+          <th class="text-center">
+            Subgrupo
+          </th>
+          <th class="text-center">
+            Professor
+          </th>
+          <th class="text-center">
+            Alunos
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{itemEditado.nome}}</td>
+          <td>{{profSelecionado}}</td>
+          <td class="td-alunos" v-for="(aluno,id) in alunosDetalhe" :key="id">
+            <ul>
+              <li>{{ aluno }}</li>
+              </ul></td>
+        </tr>
+      </tbody>
+    </template>
+  </v-simple-table>
+ 
+  <!-- <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn small color="warning" dark @click="dialogDetalhar=false"
                 >fechar</v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
-  </v-card>
+ -->
+    <!-- <v-list-item>
+  </v-card>      
+    <v-list-content>
+            <v-list-item-title>Professor</v-list-item-title>
+            <v-list-item-subtitle >{{profSelecionado}}</v-list-item-subtitle>
+   </v-list-content>
+    <v-list-content>
+             <v-list-item-title>Alunos:</v-list-item-title>
+             <v-list-item-subtitle v-for="(aluno,id) in alunosDetalhe" :key="id">{{aluno}}</v-list-item-subtitle>
+</v-list-content>
+     
+    </v-list-item> -->
   </v-dialog>
 
 
@@ -156,6 +189,12 @@
 }
 .data-table {
   padding: 3%;
+}
+.td-alunos {
+ display: block;
+}
+.td-alunos ul li {
+  list-style: none;
 }
 </style>
 
