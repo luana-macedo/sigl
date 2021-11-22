@@ -424,16 +424,23 @@ export default {
 
     salvar() {
       if (this.editIndice > -1) {
-        axios
-          .put(url, {
+        var profId = null;
+        if (this.profSelecionado.idprofessor !== null && this.profSelecionado.idprofessor!== undefined) {
+          profId = {
+              id: this.profSelecionado.idprofessor,
+            }
+        }
+        const request ={
             id: this.itemEditado.id,
             nome: this.itemEditado.nome,
             ativo: this.itemEditado.ativo === "Ativado",
-            professor: {
-              id: this.profSelecionado.idprofessor,
-            },
+            professor: profId,
             alunos: this.alunosSelecionados,
-          })
+          };
+        console.log("request",request);
+
+        axios
+          .put(url,request)
           .then((res) => {
             console.log(res.data);
             alert("Os dados foram atualizados com sucesso !");
