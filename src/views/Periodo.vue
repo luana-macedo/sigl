@@ -274,7 +274,7 @@ export default {
             id: this.itemEditado.id,
             periodo: this.itemEditado.periodo,
             dataCadastro: this.itemEditado.dataCadastro,
-            ativo: this.itemEditado.ativo,
+            ativo: this.itemEditado.ativo === "Ativado",
           })
           .then((res) => {
             //this.periodos = res.data
@@ -287,7 +287,7 @@ export default {
           .post(url, {
             periodo: this.itemEditado.periodo,
             dataCadastro: this.itemEditado.dataCadastro,
-            ativo: this.itemEditado.ativo,
+            ativo: true,
           })
           .then((res) => {
             this.periodos = res.data;
