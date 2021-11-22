@@ -68,6 +68,7 @@ export default {
       { title: 'STATUS', icon: 'mdi-list-status', to:'/status'},
       { title: 'USUÁRIO', icon: 'mdi-account-cog', to:'/usuario'},
       { title: 'CALENDÁRIO', icon: 'mdi-calendar', to:'/calendario'}, 
+      { title: 'DASHBOARD', icon: 'mdi-dashboard', to:'/dashboard'},
     ],
   }),
 };
