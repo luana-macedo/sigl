@@ -92,15 +92,11 @@
               <v-btn small color="warning" dark @click="fechar">
                 Cancelar
               </v-btn>
-
-              <v-btn
-                small
-                color="primary"
-                :disabled="!valid"
-                class="mr-4"
-                @click="salvar"
-                >Salvar</v-btn
-              >
+              
+              <v-btn small color="primary" 
+              :disabled="!valid"
+              class="mr-4"
+              @click="salvar">Salvar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -181,7 +177,7 @@ export default {
       { text: "Status", value: "ativo" },
       { text: "Ações", value: "acoes" },
     ],
-
+    
     disciplinas: [],
     periodo: [],
     periodosRaw: [],
@@ -205,6 +201,7 @@ export default {
     },
     profsSelecionados: [],
     periodoSelecionado: null,
+    
   }),
 
   computed: {
@@ -270,17 +267,17 @@ export default {
     },
 
     editItem(item) {
-      this.editIndice = this.disciplinas.indexOf(item); //comando para mostrar o título "Editar Dados"
-      this.itemEditado = Object.assign({}, item);
-      var id = this.itemEditado.id;
-      // console.log(id,"elementoo");
-      axios.get(url + "/" + id).then((res) => {
-        this.itemEditado = res.data;
-        this.profsSelecionados = this.itemEditado.professores;
-        console.log("prof", this.profsSelecionados);
-        this.periodoSelecionado = this.itemEditado.periodo;
-        console.log("periodooo", this.periodoSelecionado);
-      });
+      this.editIndice = this.disciplinas.indexOf(item);
+      const disciplina = { 
+            id: this.itemEditado.id,
+            nome: this.itemEditado.nome,
+            apelido: this.itemEditado.apelido,
+            ativo: this.itemEditado.ativo,
+            periodo: this.periodoSelecionado,
+            professores: this.profsSelecionados,
+      };
+      this.itemEditado = Object.assign({disciplina},item);
+      console.log(this.itemEditado);
       this.dialog = true;
     },
 

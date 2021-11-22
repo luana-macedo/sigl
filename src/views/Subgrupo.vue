@@ -50,9 +50,7 @@
                     <v-col cols="8" sm="6" md="4">
                       <v-label >Professor</v-label>
                       <vue-select
-                       :getOptionLabel="
-                          (professor) => professor.pessoa.nome
-                        "
+                       :getOptionLabel=" (professor) => professor.pessoa.nome"
                         v-model="profSelecionado"
                         :options="professor"
                         :rules="[(v) => !!v || '*Campo Obrigatório*']"
@@ -259,18 +257,13 @@ export default {
     async getProfessores() {
       const { data } = await this.axios.get(urlProfessor);
       this.profsRaw = data;
-      this.professor = data
-        .filter((d) => d.pessoa.nome).map((d) => ({ ...d.pessoa, idprofessor: d.id }));
+      this.professor = data.filter((d) => d.pessoa.nome).filter(Boolean);
     },
 
     async getAlunos() {
       const { data } = await this.axios.get(urlALuno);
       this.alunosRaw = data;
-      const alunos = data
-        .filter((d) => d.pessoa.nome)
-        .map((d) => ({ ...d.pessoa, idaluno: d.id }));
-      console.log(alunos);
-      this.alunos = alunos;
+      this.alunos =  data.filter((d) => d.pessoa.nome).filter(Boolean);
     },
 
     editItem(item) {
