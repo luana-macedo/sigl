@@ -9,7 +9,7 @@
       <v-toolbar flat>
         <v-toolbar-title>Gerenciamento de Sala</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
-        <v-ster></v-ster>
+        <!-- <v-ster></v-ster> -->
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
@@ -278,7 +278,7 @@ export default {
             local: this.itemEditado.local,
             capacidade: this.itemEditado.capacidade,
             descricao: this.itemEditado.descricao,
-            ativo: this.itemEditado.ativo,
+            ativo: this.itemEditado.ativo === "Ativado",
           })
           .then((res) => {
             //this.salas = res.data;
@@ -299,7 +299,7 @@ export default {
             local: this.itemEditado.local,
             capacidade: this.itemEditado.capacidade,
             descricao: this.itemEditado.descricao,
-            ativo: this.itemEditado.ativo,
+            ativo:true,
           })
           .then((res) => {
             this.salas = res.data;

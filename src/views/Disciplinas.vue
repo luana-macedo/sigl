@@ -345,9 +345,7 @@ export default {
             nome: this.itemEditado.nome,
             apelido: this.itemEditado.apelido,
             ativo: this.itemEditado.ativo,
-            periodo: {
-              id: this.periodoSelecionado.idperiodo,
-            },
+            periodo: this.periodoSelecionado,
             professores: this.profsSelecionados,
           })
           .then((res) => {

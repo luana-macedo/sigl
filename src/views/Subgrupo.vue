@@ -428,7 +428,7 @@ export default {
           .put(url, {
             id: this.itemEditado.id,
             nome: this.itemEditado.nome,
-            ativo: this.itemEditado.ativo,
+            ativo: this.itemEditado.ativo === "Ativado",
             professor: {
               id: this.profSelecionado.idprofessor,
             },
@@ -448,7 +448,7 @@ export default {
         axios
           .post(url, {
             nome: this.itemEditado.nome,
-            ativo: this.itemEditado.ativo,
+            ativo:true,
             professor: {
               id: this.profSelecionado.idprofessor,
             },
