@@ -45,6 +45,11 @@ const routes = [
     component: () => import('../views/Manuais.vue')
   },
   {
+    path: '/agendamento',
+    name: 'Agendamento',
+    component: () => import('../views/Agendamento.vue')
+  },
+  {
     path: '/agendamentoaluno',
     name: 'AgendamentoAluno',
     component: () => import('../views/Agendamentoaluno.vue')
