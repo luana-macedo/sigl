@@ -306,8 +306,8 @@ export default {
       var id = this.itemEditado.id;
       axios.get(url + "/" + id).then((res) => {
         this.itemEditado = res.data;
-        this.profSelecionado = this.itemEditado.professor.pessoa.nome;
         this.alunosSelecionados = this.itemEditado.alunos.map((d) => d.pessoa.nome);
+        this.profSelecionado = this.itemEditado.professor;
       });
 
       this.dialogDetalhar = true;
