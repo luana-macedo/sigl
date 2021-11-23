@@ -50,12 +50,12 @@ const routes = [
     component: () => import('../views/Agendamento.vue')
   },
   {
-    path: '/agendamentoaluno',
+    path: '/Agendamentoaluno',
     name: 'AgendamentoAluno',
     component: () => import('../views/Agendamentoaluno.vue')
   },
   {
-    path: '/agendamentoprof',
+    path: '/Agendamentoprof',
     name: 'AgendamentoProf',
     component: () => import('../views/Agendamentoprof.vue')
   },
