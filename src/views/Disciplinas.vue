@@ -104,6 +104,30 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+
+         <v-dialog v-model="dialogDetalhar" max-width="700px">
+          <v-simple-table dense>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="align-center">Disciplina</th>
+                  <th class="align-center">Apelido</th>
+                  <th class="align-center">Professor</th>
+                  <th class="align-center">Periodo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ itemEditado.nome }}</td>
+                  <td>{{ itemEditado.apelido }}</td>
+                  <td>{{ profsSelecionados }}</td>
+                  <td>{{ periodoSelecionado }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-dialog>
+
         <v-dialog v-model="dialogDesativar" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
@@ -124,12 +148,9 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)" color="blue">
-        mdi-pencil
-      </v-icon>
-      <v-icon small @click="desativeItem(item)" color="red">
-        mdi-power-standby
-      </v-icon>
+      <v-icon small class="mr-2" @click="detalharItem(item)" color="brown">mdi-eye</v-icon>
+      <v-icon small class="mr-2" @click="editItem(item)" color="blue">mdi-pencil</v-icon>
+      <v-icon small @click="desativeItem(item)" color="red">mdi-power-standby</v-icon>
     </template>
   </v-data-table>
 </template>
@@ -165,6 +186,7 @@ export default {
     search: "",
     dialog: false,
     dialogDesativar: false,
+    dialogDetalhar: false,
     multiple: {
       type: Boolean,
       default: false,
@@ -269,6 +291,19 @@ export default {
       this.professores = data.filter((d) => d.pessoa.nome).filter(Boolean);
     },
 
+    detalharItem(item) {
+      this.editIndice = this.disciplinas.indexOf(item);
+      this.itemEditado = Object.assign({}, item);
+      var id = this.itemEditado.id;
+      axios.get(url + "/" + id).then((res) => {
+        this.itemEditado = res.data;
+        this.periodoSelecionado = this.itemEditado.periodo.periodo;
+        this.profsSelecionados = this.itemEditado.professores.map((d) => d.pessoa.nome);
+      });
+
+      this.dialogDetalhar = true;
+    },
+
     editItem(item) {
       this.editIndice = this.disciplinas.indexOf(item); //comando para mostrar o título "Editar Dados"
       this.itemEditado = Object.assign({}, item);
@@ -344,7 +379,7 @@ export default {
             id: this.itemEditado.id,
             nome: this.itemEditado.nome,
             apelido: this.itemEditado.apelido,
-            ativo: this.itemEditado.ativo,
+            ativo: this.itemEditado.ativo === "Ativado",
             periodo: this.periodoSelecionado,
             professores: this.profsSelecionados,
           })

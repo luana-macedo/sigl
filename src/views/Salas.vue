@@ -88,6 +88,32 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+
+         <v-dialog v-model="dialogDetalhar" max-width="700px">
+          <!-- <v-card class="mx-auto"
+   > -->
+          <v-simple-table dense>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="align-center">Nome</th>
+                  <th class="align-center">Local</th>
+                  <th class="align-center">Capacidade</th>
+                  <th class="align-center">Descrição</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ itemEditado.nome }}</td>
+                  <td>{{ itemEditado.local }}</td>
+                  <td>{{ itemEditado.capacidade }}</td>
+                  <td>{{ itemEditado.descricao }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-dialog>
+
         <v-dialog v-model="dialogDesativar" max-width="500px">
           <v-card>
             <v-card-title class="text-h5"
@@ -108,6 +134,7 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
+      <v-icon small class="mr-2" @click="detalharItem(item)" color="brown">mdi-eye</v-icon>
       <v-icon small class="mr-2" @click="editItem(item)" color="blue"> mdi-pencil </v-icon>
       <v-icon small @click="desativeItem(item)" color="red"> mdi-power-standby </v-icon>
     </template>
@@ -142,13 +169,14 @@ export default {
     search: "",
     dialog: false,
     dialogDesativar: false,
+    dialogDetalhar: false,
     titulos: [
       { text: "Sala", value: "nome" },
       { text: "Local", value: "local" },
-      { text: "Capacidade", value: "capacidade", sortable: false },
-      { text: "Descrição", value: "descricao", sortable: false },
-      { text: "Status", value: "ativo", sortable: false },
-      { text: "Ações", value: "acoes", sortable: false },
+      { text: "Capacidade", value: "capacidade" },
+      { text: "Descrição", value: "descricao" },
+      { text: "Status", value: "ativo" },
+      { text: "Ações", value: "acoes" },
     ],
     salas: [],
     editIndice: -1,
@@ -250,7 +278,8 @@ export default {
             console.log(error);
           });
           }
-          this.fecharDesativar();
+        
+        this.fecharDesativar();
     },
 
     fechar() {
@@ -267,6 +296,17 @@ export default {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
       });
+    },
+
+    detalharItem(item) {
+      this.editIndice = this.salas.indexOf(item);
+      this.itemEditado = Object.assign({}, item);
+      var id = this.itemEditado.id;
+      axios.get(url + "/" + id).then((res) => {
+        this.itemEditado = res.data;
+      });
+
+      this.dialogDetalhar = true;
     },
 
     salvar() {

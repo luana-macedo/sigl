@@ -104,9 +104,36 @@
               class="mr-4" 
               @click="salvar">Salvar</v-btn>
             </v-card-actions>
-
           </v-card>
         </v-dialog>
+
+         <v-dialog v-model="dialogDetalhar" max-width="700px">
+          <!-- <v-card class="mx-auto"
+   > -->
+          <v-simple-table dense>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-center">Nome</th>
+                  <th class="text-center">CPF</th>
+                  <th class="text-center">Telefone</th>
+                  <th class="text-center">Email</th>
+                  <th class="text-center">Matricula</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ itemEditado.pessoa.nome }}</td>
+                  <td>{{ itemEditado.pessoa.cpf }}</td>
+                  <td>{{ itemEditado.pessoa.telefone }}</td>
+                  <td>{{ itemEditado.pessoa.email }}</td>
+                  <td>{{ itemEditado.matricula }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-dialog>
+
         <v-dialog v-model="dialogDesativar" max-width="400px">
           <v-card class="card-modal">
             <v-card-title class="text-h6"
@@ -127,9 +154,8 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)" color="blue">
-        mdi-pencil
-      </v-icon>
+      <v-icon small class="mr-2" @click="detalharItem(item)" color="brown">mdi-eye</v-icon>
+      <v-icon small class="mr-2" @click="editItem(item)" color="blue">mdi-pencil</v-icon>
       <v-icon small @click="desativeItem(item)" color="red"> mdi-power-standby </v-icon>
     </template>
   </v-data-table>
@@ -163,6 +189,7 @@ export default {
     search: "",
     dialog: false,
     dialogDesativar: false,
+    dialogDetalhar: false,
     titulos: [
       { text: "Nome", value: "pessoa.nome" },
       { text: "CPF", value: "pessoa.cpf" },
@@ -317,6 +344,17 @@ export default {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
       });
+    },
+
+    detalharItem(item) {
+      this.editIndice = this.alunos.indexOf(item);
+      this.itemEditado = Object.assign({}, item);
+      var id = this.itemEditado.id;
+      axios.get(url + "/" + id).then((res) => {
+        this.itemEditado = res.data;
+      });
+
+      this.dialogDetalhar = true;
     },
 
     salvar() {

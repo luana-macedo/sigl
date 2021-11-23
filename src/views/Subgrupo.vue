@@ -93,58 +93,28 @@
           </v-card>
         </v-dialog>
 
-<v-dialog v-model="dialogDetalhar" max-width="400px">
-<!-- <v-card class="mx-auto"
+        <v-dialog v-model="dialogDetalhar" max-width="400px">
+          <!-- <v-card class="mx-auto"
    > -->
-   <v-simple-table dense>
-    <template v-slot:default>
-      <thead>
-        <tr>
-          <th class="text-center">
-            Subgrupo
-          </th>
-          <th class="text-center">
-            Professor
-          </th>
-          <th class="text-center">
-            Alunos
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{{itemEditado.nome}}</td>
-          <td>{{profSelecionado}}</td>
-          <td class="td-alunos" v-for="(aluno,id) in alunosDetalhe" :key="id">
-            <ul>
-              <li>{{ aluno }}</li>
-              </ul></td>
-        </tr>
-      </tbody>
-    </template>
-  </v-simple-table>
- 
-  <!-- <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn small color="warning" dark @click="dialogDetalhar=false"
-                >fechar</v-btn>
-              <v-spacer></v-spacer>
-            </v-card-actions>
- -->
-    <!-- <v-list-item>
-  </v-card>      
-    <v-list-content>
-            <v-list-item-title>Professor</v-list-item-title>
-            <v-list-item-subtitle >{{profSelecionado}}</v-list-item-subtitle>
-   </v-list-content>
-    <v-list-content>
-             <v-list-item-title>Alunos:</v-list-item-title>
-             <v-list-item-subtitle v-for="(aluno,id) in alunosDetalhe" :key="id">{{aluno}}</v-list-item-subtitle>
-</v-list-content>
-     
-    </v-list-item> -->
-  </v-dialog>
-
+          <v-simple-table dense>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-center">Subgrupo</th>
+                  <th class="text-center">Professor</th>
+                  <th class="text-center">Alunos</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ itemEditado.nome }}</td>
+                  <td>{{ profSelecionado }}</td>
+                  <td>{{ alunosSelecionados }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-dialog>
 
         <v-dialog v-model="dialogDesativar" max-width="500px">
           <v-card>
@@ -166,15 +136,15 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.acoes`]="{ item }">
-      <v-icon small class="mr-2" @click="detalharItem(item)" color="brown">
-        mdi-eye
-      </v-icon>
-      <v-icon small class="mr-2" @click="editItem(item)" color="blue">
-        mdi-pencil
-      </v-icon>
-      <v-icon small @click="desativeItem(item)" color="red">
-        mdi-power-standby
-      </v-icon>
+      <v-icon small class="mr-2" @click="detalharItem(item)" color="brown"
+        >mdi-eye</v-icon
+      >
+      <v-icon small class="mr-2" @click="editItem(item)" color="blue"
+        >mdi-pencil</v-icon
+      >
+      <v-icon small @click="desativeItem(item)" color="red"
+        >mdi-power-standby</v-icon
+      >
     </template>
   </v-data-table>
 </template>
@@ -191,7 +161,7 @@
   padding: 3%;
 }
 .td-alunos {
- display: block;
+  display: block;
 }
 .td-alunos ul li {
   list-style: none;
@@ -247,7 +217,6 @@ export default {
       profsRaw: [],
       alunos: [],
       alunosRaw: [],
-      alunosDetalhe: [],
       editIndice: -1,
       valid: true,
       itemEditado: {
@@ -338,7 +307,7 @@ export default {
       axios.get(url + "/" + id).then((res) => {
         this.itemEditado = res.data;
         this.profSelecionado = this.itemEditado.professor.pessoa.nome;
-        this.alunosDetalhe = this.itemEditado.alunos.map((d) => d.pessoa.nome);
+        this.alunosSelecionados = this.itemEditado.alunos.map((d) => d.pessoa.nome);
       });
 
       this.dialogDetalhar = true;
@@ -425,22 +394,25 @@ export default {
     salvar() {
       if (this.editIndice > -1) {
         var profId = null;
-        if (this.profSelecionado.idprofessor !== null && this.profSelecionado.idprofessor!== undefined) {
+        if (
+          this.profSelecionado.idprofessor !== null &&
+          this.profSelecionado.idprofessor !== undefined
+        ) {
           profId = {
-              id: this.profSelecionado.idprofessor,
-            }
-        }
-        const request ={
-            id: this.itemEditado.id,
-            nome: this.itemEditado.nome,
-            ativo: this.itemEditado.ativo === "Ativado",
-            professor: profId,
-            alunos: this.alunosSelecionados,
+            id: this.profSelecionado.idprofessor,
           };
-        console.log("request",request);
+        }
+        const request = {
+          id: this.itemEditado.id,
+          nome: this.itemEditado.nome,
+          ativo: this.itemEditado.ativo === "Ativado",
+          professor: profId,
+          alunos: this.alunosSelecionados,
+        };
+        console.log("request", request);
 
         axios
-          .put(url,request)
+          .put(url, request)
           .then((res) => {
             console.log(res.data);
             alert("Os dados foram atualizados com sucesso !");
@@ -455,7 +427,7 @@ export default {
         axios
           .post(url, {
             nome: this.itemEditado.nome,
-            ativo:true,
+            ativo: true,
             professor: {
               id: this.profSelecionado.idprofessor,
             },
