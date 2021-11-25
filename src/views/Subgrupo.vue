@@ -107,13 +107,9 @@
               </thead>
               <tbody>
                 <tr>
-                  <td> {{ itemEditado.nome }}</td>
-                  <td>{{ profSelecionado.pessoa.nome }}</td>
-                  
-                  <td v-for="(item, index) in alunosSelecionados " :key="index">
-                    {{item}}
-                    
-                </td>
+                  <td>{{ itemEditado.nome }}</td>
+                  <td>{{ profSelecionado }}</td>
+                  <td>{{ alunosSelecionados }}</td>
                 </tr>
               </tbody>
             </template>
@@ -397,22 +393,20 @@ export default {
 
     salvar() {
       if (this.editIndice > -1) {
-        // var profId = null;
-        // if (
-        //   this.profSelecionado !== null &&
-        //   this.profSelecionado !== undefined
-        // ) {
-          
-        //   profId = {
-            
-        //     id: this.profSelecionado.pessoa.id,
-        //   };
-       // }
+        var profId = null;
+        if (
+          this.profSelecionado.idprofessor !== null &&
+          this.profSelecionado.idprofessor !== undefined
+        ) {
+          profId = {
+            id: this.profSelecionado.idprofessor,
+          };
+        }
         const request = {
           id: this.itemEditado.id,
           nome: this.itemEditado.nome,
           ativo: this.itemEditado.ativo === "Ativado",
-          professor: this.profSelecionado,
+          professor: profId,
           alunos: this.alunosSelecionados,
         };
         console.log("request", request);
@@ -435,7 +429,7 @@ export default {
             nome: this.itemEditado.nome,
             ativo: true,
             professor: {
-              id: this.profSelecionado.pessoa.id,
+              id: this.profSelecionado.idprofessor,
             },
             alunos: this.alunosSelecionados,
           })
