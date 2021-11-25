@@ -321,8 +321,6 @@ export default {
       this.editIndice = this.subgrupos.indexOf(item);
       this.itemEditado = Object.assign({}, item);
       var id = this.itemEditado.id;
-
-      // console.log(id,"elementoo");
       axios.get(url + "/" + id).then((res) => {
         this.itemEditado = res.data;
         this.profSelecionado = this.itemEditado.professor;
@@ -331,7 +329,6 @@ export default {
 
         console.log("alunos", this.alunosSelecionados);
       });
-
       this.dialog = true;
     },
 
