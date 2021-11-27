@@ -361,6 +361,8 @@ export default {
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
+         this.profsSelecionados = "";
+            this.periodoSelecionado ="";
       });
     },
 
@@ -385,7 +387,10 @@ export default {
           })
           .then((res) => {
             alert("Os dados foram atualizados com sucesso !");
+            
             console.log(res.data);
+             this.profsSelecionados = "";
+            this.periodoSelecionado ="";
             this.reloadPage();
           })
           .catch((error) => {
@@ -406,7 +411,10 @@ export default {
           .then((res) => {
             this.disciplinas = res.data;
             alert("Os dados foram adicionados com sucesso !");
+            
             console.log(res.data);
+            this.profsSelecionados = "";
+            this.periodoSelecionado ="";
             this.reloadPage();
           })
           .catch((error) => {

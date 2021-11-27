@@ -379,6 +379,8 @@ export default {
       this.$nextTick(() => {
         this.itemEditado = Object.assign({}, this.itemPadrao);
         this.editIndice = -1;
+         this.profSelecionado = "";
+            this.alunosSelecionados = "";
       });
     },
 
@@ -426,6 +428,8 @@ export default {
             console.log(res.data);
             alert("Os dados foram atualizados com sucesso !");
             this.reloadPage();
+            this.profSelecionado = "";
+            this.alunosSelecionados = "";
           })
           .catch((error) => {
             console.log(error);
@@ -446,6 +450,8 @@ export default {
             this.subgrupos = res.data;
             console.log(res.data);
             alert("Os dados foram adicionados com sucesso !");
+              this.profSelecionado = "";
+            this.alunosSelecionados = "";
             this.reloadPage();
           })
           .catch((error) => {
